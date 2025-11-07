@@ -23,4 +23,9 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+
+# vdcode
+.vscode/
+tsconfig.json
+
 dir.txt

@@ -1,13 +1,13 @@
-// @ts-check
-
-import mdx from '@astrojs/mdx';
-import sitemap from '@astrojs/sitemap';
+// astro.config.mjs
 import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
 
-// https://astro.build/config
+// 必要なら sitemap は後で戻せる
+// import sitemap from '@astrojs/sitemap';
+
 export default defineConfig({
-	site: 'https://example.com',
-	integrations: [mdx(), sitemap()],
-	server: { host: true }
+  site: 'https://arcanemi.com', // ← 仮のURLに変更
+  integrations: [mdx()],
+  // integrations: [mdx(), sitemap()],
+  server: { host: true }
 });
-
