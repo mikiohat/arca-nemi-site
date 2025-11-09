@@ -1,0 +1,18 @@
+---
+// src/pages/404.astro
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE_FAVICON } from "../consts";
+---
+
+<BaseLayout title="404 - ページが見つかりません">
+    <main
+        style="min-height:60vh;display:grid;place-items:center;text-align:center;"
+    >
+        <div>
+            <img src={SITE_FAVICON} alt="site icon" width="96" height="96" />
+            <h1>404 - ページが見つかりません</h1>
+            <p><code>{Astro.url.pathname}</code> は存在しません。</p>
+            <a href="/">ホームに戻る</a>
+        </div>
+    </main>
+</BaseLayout>
