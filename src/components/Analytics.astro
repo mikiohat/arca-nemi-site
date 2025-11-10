@@ -1,0 +1,33 @@
+---
+/**
+ * 本番ビルド時のみ GA を読み込む
+ * 条件A: import.meta.env.PROD
+ * 条件B: location.hostname === OFFICIAL_HOST
+ */
+import { IS_PROD, GA_ID, OFFICIAL_HOST } from "../consts";
+---
+
+{IS_PROD && (
+  // 本番ビルドのときだけ、クライアントにスクリプトを出す
+  <script is:inline>
+    // ブラウザ側でホスト名をチェック（プレビュー/ローカルは弾く）
+    if (location.hostname === '{OFFICIAL_HOST}') {
+      (function () {
+        // dataLayer を保証
+        window.dataLayer = window.dataLayer || [];
+        // 可変長引数で宣言（型エラー回避）
+        window.gtag = function (...args) { window.dataLayer.push(args); };
+
+        // ライブラリの読み込み（async）
+        const s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=${GA_ID}';
+        document.head.appendChild(s);
+
+        // 初期化 & 設定
+        window.gtag('js', new Date());
+        window.gtag('config', '${GA_ID}');
+      })();
+    }
+  </script>
+)}
