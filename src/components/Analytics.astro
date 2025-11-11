@@ -7,19 +7,21 @@
  */
 import { IS_PROD, GA_ID, OFFICIAL_HOST } from "../consts";
 
-
 console.log("[SRV] IS_PROD:", IS_PROD);            // ← devだと false
 console.log("[SRV] GA_ID:", GA_ID || "(empty)");   // ← devでは空のこと多い
 console.log("[SRV] OFFICIAL_HOST:", OFFICIAL_HOST);
 console.log("[SRV] MODE:", import.meta.env.MODE);  // development / production
 
+
 ---
 
-<!-- [AN] component rendered -->
-<meta name="x-analytics-probe" content="on" />
-<script is:inline>
-  console.log("[CLI] Analytics inline alive");
-  console.log("[SRV] local host:", location.hostname);
+<script>
+  import { IS_PROD, GA_ID, OFFICIAL_HOST } from "../consts";
+  console.log("IS_PROD:", IS_PROD);
+  console.log("GA_ID:", GA_ID || "(empty)");   // ← devでは空のこと多い
+  console.log("OFFICIAL_HOST:", OFFICIAL_HOST);
+  console.log("hostname:", location.hostname);
+  console.log("mode:", import.meta.env.MODE);
 </script>
 
 
@@ -43,7 +45,7 @@ console.log("[SRV] MODE:", import.meta.env.MODE);  // development / production
         // 初期化 & 設定
         window.gtag('js', new Date());
         window.gtag('config', '${GA_ID}');
-        console.log('[GA] loaded for', location.hostname);
+        console.log('[GA] loaded:', GA_ID, 'for', location.hostname);
       //})();
     }
   </script>
