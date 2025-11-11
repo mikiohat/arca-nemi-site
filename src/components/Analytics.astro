@@ -1,5 +1,4 @@
 ---
-
 /**
  * 本番ビルド時のみ GA を読み込む
  * 条件A: import.meta.env.PROD
@@ -7,87 +6,53 @@
  */
 import { IS_PROD, GA_ID, OFFICIAL_HOST } from "../consts";
 
-console.log("[SRV] IS_PROD:", IS_PROD);            // ← devだと false
-console.log("[SRV] GA_ID:", GA_ID || "(empty)");   // ← devでは空のこと多い
+console.log("[SRV] IS_PROD:", IS_PROD); // ← devだと false
+console.log("[SRV] GA_ID:", GA_ID || "(empty)"); // ← devでは空のこと多い
 console.log("[SRV] OFFICIAL_HOST:", OFFICIAL_HOST);
-console.log("[SRV] MODE:", import.meta.env.MODE);  // development / production
-
-
+console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
 ---
 
 <script>
   import { IS_PROD, GA_ID, OFFICIAL_HOST } from "../consts";
   console.log("IS_PROD:", IS_PROD);
-  console.log("GA_ID:", GA_ID || "(empty)");   // ← devでは空のこと多い
+  console.log("GA_ID:", GA_ID || "(empty)"); // ← devでは空のこと多い
   console.log("OFFICIAL_HOST:", OFFICIAL_HOST);
   console.log("hostname:", location.hostname);
   console.log("mode:", import.meta.env.MODE);
 </script>
 
-
-
-
-<script is:inline>
-  (function (GA_ID, HOST) {
-    console.log("[GA] start", { host: location.hostname, HOST, GA_ID });
-
-    if (location.hostname !== HOST) {
-      console.log("[GA] skipped (host mismatch)");
-      return;
-    }
-
-    var s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
-    s.onload = function () {
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function(){ dataLayer.push(arguments); };
-      window.gtag('js', new Date());
-      window.gtag('config', GA_ID);
-      console.log('[GA] loaded:', GA_ID, 'for', location.hostname);
-    };
-    document.head.appendChild(s);
-  })("{GA_ID}", "{OFFICIAL_HOST}");
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 {IS_PROD && (
-  // 本番ビルドのときだけ、クライアントにスクリプトを出す
-  <script is:inline>
-    // ブラウザ側でホスト名をチェック（プレビュー/ローカルは弾く）
-    if (location.hostname === '{OFFICIAL_HOST}') {
-      //(function () {
-        // dataLayer を保証
+  // 属性は Astro が確実に展開してくれる
+  <script is:inline data-ga={GA_ID} data-host={OFFICIAL_HOST}>
+    (function () {
+      var el   = document.currentScript;
+      var GAID = el && el.dataset ? el.dataset.ga   : "";
+      var HOST = el && el.dataset ? el.dataset.host : "";
+
+      // ← まず値が正しく入ってるか見よう
+      console.log("[GA] start", { host: location.hostname, HOST, GAID });
+
+      // ★デバッグしたい間は下の if をコメントアウトして強制ロードも可
+      if (location.hostname !== HOST) {
+        console.log("[GA] skipped: host mismatch");
+        return;
+      }
+
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = "https://www.googletagmanager.com/gtag/js?id=" + GAID;
+      s.onload = function () {
         window.dataLayer = window.dataLayer || [];
-        // 可変長引数で宣言（型エラー回避）
-        window.gtag = function (...args) { window.dataLayer.push(args); };
-
-        // ライブラリの読み込み（async）
-        const s = document.createElement('script');
-        s.async = true;
-        s.src = 'https://www.googletagmanager.com/gtag/js?id=${GA_ID}';
-        document.head.appendChild(s);
-
-        // 初期化 & 設定
-        window.gtag('js', new Date());
-        window.gtag('config', GA_ID);
-        console.log('[GA] loaded:', GA_ID, 'for', location.hostname);
-      //})();
-    }
+        window.gtag = function(){ window.dataLayer.push(arguments); };
+        window.gtag("js", new Date());
+        window.gtag("config", GAID);
+        console.log("[GA] loaded:", GAID, "for", location.hostname);
+      };
+      s.onerror = function (e) {
+        console.error("[GA] failed:", s.src, e);
+      };
+      document.head.appendChild(s);
+    })();
   </script>
 )}
+
