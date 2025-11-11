@@ -5,6 +5,7 @@ import Footer from "../components/Footer.astro";
 import Analytics from "../components/Analytics.astro";
 // src/components/BaseHead.astro
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_FAVICON } from "../consts";
+import faviconUrl from "../assets/favicon.svg"; // ← 生パスではなくimport！
 
 interface Props {
   title?: string;
