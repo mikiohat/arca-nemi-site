@@ -34,15 +34,3 @@ console.log("[SRV] SITE_FAVICON:", SITE_FAVICON);
     <Footer />
   </body>
 </html>
-
-<!-- BaseLayout の下、どこでもOK（末尾でOK） -->
-<script is:inline>
-  if (window.gtag) {
-    window.gtag("event", "page_not_found", {
-      page_path: location.pathname, // 例: /feelings-sql
-      page_location: location.href, // 例: https://…/feelings-sql
-      referrer: document.referrer || "(none)",
-    });
-    console.log("[GA] 404 flagged:", location.pathname);
-  }
-</script>
