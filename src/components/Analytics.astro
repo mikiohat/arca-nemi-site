@@ -25,28 +25,26 @@ console.log("[SRV] MODE:", import.meta.env.MODE);  // development / production
 </script>
 
 
-{IS_PROD === true && (
-  // 本番ビルドのときだけ、クライアントにスクリプトを出す
+{IS_PROD && (
   <script is:inline>
-    // ブラウザ側でホスト名をチェック（プレビュー/ローカルは弾く）
-    if (location.hostname === '{OFFICIAL_HOST}') {
-      //(function () {
-        // dataLayer を保証
-        window.dataLayer = window.dataLayer || [];
-        // 可変長引数で宣言（型エラー回避）
-        window.gtag = function (...args) { window.dataLayer.push(args); };
+    const GA_ID = "{GA_ID}";
+    const HOST  = "{OFFICIAL_HOST}";
 
-        // ライブラリの読み込み（async）
-        const s = document.createElement('script');
-        s.async = true;
-        s.src = 'https://www.googletagmanager.com/gtag/js?id=${GA_ID}';
-        document.head.appendChild(s);
+    if (location.hostname === HOST) {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = (...args) => window.dataLayer.push(args);
 
-        // 初期化 & 設定
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+      s.onload = () => {
         window.gtag('js', new Date());
-        window.gtag('config', {GA_ID});
-        console.log('[GA] loaded:', {GA_ID}, 'for', location.hostname);
-      //})();
+        window.gtag('config', GA_ID);
+        console.log('[GA] loaded:', GA_ID, 'for', location.hostname);
+      };
+      document.head.appendChild(s);
+    } else {
+      console.log("[GA] skipped: not official host", location.hostname);
     }
   </script>
 )}
