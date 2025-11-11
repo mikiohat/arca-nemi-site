@@ -11,18 +11,47 @@ const SOCIAL = [
   // { href: "https://github.com/your_id/feelings-sql-sites", label: "GitHub" },
 ];
 ---
+
 <header class="sticky top-0 z-10 border-b bg-white/80 backdrop-blur">
   <nav class="mx-auto flex max-w-screen-md items-center justify-between p-3">
     <a href="/" class="font-bold">感情💙Hub</a>
     <div class="flex items-center gap-6">
       <ul class="flex gap-4">
-        {NAV.map((n) => <li><a href={n.href} class="hover:underline">{n.label}</a></li>)}
+        {
+          NAV.map((n) => (
+            <li>
+              <a href={n.href} class="hover:underline">
+                {n.label}
+              </a>
+            </li>
+          ))
+        }
       </ul>
-      {SOCIAL.length > 0 && (
-        <ul class="hidden gap-3 sm:flex">
-          {SOCIAL.map((s) => <li><a href={s.href} rel="me" class="text-sm hover:underline">{s.label}</a></li>)}
-        </ul>
-      )}
+      {
+        SOCIAL.length > 0 && (
+          <ul class="hidden gap-3 sm:flex">
+            {SOCIAL.map((s) => (
+              <li>
+                <a href={s.href} rel="me" class="text-sm hover:underline">
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
     </div>
   </nav>
 </header>
+
+<a
+  href="https://x.com/your_account"
+  target="_blank"
+  rel="noopener"
+  onclick="window.gtag && window.gtag('event','outbound_click',{
+     event_category:'outbound',
+     event_label:'twitter_profile'
+   });"
+>
+  X（Twitter）へ
+</a>
