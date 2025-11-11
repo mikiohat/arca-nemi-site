@@ -1,18 +1,34 @@
 ---
+
 /**
  * 本番ビルド時のみ GA を読み込む
  * 条件A: import.meta.env.PROD
  * 条件B: location.hostname === OFFICIAL_HOST
  */
 import { IS_PROD, GA_ID, OFFICIAL_HOST } from "../consts";
+
+
+console.log("[SRV] IS_PROD:", IS_PROD);            // ← devだと false
+console.log("[SRV] GA_ID:", GA_ID || "(empty)");   // ← devでは空のこと多い
+console.log("[SRV] OFFICIAL_HOST:", OFFICIAL_HOST);
+console.log("[SRV] MODE:", import.meta.env.MODE);  // development / production
+
 ---
+
+<!-- [AN] component rendered -->
+<meta name="x-analytics-probe" content="on" />
+<script is:inline>
+  console.log("[CLI] Analytics inline alive");
+  console.log("[SRV] local host:", location.hostname);
+</script>
+
 
 {IS_PROD && (
   // 本番ビルドのときだけ、クライアントにスクリプトを出す
   <script is:inline>
     // ブラウザ側でホスト名をチェック（プレビュー/ローカルは弾く）
     if (location.hostname === '{OFFICIAL_HOST}') {
-      (function () {
+      //(function () {
         // dataLayer を保証
         window.dataLayer = window.dataLayer || [];
         // 可変長引数で宣言（型エラー回避）
@@ -27,7 +43,8 @@ import { IS_PROD, GA_ID, OFFICIAL_HOST } from "../consts";
         // 初期化 & 設定
         window.gtag('js', new Date());
         window.gtag('config', '${GA_ID}');
-      })();
+        console.log('[GA] loaded for', location.hostname);
+      //})();
     }
   </script>
 )}

@@ -2,40 +2,26 @@
 // src/layouts/BaseLayout.astro
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-
+import Analytics from "../components/Analytics.astro";
 // src/components/BaseHead.astro
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_FAVICON } from "../consts";
+
 interface Props {
   title?: string;
   description?: string;
 }
+
 const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
-const GA_ID = import.meta.env.PUBLIC_GA_ID; // 環境変数で設定
 ---
 
 <html lang="ja">
   <head>
+    <Analytics />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href={SITE_FAVICON} type="image/svg+xml" />
-    {
-      GA_ID && (
-        <>
-          <script
-            is:inline
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          />
-          <script is:inline>
-            {`window.dataLayer = window.dataLayer || [];
-           function gtag(){dataLayer.push(arguments);}
-           gtag('js', new Date());
-           gtag('config', '${GA_ID}');`}
-          </script>
-        </>
-      )
-    }
   </head>
   <body class="min-h-screen bg-white text-gray-900">
     <Header />
