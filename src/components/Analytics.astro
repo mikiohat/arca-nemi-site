@@ -21,22 +21,18 @@ console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
   console.log("mode:", import.meta.env.MODE);
 </script>
 
+
 {IS_PROD && (
-  // 属性は Astro が確実に展開してくれる
   <script is:inline data-ga={GA_ID} data-host={OFFICIAL_HOST}>
     (function () {
       var el   = document.currentScript;
       var GAID = el && el.dataset ? el.dataset.ga   : "";
       var HOST = el && el.dataset ? el.dataset.host : "";
 
-      // ← まず値が正しく入ってるか見よう
       console.log("[GA] start", { host: location.hostname, HOST, GAID });
 
-      // ★デバッグしたい間は下の if をコメントアウトして強制ロードも可
-      if (location.hostname !== HOST) {
-        console.log("[GA] skipped: host mismatch");
-        return;
-      }
+      if (!GAID) { console.warn("[GA] missing GAID"); return; }
+      if (location.hostname !== HOST) { console.log("[GA] skipped (host mismatch)"); return; }
 
       var s = document.createElement("script");
       s.async = true;
@@ -55,4 +51,3 @@ console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
     })();
   </script>
 )}
-
