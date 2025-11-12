@@ -27,8 +27,10 @@ console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
   <script is:inline data-host={ALLOWED_HOSTS}>
     (function(){
       var el   = document.currentScript;
-      var HOST = el && el.dataset ? el.dataset.host : ""; 
-      console.log("[FUN] HOST:", HOST);
+      var HOSTS = el && el.dataset ? el.dataset.host : ""; 
+      const allowed = HOSTS.some(h => location.hostname.includes(h));
+      console.log("[FUN] HOST:", HOSTS);
+      console.log("[FUN] ALLOWED:", allowed);            
       if (location.hostname !== HOST) { console.log("[GTM] skipped (host mismatch)"); return; }
       // Google Tag Manager
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
