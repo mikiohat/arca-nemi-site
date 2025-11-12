@@ -25,11 +25,11 @@ console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
 
 
 {IS_PROD && (
-  <script is:inline>
+  <script is:inline data-allowed-host={ALLOWED_HOSTS}>
     (function(){
-      const allowedHosts = ["arca-nemi.dev", "vercel.app"];
-      const host = location.hostname;
-      const allowed = allowedHosts.some(h => host.includes(h));
+      var el   = document.currentScript;
+      var  allowedHosts = el && el.dataset ? el.dataset.host : "";
+      const allowed = allowedHosts.some(h => location.hostname.includes(h));
       // var HOST = "{ ALLOWED_HOSTS }";
       if (!allowed) { console.log("[GTM] skipped (host mismatch)"); return; }
       // Google Tag Manager
@@ -43,3 +43,9 @@ console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
   </script>
 )}
 
+<!-- 
+  <script is:inline data-ga={GA_ID} data-host={OFFICIAL_HOST}>
+    (function () {
+      var el   = document.currentScript;
+      var GAID = el && el.dataset ? el.dataset.ga   : "";
+      var HOST = el && el.dataset ? el.dataset.host : ""; -->
