@@ -14,7 +14,6 @@ interface Props {
 
 const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 
-import { IS_PROD } from "../consts";
 //console.log("[SRV] SITE_FAVICON:", SITE_FAVICON);
 ---
 
@@ -29,18 +28,15 @@ import { IS_PROD } from "../consts";
   </head>
   <body class="min-h-screen bg-white text-gray-900">
     <!-- Google Tag Manager (noscript) -->
-    {
-      IS_PROD && (
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
-            height="0"
-            width="0"
-            style="display:none;visibility:hidden"
-          />
-        </noscript>
-      )
-    }
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-PZDTGPSS"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      >
+      </iframe>
+    </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <Header />
     <main class="mx-auto max-w-screen-md px-4 py-8">
