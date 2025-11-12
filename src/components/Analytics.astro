@@ -27,7 +27,7 @@ console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
   <script is:inline data-host={ALLOWED_HOSTS}>
     (function(){
       var el   = document.currentScript;
-      var HOSTS = el && el.dataset ? el.dataset.host : ""; 
+      var HOSTS = el && el.dataset ? el.dataset.host.split(",") : []; 
       console.log("[FUN] HOST:", HOSTS);
       const allowed = HOSTS.some(h => location.hostname.includes(h));
       console.log("[FUN] ALLOWED:", allowed);            
