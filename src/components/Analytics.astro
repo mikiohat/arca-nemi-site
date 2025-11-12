@@ -22,31 +22,18 @@ console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
 </script> -->
 
 {IS_PROD && (
-  <script is:inline data-ga={GA_ID} data-host={OFFICIAL_HOST}>
-    (function () {
-      var el   = document.currentScript;
-      var GAID = el && el.dataset ? el.dataset.ga   : "";
-      var HOST = el && el.dataset ? el.dataset.host : "";
-
-      console.log("[GA] start", { host: location.hostname, HOST, GAID });
-
-      if (!GAID) { console.warn("[GA] missing GAID"); return; }
-      if (location.hostname !== HOST) { console.log("[GA] skipped (host mismatch)"); return; }
-
-      var s = document.createElement("script");
-      s.async = true;
-      s.src = "https://www.googletagmanager.com/gtag/js?id=" + GAID;
-      s.onload = function () {
-        window.dataLayer = window.dataLayer || [];
-        window.gtag = function(){ window.dataLayer.push(arguments); };
-        window.gtag("js", new Date());
-        window.gtag("config", GAID);
-        console.log("[GA] loaded:", GAID, "for", location.hostname);
-      };
-      s.onerror = function (e) {
-        console.error("[GA] failed:", s.src, e);
-      };
-      document.head.appendChild(s);
+  <script is:inline>
+    (function(){
+      var HOST = "{OFFICIAL_HOST}";
+      if (location.hostname !== HOST) { console.log("[GTM] skipped (host mismatch)"); return; }
+      // Google Tag Manager
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+        var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
+        j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+        f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-PZDTGPSS');
+      // End Google Tag Manager
     })();
   </script>
 )}
+
