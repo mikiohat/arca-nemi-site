@@ -25,14 +25,10 @@ console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
 
 
 {IS_PROD && (
-  <script is:inline data-allowed-host={ALLOWED_HOSTS}>
+  <script is:inline data-host={ALLOWED_HOSTS}>
     (function(){
-const hosts = ["arca-nemi.dev", "vercel.app"];
-const myHost = "arca-nemi-site-abc123.vercel.app";
-
-// includes() は「文字列が部分一致するか」を調べる
-const allowed = hosts.some(h => myHost.includes(h));
-      if (!allowed) { console.log("[GTM] skipped (host mismatch)"); return; }
+      var HOST = el && el.dataset ? el.dataset.host : ""; 
+      if (location.hostname) { console.log("[GTM] skipped (host mismatch)"); return; }
       // Google Tag Manager
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
         var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
