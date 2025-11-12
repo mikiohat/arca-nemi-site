@@ -1,52 +1,37 @@
 ---
 /**
- * 本番ビルド時のみ GA を読み込む
- * 条件A: import.meta.env.PROD
- * 条件B: location.hostname === OFFICIAL_HOST
+ * 本番ビルド時のみ GTM を読み込む
+ * 条件: location.hostname === OFFICIAL_HOST
  */
-import { IS_PROD, GA_ID, OFFICIAL_HOST } from "../consts";
+import { OFFICIAL_HOST, GTM_ID } from "../consts";
 
-console.log("[SRV] IS_PROD:", IS_PROD); // ← devだと false
-console.log("[SRV] GA_ID:", GA_ID || "(empty)"); // ← devでは空のこと多い
 console.log("[SRV] OFFICIAL_HOST:", OFFICIAL_HOST);
-console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
 ---
 
-<!-- サーバサイドデバッグ　<script>
-  import { IS_PROD, GA_ID, OFFICIAL_HOST } from "../consts";
-  console.log("IS_PROD:", IS_PROD);
-  console.log("GA_ID:", GA_ID || "(empty)"); // ← devでは空のこと多い
-  console.log("OFFICIAL_HOST:", OFFICIAL_HOST);
+<script>
   console.log("hostname:", location.hostname);
-  console.log("mode:", import.meta.env.MODE);
-</script> -->
+</script>
 
-{IS_PROD && (
-  <script is:inline data-ga={GA_ID} data-host={OFFICIAL_HOST}>
-    (function () {
-      var el   = document.currentScript;
-      var GAID = el && el.dataset ? el.dataset.ga   : "";
-      var HOST = el && el.dataset ? el.dataset.host : "";
-
-      console.log("[GA] start", { host: location.hostname, HOST, GAID });
-
-      if (!GAID) { console.warn("[GA] missing GAID"); return; }
-      if (location.hostname !== HOST) { console.log("[GA] skipped (host mismatch)"); return; }
-
-      var s = document.createElement("script");
-      s.async = true;
-      s.src = "https://www.googletagmanager.com/gtag/js?id=" + GAID;
-      s.onload = function () {
-        window.dataLayer = window.dataLayer || [];
-        window.gtag = function(){ window.dataLayer.push(arguments); };
-        window.gtag("js", new Date());
-        window.gtag("config", GAID);
-        console.log("[GA] loaded:", GAID, "for", location.hostname);
-      };
-      s.onerror = function (e) {
-        console.error("[GA] failed:", s.src, e);
-      };
-      document.head.appendChild(s);
-    })();
-  </script>
-)}
+<script is:inline data-ga={GTM_ID} data-host={OFFICIAL_HOST}>
+  (function () {
+    var el = document.currentScript;
+    var GTMID = el && el.dataset ? el.dataset.ga : "";
+    var HOST = el && el.dataset ? el.dataset.host : "";
+    if (location.hostname !== HOST) {
+      console.log("[GTM] skipped (host mismatch)");
+      return;
+    }
+    // Google Tag Manager
+    (function (w, d, s, l, i) {
+      w[l] = w[l] || [];
+      w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+      var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s),
+        dl = l != "dataLayer" ? "&l=" + l : "";
+      j.async = true;
+      j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, "script", "dataLayer", GTMID);
+    // End Google Tag Manager
+  })();
+</script>

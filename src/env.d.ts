@@ -1,4 +1,8 @@
 // declaration
+// import.meta.env.MODEやPRODが使えるようになる
+// export const IS_PROD = import.meta.env.PROD; //import.meta.env.MODE
+// export const GA_ID = import.meta.env.PUBLIC_GA_ID;
+
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
