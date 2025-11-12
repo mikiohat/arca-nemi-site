@@ -9,18 +9,18 @@ import { IS_PROD, GA_ID, OFFICIAL_HOST } from "../consts";
 console.log("[SRV] IS_PROD:", IS_PROD); // ← devだと false
 console.log("[SRV] GA_ID:", GA_ID || "(empty)"); // ← devでは空のこと多い
 console.log("[SRV] OFFICIAL_HOST:", OFFICIAL_HOST);
-console.log("[SRV] LOCAL_HOST:", location.hostname);
 console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
 ---
 
-<!-- サーバサイドデバッグ　<script>
+<script>
   import { IS_PROD, GA_ID, OFFICIAL_HOST } from "../consts";
   console.log("IS_PROD:", IS_PROD);
   console.log("GA_ID:", GA_ID || "(empty)"); // ← devでは空のこと多い
   console.log("OFFICIAL_HOST:", OFFICIAL_HOST);
   console.log("hostname:", location.hostname);
   console.log("mode:", import.meta.env.MODE);
-</script> -->
+</script>
+
 
 {IS_PROD && (
   <script is:inline>
