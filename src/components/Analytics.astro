@@ -3,7 +3,7 @@
  * 本番ビルド時のみ GTM を読み込む
  * 条件: location.hostname === OFFICIAL_HOST
  */
-import { OFFICIAL_HOST } from "../consts";
+import { OFFICIAL_HOST, GTM_ID } from "../consts";
 
 console.log("[SRV] OFFICIAL_HOST:", OFFICIAL_HOST);
 ---
@@ -12,9 +12,10 @@ console.log("[SRV] OFFICIAL_HOST:", OFFICIAL_HOST);
   console.log("hostname:", location.hostname);
 </script>
 
-<script is:inline data-host={OFFICIAL_HOST}>
+<script is:inline data-ga={GTM_ID} data-host={OFFICIAL_HOST}>
   (function () {
     var el = document.currentScript;
+    var GTMID = el && el.dataset ? el.dataset.ga : "";
     var HOST = el && el.dataset ? el.dataset.host : "";
     if (location.hostname !== HOST) {
       console.log("[GTM] skipped (host mismatch)");
@@ -30,7 +31,7 @@ console.log("[SRV] OFFICIAL_HOST:", OFFICIAL_HOST);
       j.async = true;
       j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
       f.parentNode.insertBefore(j, f);
-    })(window, document, "script", "dataLayer", "GTM-PZDTGPSS");
+    })(window, document, "script", "dataLayer", GTMID);
     // End Google Tag Manager
   })();
 </script>

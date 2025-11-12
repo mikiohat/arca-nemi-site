@@ -4,8 +4,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Analytics from "../components/Analytics.astro";
 // src/components/BaseHead.astro
-import { SITE_TITLE, SITE_DESCRIPTION, SITE_FAVICON } from "../consts";
-import faviconUrl from "../assets/favicon.svg"; // ← 生パスではなくimport！
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_FAVICON, GTM_ID } from "../consts";
 
 interface Props {
   title?: string;
@@ -30,7 +29,7 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
     <!-- Google Tag Manager (noscript) -->
     <noscript>
       <iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-PZDTGPSS"
+        src={"https://www.googletagmanager.com/ns.html?id=" + GTM_ID}
         height="0"
         width="0"
         style="display:none;visibility:hidden"
