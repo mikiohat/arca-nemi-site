@@ -28,3 +28,5 @@ pnpm-debug.log*
 tsconfig.json
 
 dir.txt
+memo.txt
+.vercel

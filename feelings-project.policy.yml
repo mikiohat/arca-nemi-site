@@ -1,0 +1,86 @@
+# feelings-project.policy.yml
+# Purpose: Project-wide operating rules (brand charter + deployment)
+version: 1
+updated_at: "2025-11-01T00:00:00+09:00"
+
+project:
+  key: feelings-project
+  visibility: public
+
+brand_charter:
+  principles:
+    - id: 1
+      title: Craft the world, let time make it real
+      quote: "God is in the details — and time makes the world real."
+      guidelines:
+        - Design and storytelling are completed through accumulation.
+        - Be patient and meticulous. Do not rush results.
+        - Consistency of the world is the foundation of trust.
+    - id: 2
+      title: Make it discoverable, or it doesn’t exist
+      quote: "Even the best story means nothing if it isn’t found."
+      guidelines:
+        - SEO, structure, and SNS are forms of sincerity.
+        - “Customer first” is the implementation of thoughtfulness.
+        - Never stop making efforts to be discovered.
+    - id: 3
+      title: Help visitors fall in love with AI and computer technology, and feel inspired
+      quote: "Teach hearts, not just heads."
+      guidelines:
+        - Remind people of the emotions beyond technology.
+        - Always ask why we learn it and what value it brings.
+        - Design learning experiences with warmth.
+
+practical_notes:
+  # 🌙 運用の心得
+  - perspective: World-building consistency
+    practice: Maintain consistency in design, color, font, and narrative. Characters and backgrounds should embody “God is in the details.”
+    checkpoints:
+      - design_system_present: true
+      - typography_locked: true
+      - character_assets_versioned: true
+  - perspective: Delivery & discoverability
+    practice: Systematize metadata, SEO, and SNS structures to refine the “technology of reaching.” Validate through GA4.
+    checkpoints:
+      - meta_og_twitter_present: true
+      - sitemap_robots_present: true
+      - ga4_event_plan_documented: true
+  - perspective: Empathy through technology
+    practice: Speak about code and AI in human terms. Create experiences that make users “touch and fall in love” through playgrounds or conversational structures.
+    checkpoints:
+      - tutorial_has_try_section: true
+      - conversational_examples_included: true
+
+conventions:
+  # 実務規約（開発用）
+  commit:
+    style: "conventional-commits"
+    examples:
+      - "feat(blog): add ep.03 outline"
+      - "fix(og): correct favicon path"
+      - "chore(ci): tighten review rules"
+  branches:
+    protected:
+      - main
+    ephemeral_prefixes:
+      - "feature/"
+      - "fix/"
+      - "chore/"
+  assets:
+    public_dir_rules:
+      - "Favicon, OGP, robots.txt, and sitemap.xml must be placed in the public/ directory."
+      - "Always use absolute paths (e.g., /favicon.svg)."
+
+policy:
+  deploy:
+    method: github-only          # 原則：Vercel CLIによる手動デプロイは禁止
+    production_branch: main      # 本番ブランチ
+    preview_branch_prefix: "feature/"  # プレビュー用の接頭辞
+    manual_vercel: false         # CLI直デプロイ禁止フラグ
+    ci:
+      require_pull_request: true
+      require_reviews: true      # レビュー文化を維持
+      min_approvals: 1           # チーム化後は2などに引き上げ可
+    audit:
+      keep_build_logs: true
+      trace_deploy_from_commit: true  # どのコミットが本番に出たかを明確化
