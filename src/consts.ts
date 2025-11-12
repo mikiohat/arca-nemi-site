@@ -6,3 +6,4 @@ export const SITE_DESCRIPTION = '感情とロジックが対話する、学び�
 export const SITE_FAVICON = '/favicon.svg';
 
 export const OFFICIAL_HOST = 'arca-nemi.dev';
+export const GA_ID = import.meta.env.PUBLIC_GA_ID;
