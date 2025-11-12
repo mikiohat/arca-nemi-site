@@ -1,5 +1,6 @@
 ---
 // src/pages/404.astro
+// 本来望んでいたリンク先でないものとしてGA4でちゃんと認識されている
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { SITE_FAVICON } from "../consts";
 ---
@@ -15,16 +16,4 @@ import { SITE_FAVICON } from "../consts";
             <a href="/">ホームに戻る</a>
         </div>
     </main>
-
-    <!-- BaseLayout の下、どこでもOK（末尾でOK） -->
-    <!-- <script is:inline>
-        if (window.gtag) {
-            window.gtag("event", "page_not_found", {
-                page_path: location.pathname, // 例: /feelings-sql
-                page_location: location.href, // 例: https://…/feelings-sql
-                referrer: document.referrer || "(none)",
-            });
-            console.log("[GA] 404 flagged:", location.pathname);
-        }
-    </script> -->
 </BaseLayout>
