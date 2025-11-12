@@ -18,7 +18,6 @@ console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
   console.log("IS_PROD:", IS_PROD);
   console.log("GA_ID:", GA_ID || "(empty)"); // ← devでは空のこと多い
   console.log("OFFICIAL_HOST:", OFFICIAL_HOST);
-  console.log("ALLOWED_HOST:", ALLOWED_HOST);
   console.log("hostname:", location.hostname);
   console.log("mode:", import.meta.env.MODE);
 </script>
@@ -29,6 +28,7 @@ console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
     (function(){
       var el   = document.currentScript;
       var HOST = el && el.dataset ? el.dataset.host : ""; 
+      console.log("[FUN] HOST:", HOST);
       if (location.hostname !== HOST) { console.log("[GTM] skipped (host mismatch)"); return; }
       // Google Tag Manager
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
