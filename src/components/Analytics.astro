@@ -28,8 +28,8 @@ console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
     (function(){
       var el   = document.currentScript;
       var HOSTS = el && el.dataset ? el.dataset.host : ""; 
-      const allowed = HOSTS.some(h => location.hostname.includes(h));
       console.log("[FUN] HOST:", HOSTS);
+      const allowed = HOSTS.some(h => location.hostname.includes(h));
       console.log("[FUN] ALLOWED:", allowed);            
       if (location.hostname !== HOST) { console.log("[GTM] skipped (host mismatch)"); return; }
       // Google Tag Manager
