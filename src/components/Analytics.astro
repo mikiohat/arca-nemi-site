@@ -27,10 +27,11 @@ console.log("[SRV] MODE:", import.meta.env.MODE); // development / production
 {IS_PROD && (
   <script is:inline data-allowed-host={ALLOWED_HOSTS}>
     (function(){
-      var el   = document.currentScript;
-      var  allowedHosts = el && el.dataset ? el.dataset.host : "";
-      const allowed = allowedHosts.some(h => location.hostname.includes(h));
-      // var HOST = "{ ALLOWED_HOSTS }";
+const hosts = ["arca-nemi.dev", "vercel.app"];
+const myHost = "arca-nemi-site-abc123.vercel.app";
+
+// includes() は「文字列が部分一致するか」を調べる
+const allowed = hosts.some(h => myHost.includes(h));
       if (!allowed) { console.log("[GTM] skipped (host mismatch)"); return; }
       // Google Tag Manager
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
