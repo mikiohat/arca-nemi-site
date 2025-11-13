@@ -5,14 +5,11 @@
  */
 import { OFFICIAL_HOST, GTM_ID } from "../consts";
 
-console.log("[SRV] OFFICIAL_HOST:", OFFICIAL_HOST);
+//console.log("[SRV] OFFICIAL_HOST:", OFFICIAL_HOST);
 ---
 
-<script>
-  console.log("hostname:", location.hostname);
-</script>
-
-<script is:inline data-ga={GTM_ID} data-host={OFFICIAL_HOST}>
+<!-- defer は基本的に<script src="..."></script>で効く。↓はinlineで、Baselayoutでheadに読み込まれて展開だからたぶん意味なし-->
+<script is:inline data-ga={GTM_ID} data-host={OFFICIAL_HOST} defer>
   (function () {
     var el = document.currentScript;
     var GTMID = el && el.dataset ? el.dataset.ga : "";
