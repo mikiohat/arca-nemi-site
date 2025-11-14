@@ -1,0 +1,110 @@
+---
+import TalkRow from "@talk/TalkRow.astro";
+
+const episode = {
+    title: "第1話：余白を盛りすぎるアルカ",
+    description:
+        "余白とレイアウトの考え方を、アルカとネミのトークでゆるっと学ぶ回。",
+    lines: [
+        {
+            speaker: "arca",
+            text: "ネミ先輩〜！レイアウトを頑張ってみたんですけど、なんかオシャレにならなくて……。",
+        },
+        {
+            speaker: "nemi",
+            text: "詰め込みすぎだよ。レイアウトの中に『余白』がほとんどないから、窮屈に見えちゃう。",
+        },
+        {
+            speaker: "arca",
+            text: "えっ、余白があると落ち着きがなくて…ついつい盛ったり足したりしちゃいます……。",
+        },
+        {
+            speaker: "nemi",
+            text: "余白を怖がらないこと。余白をうまく使って、より整理されて見えるレイアウトを目指そう。",
+        },
+        {
+            speaker: "arca",
+            text: "できちゃった余白がそんなにうまく活かせるんですか…？",
+        },
+        {
+            speaker: "nemi",
+            text: "余白が『できる』じゃなくて、余白を『つくる』んだよ。",
+        },
+        {
+            speaker: "arca",
+            text: "は、はいぃ……！！！",
+        },
+    ] as const,
+};
+---
+
+<title>{episode.title} | 感情💙SQL</title>
+<meta name="description" content={episode.description} />
+
+<main class="episode">
+    <header class="episode__header">
+        <p class="episode__label">Episode 01</p>
+        <h1 class="episode__title">{episode.title}</h1>
+        <p class="episode__description">
+            {episode.description}
+        </p>
+    </header>
+
+    <section class="episode__talk">
+        {
+            episode.lines.map((line) => (
+                <TalkRow speaker={line.speaker} text={line.text} />
+            ))
+        }
+    </section>
+</main>
+
+<style>
+    .episode {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 1.25rem 1rem 2.5rem;
+    }
+
+    .episode__header {
+        margin-bottom: 1.5rem;
+    }
+
+    .episode__label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        opacity: 0.7;
+        margin-bottom: 0.35rem;
+    }
+
+    .episode__title {
+        font-size: 1.35rem;
+        line-height: 1.4;
+        margin-bottom: 0.35rem;
+    }
+
+    .episode__description {
+        font-size: 0.9rem;
+        line-height: 1.7;
+        color: #4b5563;
+    }
+
+    .episode__talk {
+        margin-top: 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+        .episode {
+            padding-inline: 1.5rem;
+        }
+
+        .episode__title {
+            font-size: 1.5rem;
+        }
+
+        .episode__description {
+            font-size: 0.95rem;
+        }
+    }
+</style>

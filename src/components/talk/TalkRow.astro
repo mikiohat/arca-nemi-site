@@ -1,0 +1,102 @@
+---
+interface Props {
+    speaker: "arca" | "nemi";
+    text: string;
+}
+
+const { speaker, text } = Astro.props;
+const isArca = speaker === "arca";
+---
+
+<div class={`talk-row ${isArca ? "talk-row--arca" : "talk-row--nemi"}`}>
+    <div class="talk-row__character">
+        <div
+            class={`character-band ${isArca ? "character-band--arca" : "character-band--nemi"}`}
+        >
+            <!-- ここは好きなアイコン画像に差し替えてOK -->
+            <img
+                src={isArca
+                    ? "/assets/arca-normal.svg"
+                    : "/assets/nemi-normal.svg"}
+                alt={isArca ? "Arca" : "Nemi"}
+                class="character-band__icon"
+                loading="lazy"
+            />
+        </div>
+    </div>
+
+    <div class="talk-row__bubble">
+        <div class="bubble">
+            {text}
+        </div>
+    </div>
+</div>
+
+<style>
+    .talk-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-block: 0.75rem;
+    }
+
+    /* アルカは左・ネミは右（左右反転） */
+    .talk-row--arca {
+        flex-direction: row;
+    }
+
+    .talk-row--nemi {
+        flex-direction: row-reverse;
+    }
+
+    .talk-row__character {
+        flex: 0 0 26%;
+    }
+
+    .talk-row__bubble {
+        flex: 1 1 auto;
+    }
+
+    .character-band {
+        border-radius: 0.75rem;
+        padding: 0.4rem 0.35rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* 🎨 配色：アルカ＝青系、ネミ＝赤系 */
+    .character-band--arca {
+        background: #2d6cdf; /* お好みで青系に調整してOK */
+    }
+
+    .character-band--nemi {
+        background: #e2574c; /* お好みで赤系に調整してOK */
+    }
+
+    .character-band__icon {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .bubble {
+        background: #ffffff;
+        border-radius: 0.75rem;
+        padding: 0.75rem 0.9rem;
+        box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08);
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    @media (min-width: 768px) {
+        .talk-row {
+            gap: 1rem;
+            margin-block: 1rem;
+        }
+
+        .bubble {
+            font-size: 1rem;
+        }
+    }
+</style>
