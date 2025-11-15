@@ -2,21 +2,26 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="feelings 💙 SQL">
+<!-- src/pages/index.astro -->
+<BaseLayout title="feelings 💙 projects">
     {/* HERO */}
     <section class="fp-section fp-hero js-fade" id="top">
         <div class="fp-hero-inner">
             <p class="fp-kicker">A conversation between feelings and logic.</p>
             <h1 class="fp-title">
-                感情💙SQL
-                <span>動き出したくなる、思想をもった実務家のために。</span>
+                feelings 💙 projects
+                <span
+                    >For practitioners who move with intention and live with
+                    philosophy.</span
+                >
             </h1>
             <p class="fp-lead">
-                アルカ（感情）とネミ（ロジック）の掛け合いを通じて、
-                データ社会に「人の温度」と「考える楽しさ」を取り戻すプロジェクト。
+                Through the banter between Arca (emotion) and Nemi (logic), this
+                project brings back “human warmth” and “the joy of thinking” to
+                a data-driven world.
             </p>
 
-            <a href="#story" class="fp-cta">物語からはじめる</a>
+            <a href="#story" class="fp-cta">Start with the Story</a>
         </div>
     </section>
 
@@ -25,12 +30,13 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
         <div class="fp-section-inner">
             <h2>Story</h2>
             <p>
-                夜更けのオフィス。クエリログの山に埋もれながら、
-                ネミはふと「なんで、こんなにしんどいんだろう」と手を止める。
+                Late at night in the office, buried under a mountain of query
+                logs, Nemi suddenly pauses and wonders, “Why… does this feel so
+                exhausting?”
             </p>
             <p>
-                そのとき、画面の奥からひょいっと顔を出したのが、
-                感情を司るAIの女の子・アルカだった――。
+                Just then, someone pops out from deep inside the monitor— Arca,
+                the AI girl who embodies emotion.
             </p>
         </div>
     </section>
@@ -41,18 +47,20 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
             <h2>Cast</h2>
             <div class="fp-cards">
                 <article class="fp-card">
-                    <h3>アルカ</h3>
+                    <h3>Arca</h3>
                     <p>
-                        感情とノリを司るAIの女の子。考える前に動くタイプ。
-                        データの“ざわざわ”を言語化するのが得意。
+                        An AI girl who governs emotion and impulse. Acts before
+                        she thinks. Skilled at giving language to the “emotional
+                        noise” hidden in data.
                     </p>
                 </article>
 
                 <article class="fp-card">
-                    <h3>ネミ</h3>
+                    <h3>Nemi</h3>
                     <p>
-                        温度のある理屈屋なエンジニア。ロジックで世界を整理しながらも、
-                        どこか優しいツッコミ役。
+                        A warm-hearted, logic-driven engineer. She organizes the
+                        world with reason, yet somehow always delivers the
+                        gentlest punchlines.
                     </p>
                 </article>
             </div>
@@ -64,30 +72,31 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
         <div class="fp-section-inner">
             <h2>Episodes &amp; Playground</h2>
             <p>
-                まずは、アルカとネミのおバカな会話から。
-                そして、ワンクリックで実際にためせるSQLへ。
+                First, enjoy Arca and Nemi’s silly conversations. Then, with one
+                click, try the SQL yourself.
             </p>
 
             <div class="fp-cards">
                 <article class="fp-card">
-                    <h3>第1話：問いから始まるSQL</h3>
+                    <h3>Episode 1: SQL Begins with a Question</h3>
                     <p>
-                        「なんでこのクエリ重いんだろう？」から始まる、夜更けの残業デバッグ会。
+                        A late-night debugging session sparked by “Why is this
+                        query so slow?”
                     </p>
                     <p>
-                        <a href="/episodes/episode-1">Episodeを読む</a> ／
-                        <a href="/playground/episode-1">Playgroundで試す</a>
+                        <a href="/episodes/episode-1">Read the Episode</a> ／
+                        <a href="/playground/episode-1">Try in Playground</a>
                     </p>
                 </article>
 
                 <article class="fp-card">
-                    <h3>第2話：ROLLBACKで黒歴史を消したい</h3>
+                    <h3>
+                        Episode 2: I Wish I Could ROLLBACK My Cringe Moments
+                    </h3>
+                    <p>Arca dreams aloud: “If only life had transactions…”</p>
                     <p>
-                        「人生にもトランザクションがあればいいのに」と言い出すアルカ回。
-                    </p>
-                    <p>
-                        <a href="/episodes/episode-2">Episodeを読む</a> ／
-                        <a href="/playground/episode-2">Playgroundで試す</a>
+                        <a href="/episodes/episode-2">Read the Episode</a> ／
+                        <a href="/playground/episode-2">Try in Playground</a>
                     </p>
                 </article>
             </div>
@@ -99,9 +108,11 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
         <div class="fp-section-inner">
             <h2>What you’ll learn</h2>
             <ul class="fp-list">
-                <li>感情から問いを立てるSQLの考え方</li>
-                <li>日常のモヤモヤをデータの問いに翻訳する技術</li>
-                <li>ROLLBACKしたくなる黒歴史との付き合い方</li>
+                <li>How to form SQL questions starting from emotion</li>
+                <li>How to translate daily frustrations into data questions</li>
+                <li>
+                    How to live gracefully with “ROLLBACK-worthy” past mistakes
+                </li>
             </ul>
         </div>
     </section>
@@ -113,11 +124,13 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
             <ul class="fp-news">
                 <li>
                     <time datetime="2025-11-15">2025.11.15</time>
-                    <span>第1話「問いから始まるSQL」準備中。</span>
+                    <span
+                        >Episode 1 “SQL Begins with a Question” — coming soon.</span
+                    >
                 </li>
                 <li>
                     <time datetime="2025-11-20">2025.11.20</time>
-                    <span>アルカ＆ネミのビジュアル、ティザー公開予定。</span>
+                    <span>Arca &amp; Nemi teaser visuals coming soon.</span>
                 </li>
             </ul>
         </div>

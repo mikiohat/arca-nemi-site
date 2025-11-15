@@ -403,3 +403,13 @@ img {
     min-width: 150px;
   }
 }
+
+
+/* ========== Episode Typography ========== */
+h1,
+h2,
+.episode__title,
+.fp-kicker,
+.fp-cta  {
+  font-family: "Kurale", serif;
+}

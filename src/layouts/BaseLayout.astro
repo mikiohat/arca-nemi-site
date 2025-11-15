@@ -26,6 +26,13 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href={SITE_FAVICON} type="image/svg+xml" />
+    <!-- 🔤 Kurale 読み込み（見出し用 serif フォント） -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kurale&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <!-- ★ Tailwind 用の bg-white/text-gray-900 は削除 -->
