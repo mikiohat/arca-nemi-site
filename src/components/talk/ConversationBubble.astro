@@ -1,0 +1,255 @@
+---
+interface Props {
+    speaker: string; // 表示名（"Arca" / "Nemi" / "Narration" など）
+    character?: "arca" | "nemi"; // アバター用のキャラID
+    emotion?: "normal" | "happy" | "anger" | "sad" | "joy"; // 表情
+    align?: "left" | "right" | "center";
+    tone?: "light" | "dark" | "narration";
+}
+
+const {
+    speaker,
+    character = "arca",
+    emotion = "normal",
+    align = "left",
+    tone = "light",
+} = Astro.props;
+
+type Character = "arca" | "nemi";
+type Emotion = "normal" | "joy" | "anger" | "sad" | "happy";
+
+const AVATAR_MAP: Record<Character, Record<Emotion, string>> = {
+    arca: {
+        normal: "/avatars/arca/normal.webp",
+        happy: "/avatars/arca/happy.webp",
+        anger: "/avatars/arca/anger.webp",
+        sad: "/avatars/arca/sad.webp",
+        joy: "/avatars/arca/joy.webp",
+    },
+    nemi: {
+        normal: "/avatars/nemi/normal.webp",
+        happy: "/avatars/nemi/happy.webp",
+        anger: "/avatars/nemi/anger.webp",
+        sad: "/avatars/nemi/sad.webp",
+        joy: "/avatars/nemi/joy.webp",
+    },
+} as const;
+
+const alignmentClass =
+    align === "right"
+        ? "cb-row--right"
+        : align === "center"
+          ? "cb-row--center"
+          : "cb-row--left";
+
+const toneClass =
+    tone === "dark"
+        ? "cb--tone-dark"
+        : tone === "narration"
+          ? "cb--tone-narration"
+          : "cb--tone-light";
+
+const avatarSrc = tone === "narration" ? null : AVATAR_MAP[character][emotion];
+
+// イニシャル用（とりあえず1文字だけ出す）
+const initial = speaker.slice(0, 1);
+---
+
+<div class={`cb-row ${alignmentClass}`}>
+    <div class={`cb ${toneClass}`}>
+        {
+            tone !== "narration" && (
+                <div class="cb-avatar" aria-hidden="true">
+                    {avatarSrc ? (
+                        <img
+                            src={avatarSrc}
+                            alt={speaker}
+                            class="cb-avatar-img"
+                            loading="lazy"
+                        />
+                    ) : (
+                        <span>{initial}</span>
+                    )}
+                </div>
+            )
+        }
+        <div class="cb-body">
+            <div class="cb-meta">
+                <span class="cb-name">{speaker}</span>
+            </div>
+            <div class="cb-text">
+                <slot />
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .cb-row {
+        display: flex;
+        margin: 0.35rem 0;
+    }
+
+    .cb-row--left {
+        justify-content: flex-start;
+    }
+
+    .cb-row--right {
+        justify-content: flex-end;
+    }
+
+    /* 中央寄せ（narration 用） */
+    .cb-row--center {
+        justify-content: center;
+    }
+
+    /* narration 専用トーン（少しフラットで静かな感じ） */
+    .cb--tone-narration {
+        max-width: 620px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.85);
+        border-color: rgba(148, 163, 184, 0.55);
+        box-shadow: none;
+        text-align: left;
+        justify-content: center;
+    }
+
+    /* narration では名前は消して、テキストだけ残す */
+    .cb--tone-narration .cb-meta {
+        display: none;
+    }
+
+    .cb--tone-narration .cb-text {
+        font-size: 0.9rem;
+        line-height: 1.8;
+        color: #e5e7eb;
+    }
+
+    .cb {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.55rem;
+        max-width: min(100%, 560px);
+        padding: 0.55rem 0.85rem;
+        border-radius: 18px;
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        background: radial-gradient(
+                circle at 0 0,
+                rgba(129, 140, 248, 0.18),
+                transparent 55%
+            ),
+            rgba(9, 12, 26, 0.96);
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.8);
+        transform: translateY(0) scale(1);
+        transition:
+            transform 170ms cubic-bezier(0.16, 1.1, 0.3, 1),
+            box-shadow 170ms ease-out,
+            border-color 170ms ease-out,
+            background 170ms ease-out;
+    }
+
+    /* 右側のときは並びを反転 */
+    .cb-row--right .cb {
+        flex-direction: row-reverse;
+    }
+
+    .cb:hover {
+        transform: translateY(-1px) scale(1.02);
+        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.95);
+        border-color: rgba(191, 219, 254, 0.85);
+    }
+
+    .cb-avatar {
+        flex: 0 0 auto;
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        background: radial-gradient(
+            circle at 30% 0%,
+            rgba(248, 250, 252, 0.95),
+            rgba(129, 140, 248, 0.9)
+        );
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #0b1120;
+        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.9);
+    }
+
+    .cb-body {
+        min-width: 0;
+    }
+
+    .cb-meta {
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--fp-muted, #9ca3af);
+        margin-bottom: 0.15rem;
+    }
+
+    .cb-name {
+        opacity: 0.9;
+    }
+
+    .cb-text {
+        font-size: 0.9rem;
+        line-height: 1.7;
+        color: var(--fp-text, #e5e7eb);
+        word-wrap: break-word;
+    }
+
+    .cb-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        overflow: hidden;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #e5e7eb;
+    }
+
+    .cb-avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* tone違い（ネミ側を少しダーク寄りに） */
+    .cb--tone-dark {
+        background: radial-gradient(
+                circle at 0 0,
+                rgba(56, 78, 183, 0.25),
+                transparent 55%
+            ),
+            rgba(9, 10, 24, 0.98);
+        border-color: rgba(107, 114, 128, 0.8);
+    }
+
+    .cb--tone-dark .cb-avatar {
+        background: radial-gradient(
+            circle at 30% 0%,
+            rgba(248, 250, 252, 0.98),
+            rgba(56, 189, 248, 0.9)
+        );
+    }
+
+    @media (max-width: 720px) {
+        .cb-row {
+            margin: 0.3rem 0;
+        }
+
+        .cb {
+            max-width: 100%;
+            padding: 0.5rem 0.75rem;
+            border-radius: 16px;
+        }
+
+        .cb-text {
+            font-size: 0.88rem;
+        }
+    }
+</style>
