@@ -7,7 +7,7 @@ import mdx from '@astrojs/mdx';
 // import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://arcanemi.com', // ← 仮のURLに変更
+  site: 'https://arca-nemi.dev',
   integrations: [mdx()],
   // integrations: [mdx(), sitemap()],
   server: { host: true },

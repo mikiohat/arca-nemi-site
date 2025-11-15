@@ -1,10 +1,14 @@
 ---
-// src/layouts/BaseLayout.astro
+// 共通レイアウト
 import Header from "@common/Header.astro";
 import Footer from "@common/Footer.astro";
 import Analytics from "@common/Analytics.astro";
-// src/components/BaseHead.astro
+
+// サイトのメタ情報
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_FAVICON, GTM_ID } from "@/consts";
+
+// グローバルスタイル（Constance風テーマ）
+import "../styles/global.css";
 
 interface Props {
   title?: string;
@@ -12,8 +16,6 @@ interface Props {
 }
 
 const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
-
-//console.log("[SRV] SITE_FAVICON:", SITE_FAVICON);
 ---
 
 <html lang="ja">
@@ -24,8 +26,17 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href={SITE_FAVICON} type="image/svg+xml" />
+    <!-- 🔤 Kurale 読み込み（見出し用 serif フォント） -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kurale&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body class="min-h-screen bg-white text-gray-900">
+
+  <!-- ★ Tailwind 用の bg-white/text-gray-900 は削除 -->
+  <body>
     <!-- Google Tag Manager (noscript) -->
     <noscript>
       <iframe
@@ -37,10 +48,87 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
       </iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
+
     <Header />
-    <main class="mx-auto max-w-screen-md px-4 py-8">
+
+    <!-- ★ Constance 風の共通コンテナ -->
+    <main class="fp-main">
       <slot />
     </main>
+
     <Footer />
+
+    <!-- ★ 右下 runner（進捗バー） -->
+    <div id="runner" class="fp-runner">
+      <div class="fp-runner-body">
+        <span class="fp-runner-label">progress</span>
+        <div class="fp-runner-bar">
+          <div class="fp-runner-progress"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ★ fade-in と runner 用の軽量スクリプト -->
+    <script is:inline>
+      if (typeof window !== "undefined") {
+        const fadeEls = document.querySelectorAll(".js-fade");
+        const runner = document.getElementById("runner");
+        let runnerProgress = null;
+
+        if (runner) {
+          runnerProgress = runner.querySelector(".fp-runner-progress");
+        }
+
+        // セクションのふわっと表示
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.15 },
+        );
+
+        fadeEls.forEach((el) => io.observe(el));
+
+        // runner のスクロール連動（requestAnimationFrame で優しく）
+        let ticking = false;
+
+        const updateRunnerCore = () => {
+          if (!runner || !runnerProgress) {
+            ticking = false;
+            return;
+          }
+
+          const scrollTop = window.scrollY;
+          const doc = document.documentElement;
+          const scrollHeight = doc.scrollHeight - window.innerHeight;
+          const ratio = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+
+          const maxTranslate = 40; // px
+          const tx = ratio * maxTranslate;
+          runner.style.transform = "translateX(" + tx + "px)";
+
+          const clamped = Math.max(0.05, Math.min(1, ratio));
+          runnerProgress.style.transform = "scaleX(" + clamped + ")";
+
+          ticking = false;
+        };
+
+        const onScroll = () => {
+          if (!ticking) {
+            ticking = true;
+            window.requestAnimationFrame(updateRunnerCore);
+          }
+        };
+
+        window.addEventListener("scroll", onScroll);
+        window.addEventListener("resize", onScroll);
+        onScroll();
+      }
+    </script>
   </body>
 </html>

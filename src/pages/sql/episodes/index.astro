@@ -1,0 +1,24 @@
+---
+const episodes = [
+    {
+        slug: "filtering-feelings",
+        title: "filtering feelings（仮タイトル）",
+        description: "感情をフィルタする、WHERE句っぽい回のエピソード。",
+    },
+];
+---
+
+<main>
+    <h1>感情💙SQL エピソード一覧</h1>
+
+    <ul>
+        {
+            episodes.map((ep) => (
+                <li>
+                    <a href={`/sql/episodes/${ep.slug}`}>{ep.title}</a>
+                    <p>{ep.description}</p>
+                </li>
+            ))
+        }
+    </ul>
+</main>

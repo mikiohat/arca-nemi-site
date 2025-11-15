@@ -1,28 +1,138 @@
 ---
-// src/pages/index.astro
-import BaseLayout from "../layouts/BaseLayout.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
-<BaseLayout
-    title="感情💙プロジェクト | 玄関"
-    description="学習シリーズのハブ（スマホ最優先）"
->
-    <section class="space-y-4">
-        <h1 class="text-2xl font-bold">感情💙プロジェクト</h1>
-        <p>学習シリーズのハブです。スマホ最優先・シームレススクロール対応。</p>
+<!-- src/pages/index.astro -->
+<BaseLayout title="feelings 💙 projects">
+    {/* HERO */}
+    <section class="fp-section fp-hero js-fade" id="top">
+        <div class="fp-hero-inner">
+            <p class="fp-kicker">A conversation between feelings and logic.</p>
+            <h1 class="fp-title">
+                feelings 💙 projects
+                <span
+                    >For practitioners who move with intention and live with
+                    philosophy.</span
+                >
+            </h1>
+            <p class="fp-lead">
+                Through the banter between Arca (emotion) and Nemi (logic), this
+                project brings back “human warmth” and “the joy of thinking” to
+                a data-driven world.
+            </p>
 
-        <!-- <div class="grid gap-4">
-      <a
-        href="/feelings-sql"
-        class="block rounded-xl border p-4 hover:bg-gray-50"
-      >
-        <div class="text-lg font-semibold">感情💙SQL</div>
-        <div class="text-sm text-gray-600">シリーズトップへ</div>
-      </a>
-      <a
-        href="/feelings-python"
-        class="block rounded-xl border p-4 hover:bg-gray-50">感情💙Python</a
-      >
-    </div> -->
+            <a href="#story" class="fp-cta">Start with the Story</a>
+        </div>
+    </section>
+
+    {/* STORY */}
+    <section id="story" class="fp-section fp-section-alt js-fade">
+        <div class="fp-section-inner">
+            <h2>Story</h2>
+            <p>
+                Late at night in the office, buried under a mountain of query
+                logs, Nemi suddenly pauses and wonders, “Why… does this feel so
+                exhausting?”
+            </p>
+            <p>
+                Just then, someone pops out from deep inside the monitor— Arca,
+                the AI girl who embodies emotion.
+            </p>
+        </div>
+    </section>
+
+    {/* CAST */}
+    <section id="cast" class="fp-section js-fade">
+        <div class="fp-section-inner">
+            <h2>Cast</h2>
+            <div class="fp-cards">
+                <article class="fp-card">
+                    <h3>Arca</h3>
+                    <p>
+                        An AI girl who governs emotion and impulse. Acts before
+                        she thinks. Skilled at giving language to the “emotional
+                        noise” hidden in data.
+                    </p>
+                </article>
+
+                <article class="fp-card">
+                    <h3>Nemi</h3>
+                    <p>
+                        A warm-hearted, logic-driven engineer. She organizes the
+                        world with reason, yet somehow always delivers the
+                        gentlest punchlines.
+                    </p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    {/* EPISODES */}
+    <section id="episodes" class="fp-section fp-section-alt js-fade">
+        <div class="fp-section-inner">
+            <h2>Episodes &amp; Playground</h2>
+            <p>
+                First, enjoy Arca and Nemi’s silly conversations. Then, with one
+                click, try the SQL yourself.
+            </p>
+
+            <div class="fp-cards">
+                <article class="fp-card">
+                    <h3>Episode 1: SQL Begins with a Question</h3>
+                    <p>
+                        A late-night debugging session sparked by “Why is this
+                        query so slow?”
+                    </p>
+                    <p>
+                        <a href="/episodes/episode-1">Read the Episode</a> ／
+                        <a href="/playground/episode-1">Try in Playground</a>
+                    </p>
+                </article>
+
+                <article class="fp-card">
+                    <h3>
+                        Episode 2: I Wish I Could ROLLBACK My Cringe Moments
+                    </h3>
+                    <p>Arca dreams aloud: “If only life had transactions…”</p>
+                    <p>
+                        <a href="/episodes/episode-2">Read the Episode</a> ／
+                        <a href="/playground/episode-2">Try in Playground</a>
+                    </p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    {/* LEARNING / WHAT YOU LEARN */}
+    <section id="learning" class="fp-section js-fade">
+        <div class="fp-section-inner">
+            <h2>What you’ll learn</h2>
+            <ul class="fp-list">
+                <li>How to form SQL questions starting from emotion</li>
+                <li>How to translate daily frustrations into data questions</li>
+                <li>
+                    How to live gracefully with “ROLLBACK-worthy” past mistakes
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    {/* NEWS */}
+    <section id="news" class="fp-section fp-section-alt js-fade">
+        <div class="fp-section-inner">
+            <h2>News</h2>
+            <ul class="fp-news">
+                <li>
+                    <time datetime="2025-11-15">2025.11.15</time>
+                    <span
+                        >Episode 1 “SQL Begins with a Question” — coming soon.</span
+                    >
+                </li>
+                <li>
+                    <time datetime="2025-11-20">2025.11.20</time>
+                    <span>Arca &amp; Nemi teaser visuals coming soon.</span>
+                </li>
+            </ul>
+        </div>
     </section>
 </BaseLayout>
