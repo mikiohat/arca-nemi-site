@@ -10,29 +10,28 @@ project:
 brand_charter:
   principles:
     - id: 1
-      title: Craft the world, let time make it real
-      quote: "God is in the details — and time makes the world real."
-      guidelines:
-        - Design and storytelling are completed through accumulation.
-        - Be patient and meticulous. Do not rush results.
-        - Consistency of the world is the foundation of trust.
-    - id: 2
-      title: Make it discoverable, or it doesn’t exist
-      quote: "Even the best story means nothing if it isn’t found."
-      guidelines:
-        - SEO, structure, and SNS are forms of sincerity.
-        - “Customer first” is the implementation of thoughtfulness.
-        - Never stop making efforts to be discovered.
-    - id: 3
       title: Help visitors fall in love with AI and computer technology, and feel inspired
       quote: "Teach hearts, not just heads."
       guidelines:
         - Remind people of the emotions beyond technology.
         - Always ask why we learn it and what value it brings.
         - Design learning experiences with warmth.
+    - id: 2
+      title: Craft the world, let time make it real
+      quote: "God is in the details — and time makes the world real."
+      guidelines:
+        - Design and storytelling are completed through accumulation.
+        - Be patient and meticulous. Do not rush results.
+        - Consistency of the world is the foundation of trust.
+    - id: 3
+      title: Make it discoverable, or it doesn’t exist
+      quote: "Even the best story means nothing if it isn’t found."
+      guidelines:
+        - SEO, structure, and SNS are forms of sincerity.
+        - “Customer first” is the implementation of thoughtfulness.
+        - Never stop making efforts to be discovered.
 
 practical_notes:
-  # 🌙 運用の心得
   - perspective: World-building consistency
     practice: Maintain consistency in design, color, font, and narrative. Characters and backgrounds should embody “God is in the details.”
     checkpoints:
@@ -52,7 +51,6 @@ practical_notes:
       - conversational_examples_included: true
 
 conventions:
-  # 実務規約（開発用）
   commit:
     style: "conventional-commits"
     examples:

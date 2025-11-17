@@ -404,12 +404,45 @@ img {
   }
 }
 
+/* under-construction */
+
+/* 全体の帯（背景だけ担当） */
+.fp-under-construction {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2.5rem 1.5rem;
+  /* text-align はここには書かない */
+}
+
+/* 中央に細長いブロックをつくる */
+.fp-under-wrap {
+  max-width: 880px;      /* ← .fp-main と同じ幅にする */
+  margin: 0 auto;
+  padding: 0 16px;       /* ← .fp-main の左右paddingと合わせる */
+}
+
+/* 見出しを左揃えに */
+.fp-under-title {
+  font-size: 1.4rem;
+  margin: 0 0 0.75rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+/* セリフも左揃え＋行間を少しだけ広めに */
+.fp-dialogue {
+  text-align: left;
+  line-height: 1.5;
+  font-size: 1rem;
+  margin: 0;
+}
+
 
 /* ========== Episode Typography ========== */
 h1,
 h2,
 .episode__title,
 .fp-kicker,
-.fp-cta  {
+.fp-cta,
+.fp-lead  {
   font-family: "Kurale", serif;
 }

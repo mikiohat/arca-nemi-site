@@ -37,6 +37,26 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 
   <!-- ★ Tailwind 用の bg-white/text-gray-900 は削除 -->
   <body>
+    <!-- ========================= -->
+    <!-- UNDER CONSTRUCTION MODE -->
+    <!-- コメントアウトでON/OFFできる コメントアウトの形は、{/* ... */}-->
+    {
+      (
+        <section class="fp-under-construction">
+          <div class="fp-under-wrap fp-left">
+            <h2>Under Construction</h2>
+
+            <p class="fp-dialogue">
+              Arca: “Wait just a bit! I'm still arranging things.”
+              <br />
+              Nemi: “Rushing creates bugs. Please check back soon.”
+            </p>
+          </div>
+        </section>
+      )
+    }
+    <!-- ========================= -->
+
     <!-- Google Tag Manager (noscript) -->
     <noscript>
       <iframe
