@@ -26,10 +26,10 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
         </div>
     </section>
 
-    {/* INTRODUCTION: About this site / Arca & Nemi */}
+    {/* INTRODUCTION: About this site */}
     <section class="fp-section fp-intro js-fade" id="about-site">
         <div class="fp-intro-inner">
-            <h2 class="fp-section-title">About Arca &amp; Nemi</h2>
+            <h2 class="fp-section-title">About this site</h2>
 
             <p class="fp-body">
                 This site is the home of Arca and Nemi within feelings 💙
@@ -46,10 +46,10 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
         </div>
     </section>
 
-    {/* STORY */}
+    {/* STORY / AI is a partner */}
     <section id="story" class="fp-section fp-section-alt js-fade">
         <div class="fp-section-inner">
-            <h2>Story</h2>
+            <h2>AI is a partner — that’s why we still need to learn.</h2>
             <p>
                 Late at night in the office, buried under a mountain of query
                 logs, Nemi suddenly pauses and wonders, “Why… does this feel so
@@ -62,36 +62,55 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
         </div>
     </section>
 
-    {/* CAST */}
+    {/* CAST / Who are Arca & Nemi? */}
     <section id="cast" class="fp-section js-fade">
         <div class="fp-section-inner">
-            <h2>Cast</h2>
-            <div class="fp-cards">
-                <article class="fp-card">
-                    <h3>Arca</h3>
-                    <p>
-                        An AI girl who governs emotion and impulse. Acts before
-                        she thinks. Skilled at giving language to the “emotional
-                        noise” hidden in data.
-                    </p>
+            <h2>Who are Arca &amp; Nemi?</h2>
+
+            <div class="fp-cards fp-cards--character">
+                <!-- Arca -->
+                <article class="fp-card fp-card--character">
+                    <img
+                        src="/assets/arca_full.webp"
+                        alt="Arca illustration"
+                        class="fp-character-img"
+                        loading="lazy"
+                    />
+                    <div class="fp-character-body">
+                        <h3>Arca</h3>
+                        <p>
+                            An AI girl who governs emotion and impulse. Acts
+                            before she thinks. Skilled at giving language to the
+                            “emotional noise” hidden in data.
+                        </p>
+                    </div>
                 </article>
 
-                <article class="fp-card">
-                    <h3>Nemi</h3>
-                    <p>
-                        A warm-hearted, logic-driven engineer. She organizes the
-                        world with reason, yet somehow always delivers the
-                        gentlest punchlines.
-                    </p>
+                <!-- Nemi -->
+                <article class="fp-card fp-card--character">
+                    <img
+                        src="/assets/nemi_full.webp"
+                        alt="Nemi illustration"
+                        class="fp-character-img"
+                        loading="lazy"
+                    />
+                    <div class="fp-character-body">
+                        <h3>Nemi</h3>
+                        <p>
+                            A warm-hearted, logic-driven engineer. She organizes
+                            the world with reason, yet somehow always delivers
+                            the gentlest punchlines.
+                        </p>
+                    </div>
                 </article>
             </div>
         </div>
     </section>
 
-    {/* EPISODES */}
-    <section id="episodes" class="fp-section fp-section-alt js-fade">
+    {/* TOPICS */}
+    <section id="topics" class="fp-section fp-section-alt js-fade">
         <div class="fp-section-inner">
-            <h2>Episodes &amp; Playground</h2>
+            <h2>Topics</h2>
             <p>
                 First, enjoy Arca and Nemi’s silly conversations. Then, with one
                 click, try the SQL yourself.
@@ -127,7 +146,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
     {/* LEARNING / WHAT YOU LEARN */}
     <section id="learning" class="fp-section js-fade">
         <div class="fp-section-inner">
-            <h2>What you’ll learn</h2>
+            <h2>What you’ll learn here</h2>
             <ul class="fp-list">
                 <li>How to form SQL questions starting from emotion</li>
                 <li>How to translate daily frustrations into data questions</li>
