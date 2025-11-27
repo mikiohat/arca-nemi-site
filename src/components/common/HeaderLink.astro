@@ -1,24 +1,49 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
 
-type Props = HTMLAttributes<'a'>;
+type Props = HTMLAttributes<"a">;
 
-const { href, class: className, ...props } = Astro.props;
-const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
-const subpath = pathname.match(/[^\/]+/g);
-const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
+const { href = "/", class: className, ...props } = Astro.props as Props;
+
+// ベースURLを除いたパスを取得
+const rawPath = Astro.url.pathname.replace(import.meta.env.BASE_URL, "");
+const pathname = rawPath === "" ? "/" : rawPath;
+
+let isActive = false;
+
+// Home
+if (href === "/") {
+	isActive = pathname === "/";
+}
+// Episodes ハブ & /sql/episodes, /python/episodes, /sql/episodes/episode-1 など
+else if (href === "/episodes") {
+	isActive =
+		pathname === "/episodes" || /^\/[^/]+\/episodes(\/|$)/.test(pathname);
+}
+// Playground ハブ & /sql/playground, /python/playground など
+else if (href === "/playground") {
+	isActive =
+		pathname === "/playground" ||
+		/^\/[^/]+\/playground(\/|$)/.test(pathname);
+}
+// About など、その他のパターン
+else {
+	isActive = pathname === href || pathname.startsWith(href + "/");
+}
 ---
 
 <a href={href} class:list={[className, { active: isActive }]} {...props}>
 	<slot />
 </a>
+
 <style>
 	a {
 		display: inline-block;
 		text-decoration: none;
 	}
+
 	a.active {
-		font-weight: bolder;
+		font-weight: 700;
 		text-decoration: underline;
 	}
 </style>

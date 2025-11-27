@@ -5,10 +5,16 @@ import Footer from "@common/Footer.astro";
 import Analytics from "@common/Analytics.astro";
 
 // サイトのメタ情報
-import { SITE_TITLE, SITE_DESCRIPTION, SITE_FAVICON, GTM_ID } from "@/consts";
+import {
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+  SITE_FAVICON,
+  GTM_ID,
+  SITE_MAX_WIDTH,
+} from "@/consts";
 
 // グローバルスタイル（Constance風テーマ）
-import "../styles/global.css";
+import "@styles/global.css";
 
 interface Props {
   title?: string;
@@ -35,7 +41,6 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
     />
   </head>
 
-  <!-- ★ Tailwind 用の bg-white/text-gray-900 は削除 -->
   <body>
     <!-- ========================= -->
     <!-- UNDER CONSTRUCTION MODE -->
@@ -43,10 +48,10 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
     {
       (
         <section class="fp-under-construction">
-          <div class="fp-under-wrap fp-left">
+          <div class="fp-under-wrap">
             <h2>Under Construction</h2>
 
-            <p class="fp-dialogue">
+            <p class="fp-under-dialogue">
               Arca: “Wait just a bit! I'm still arranging things.”
               <br />
               Nemi: “Rushing creates bugs. Please check back soon.”
@@ -68,6 +73,8 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
       </iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
+
+    <body style={`--site-max-width: ${SITE_MAX_WIDTH};`}></body>
 
     <Header />
 

@@ -1,3 +1,4 @@
+// src/consts.ts
 // Place any global data in this file.
 // You can import this data from anywhere in your site by using the `import` keyword.
 
@@ -8,3 +9,4 @@ export const SITE_FAVICON = '/favicon.svg';
 export const OFFICIAL_HOST = 'arca-nemi.dev';
 //export const GA_ID = import.meta.env.PUBLIC_GA_ID;
 export const GTM_ID = import.meta.env.PUBLIC_GTM_ID;
+export const SITE_MAX_WIDTH = '880px';
