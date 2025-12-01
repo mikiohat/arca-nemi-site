@@ -7,17 +7,71 @@ const NAV = [
   { href: "/playground", label: "Playground" },
   { href: "/about", label: "About" },
 ];
+
+// 現在のパスを取得
+const { pathname } = Astro.url;
+
+// 日本語ページかどうか判定（/ja ではじまるか）
+const isJa = pathname.startsWith("/ja");
+
+// 英語側のURL（/ja を外したもの）
+const enPath = isJa
+  ? pathname === "/ja"
+    ? "/"
+    : pathname.replace(/^\/ja/, "")
+  : pathname;
+
+// 日本語側のURL（先頭に /ja をつけたもの）
+const jaPath = isJa ? pathname : "/ja" + (pathname === "/" ? "" : pathname);
 ---
 
 <header class="fp-header">
   <div class="fp-header-inner">
-    <a href="/" class="fp-logo"> feelings💙projects </a>
-    <nav class="fp-nav" aria-label="Primary navigation">
-      {
-        NAV.map((item) => (
-          <HeaderLink href={item.href}>{item.label}</HeaderLink>
-        ))
-      }
-    </nav>
+    <a href={isJa ? "/ja" : "/"} class="fp-logo">feelings💙projects</a>
+
+    <div class="fp-header-right">
+      <nav class="fp-nav fp-nav-desktop" aria-label="Primary navigation">
+        {
+          NAV.map((item) => (
+            <HeaderLink href={item.href}>{item.label}</HeaderLink>
+          ))
+        }
+      </nav>
+
+      {/* Language switcher */}
+      <details class="fp-lang-switch">
+        <summary aria-label="Change language">
+          <svg
+            class="fp-lang-icon-svg"
+            viewBox="0 0 24 24"
+            role="img"
+            aria-hidden="true"
+          >
+            <!-- 外側の丸 -->
+            <circle cx="12" cy="12" r="9"></circle>
+
+            <!-- 経線（縦方向の曲線）→ 楕円のまま残す -->
+            <ellipse cx="12" cy="12" rx="4.5" ry="9"></ellipse>
+
+            <!-- 中央の縦線（直線） -->
+            <path d="M12 3v18"></path>
+
+            <!-- 赤道（中央の横線） -->
+            <path d="M3 12h18"></path>
+
+            <!-- 上の緯度線（直線） -->
+            <path d="M4.5 8.5h15"></path>
+
+            <!-- 下の緯度線（直線） -->
+            <path d="M4.5 15.5h15"></path>
+          </svg>
+        </summary>
+
+        <ul class="fp-lang-menu">
+          <li><a href={enPath}>English</a></li>
+          <li><a href={jaPath}>日本語</a></li>
+        </ul>
+      </details>
+    </div>
   </div>
 </header>

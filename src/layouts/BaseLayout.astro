@@ -19,12 +19,22 @@ import "@styles/global.css";
 interface Props {
   title?: string;
   description?: string;
+  lang?: string; // 言語を外部から渡せるようにする
 }
 
-const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
+// いったん「生の説明」を取ってから、空白を整える
+const rawTitle = Astro.props.title ?? SITE_TITLE;
+const rawDescription = Astro.props.description ?? SITE_DESCRIPTION;
+
+// 改行や連続スペースを1つのスペースにまとめて、前後の空白を削る
+const title = rawTitle;
+const description = rawDescription.replace(/\s+/g, " ").trim();
+
+// デフォルト言語 = 英語
+const lang = Astro.props.lang ?? "en";
 ---
 
-<html lang="ja">
+<html lang={lang}>
   <head>
     <Analytics />
     <meta charset="utf-8" />
@@ -41,7 +51,7 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
     />
   </head>
 
-  <body>
+  <body style={`--site-max-width: ${SITE_MAX_WIDTH};`}>
     <!-- ========================= -->
     <!-- UNDER CONSTRUCTION MODE -->
     <!-- コメントアウトでON/OFFできる コメントアウトの形は、{/* ... */}-->
@@ -73,8 +83,6 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
       </iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
-
-    <body style={`--site-max-width: ${SITE_MAX_WIDTH};`}></body>
 
     <Header />
 

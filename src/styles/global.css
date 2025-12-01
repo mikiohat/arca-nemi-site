@@ -23,7 +23,8 @@ body {
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
   background: radial-gradient(circle at 0 0, #0b1025, #02030a 60%);
   color: var(--fp-text);
   -webkit-font-smoothing: antialiased;
@@ -55,6 +56,7 @@ h6 {
   margin: 0 0 0.75rem;
   line-height: 1.2;
   color: var(--fp-text);
+  font-weight: 600; /* 見出しなので少し太め */
 }
 
 h1 {
@@ -114,6 +116,14 @@ img {
   border-bottom: 1px solid rgba(148, 163, 184, 0.3);
 }
 
+/* ヘッダー右側（ナビ + 言語）をひとまとめにする */
+.fp-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;        /* ← ロゴと同じ距離に調整 */
+  flex-shrink: 0;   /* ← 押しつぶされないようにする */
+}
+
 .fp-header-inner {
   max-width: var(--site-max-width);
   margin: 0 auto;
@@ -121,6 +131,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem; 
 }
 
 /* ロゴ（ヘッダー左のテキスト） */
@@ -129,6 +140,8 @@ img {
   font-weight: 500;         /* ← Boldすぎると大きく見えるので少し控えめ */
   opacity: 0.9;             /* ← ほんのり弱めて世界観に馴染ませる */
   text-decoration: none;
+  white-space: nowrap;  /* ← ロゴを1行に固定 */
+  flex-shrink: 0;       /* ← つぶされないようにする */
 }
 
 .fp-nav {
@@ -160,6 +173,77 @@ img {
   transform: scaleX(1);
 }
 
+/* 言語切り替え */
+.fp-lang-switch {
+  position: relative;
+  margin-left: 1.2rem;
+  font-size: 0.8rem;
+  margin-left: 0rem; /* ← 好きな値に調整、0 でもOK */
+}
+
+.fp-lang-switch > summary {
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  user-select: none;
+  padding: 0;           /* ← 余白もリセット */
+  border: none;         /* ← 線なし */
+  background: none;     /* ← 背景なし */
+  backdrop-filter: none;
+  border-radius: 0;     /* ← 角丸なし */
+}
+
+/*
+.fp-lang-switch > summary::-webkit-details-marker {
+  display: none;
+}
+*/
+/* ここがSVG用のスタイル */
+.fp-lang-icon-svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  stroke: var(--fp-accent);
+  stroke-width: 1.4;
+  fill: none;
+  opacity: 0.85; /* ← ここで主張を弱める */
+}
+
+.fp-lang-caret {
+  font-size: 0.7rem;
+  transform: translateY(1px);
+}
+
+.fp-lang-menu {
+  position: absolute;
+  right: 0;
+  margin-top: 0.4rem;
+  padding: 0.4rem 0;
+  min-width: 140px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.98);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.9);
+  z-index: 20;
+}
+
+.fp-lang-menu li {
+  list-style: none;
+}
+
+.fp-lang-menu a {
+  display: block;
+  padding: 0.4rem 0.9rem;
+  text-decoration: none;
+  color: #e5e7eb;
+  font-size: 0.8rem;
+}
+
+.fp-lang-menu a:hover {
+  background: rgba(55, 65, 81, 0.9);
+}
 
 /* =========================== */
 /* Footer */
@@ -467,6 +551,10 @@ img {
     padding: 72px 10px 96px;
   }
 
+  .fp-header-right {
+    gap: 0.6rem; /* 全体の詰まりを軽減 */
+  }
+
   /* ヘッダー中身の左右 padding も 10px に */
   .fp-header-inner {
     padding-inline: 10px;
@@ -480,6 +568,26 @@ img {
   .fp-nav {
     gap: 0.7rem;
     font-size: 0.8rem;
+  }
+
+/* ★ ここから言語ボタンのモバイル調整 */
+
+  /* ラベルと▼は隠して、アイコンだけにする */
+  .fp-lang-label,
+  .fp-lang-caret {
+    display: none;
+  }
+
+  /* ボタン自体はタップしやすいサイズに */
+  .fp-lang-switch > summary {
+    padding: 0;                 /* テキストなくなるので余白リセット */
+    width: 40px;
+    height: 40px;
+    justify-content: center;    /* 中央に🌐を置く */
+  }
+
+  .fp-lang-icon {
+    font-size: 1.2rem;
   }
 
   .fp-title {
@@ -533,13 +641,14 @@ img {
 }
 
 
-/* ========== Episode Typography ========== */
-h1,
-h2,
-.episode__title,
+/* ========== English decorative headings (Kurale) ========== */
+
+.fp-title,
+.fp-heading,
+.fp-logo,
 .fp-kicker,
 .fp-cta,
-.fp-logo,
-.fp-lead  {
+.episode__title {
   font-family: "Kurale", serif;
 }
+

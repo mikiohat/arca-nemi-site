@@ -1,0 +1,180 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout lang="ja">
+    {/* HERO */}
+    <section class="fp-section fp-hero js-fade" id="top">
+        <div class="fp-hero-inner">
+            <p class="fp-kicker" lang="en">
+                A conversation between feelings and logic.
+            </p>
+
+            <h1 class="fp-title" lang="en">
+                feelings 💙 projects
+                <span lang="en">
+                    For practitioners who move with intention and live with
+                    philosophy.
+                </span>
+            </h1>
+
+            <p class="fp-lead" lang="en">
+                In a data-driven world, we value “human warmth” and thoughtful
+                practice.
+            </p>
+
+            <a href="#story" class="fp-cta fp-heading" lang="en">
+                Start with the Story
+            </a>
+        </div>
+    </section>
+
+    {/* INTRODUCTION */}
+    <section class="fp-section fp-intro js-fade" id="about-site">
+        <div class="fp-intro-inner">
+            <h2 class="fp-heading" lang="en">About this site</h2>
+
+            <p class="fp-body">
+                このサイトは「feelings 💙 projects」のなかにある、
+                アルカとネミの“学びの家”です。 ここでは、SQL や Python
+                などのツールを、 ふたりの掛け合いを通してやさしく体験できます。
+            </p>
+
+            <p class="fp-body">
+                データ・コード・意思決定を探求しながらも、
+                “人らしさ”や“自分の考え方”は失わない。
+                そんな未来の実務家のための場所です。
+            </p>
+        </div>
+    </section>
+
+    {/* STORY */}
+    <section id="story" class="fp-section fp-section-alt js-fade">
+        <div class="fp-section-inner">
+            <h2 class="fp-heading" lang="en">
+                AI is a partner — that’s why we still need to learn.
+            </h2>
+
+            <p>
+                深夜のオフィス。大量のクエリログに埋もれながら、
+                ネミはつぶやきます。「なんで……こんなに疲れるんだろう？」
+            </p>
+            <p>
+                その瞬間、モニターの奥からひょこっと現れたのは、
+                感情を司るAI少女・アルカでした。
+            </p>
+        </div>
+    </section>
+
+    {/* CAST */}
+    <section id="cast" class="fp-section js-fade">
+        <div class="fp-section-inner">
+            <h2 class="fp-heading" lang="en">Who are Arca &amp; Nemi?</h2>
+
+            <div class="fp-cards fp-cards--character">
+                <!-- Arca -->
+                <article class="fp-card fp-card--character">
+                    <img
+                        src="/assets/arca_full.webp"
+                        alt="Arca illustration"
+                        class="fp-character-img"
+                        loading="lazy"
+                    />
+                    <div class="fp-character-body">
+                        <h3 class="fp-heading" lang="en">Arca</h3>
+                        <p>
+                            感情と衝動を司るAIの少女。考えるより先に動き、
+                            データの向こうにある「感情のノイズ」を言語化するのが得意。
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Nemi -->
+                <article class="fp-card fp-card--character">
+                    <img
+                        src="/assets/nemi_full.webp"
+                        alt="Nemi illustration"
+                        class="fp-character-img"
+                        loading="lazy"
+                    />
+                    <div class="fp-character-body">
+                        <h3 class="fp-heading" lang="en">Nemi</h3>
+                        <p>
+                            やさしくて論理的なエンジニア。世界を整理するのが得意なのに、
+                            なぜかいつも一番おもしろいところを持っていく。
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    {/* TOPICS */}
+    <section id="topics" class="fp-section fp-section-alt js-fade">
+        <h2 class="fp-heading" lang="en">Topics</h2>
+
+        <p>
+            まずはアルカとネミのちょっとした掛け合いを楽しんで、
+            そのあとワンクリックで SQL を試せます。
+        </p>
+
+        <div class="fp-cards">
+            <article class="fp-card">
+                <h3 class="fp-heading" lang="en">
+                    Episode 1: SQL Begins with a Question
+                </h3>
+                <p>
+                    「なんでこのクエリ遅いの？」から始まる深夜のデバッグ物語。
+                </p>
+                <p>
+                    <a href="/ja/episodes/episode-1">Episode を読む</a> ／
+                    <a href="/ja/playground/episode-1">Playground で試す</a>
+                </p>
+            </article>
+
+            <article class="fp-card">
+                <h3 class="fp-heading" lang="en">
+                    Episode 2: I Wish I Could ROLLBACK My Cringe Moments
+                </h3>
+                <p>
+                    「人生もトランザクションならよかったのに…」とアルカのつぶやき。
+                </p>
+                <p>
+                    <a href="/ja/episodes/episode-2">Episode を読む</a> ／
+                    <a href="/ja/playground/episode-2">Playground で試す</a>
+                </p>
+            </article>
+        </div>
+    </section>
+
+    {/* LEARNING */}
+    <section id="learning" class="fp-section js-fade">
+        <div class="fp-section-inner">
+            <h2 class="fp-heading" lang="en">What you’ll learn here</h2>
+            <ul class="fp-list">
+                <li>感情から SQL の問いを立てる方法</li>
+                <li>日々のモヤモヤをデータの質問に翻訳する方法</li>
+                <li>“ROLLBACK したい過去” をやさしく扱う方法</li>
+            </ul>
+        </div>
+    </section>
+
+    {/* NEWS */}
+    <section id="news" class="fp-section fp-section-alt js-fade">
+        <div class="fp-section-inner">
+            <h2 class="fp-heading" lang="en">News</h2>
+            <ul class="fp-news">
+                <li>
+                    <time datetime="2025-11-15">2025.11.15</time>
+                    <span
+                        >エピソード1「SQL Begins with a Question」近日公開。</span
+                    >
+                </li>
+                <li>
+                    <time datetime="2025-11-20">2025.11.20</time>
+                    <span>アルカ＆ネミのティザービジュアルを公開予定。</span>
+                </li>
+            </ul>
+        </div>
+    </section>
+</BaseLayout>
