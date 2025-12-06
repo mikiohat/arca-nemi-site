@@ -7,6 +7,8 @@
   --fp-accent-soft: #4f46e5;
   --fp-text: #f9fafb;
   --fp-muted: #9ca3af;
+
+    --fp-font-base: 1.2rem;
 }
 
 /* 全体リセットに近い最低限 */
@@ -91,7 +93,7 @@ h3 {
 /* ★ 読み物用のベース段落（About・Story共通） */
 p {
   margin: 0.9rem 0;
-  font-size: 1.20rem;
+  font-size: var(--fp-font-base);
   line-height: 1.8;
   letter-spacing: 0.02em; /* なくてもOK。0.01emなら違和感出にくい */
 }
@@ -164,6 +166,13 @@ img {
   flex-shrink: 0;       /* ← つぶされないようにする */
 }
 
+.fp-logo-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  margin-top: -1px;
+}
+
 .fp-nav {
   display: flex;
   gap: 1rem;
@@ -196,7 +205,7 @@ img {
 /* 言語切り替え */
 .fp-lang-switch {
   position: relative;
-  margin-left: 1.2rem;
+  margin-left: var(--fp-font-base);
   font-size: 0.8rem;
   margin-left: 0rem; /* ← 好きな値に調整、0 でもOK */
 }
@@ -489,7 +498,7 @@ img {
 
 .fp-list li {
   display: flex;
-  font-size: 1.20rem;
+  font-size: var(--fp-font-base);
   align-items: baseline;
   gap: 0.5rem;
   margin: 0.3rem 0;      /* ← 少しだけ広げる */
@@ -619,7 +628,7 @@ img {
 @media (max-width: 720px) {
   p,
   .fp-list li {
-    font-size: 1rem;
+    font-size: calc(var(--fp-font-base) * 0.83); /* ≒1rem */
     line-height: 1.9; /* 画面幅が狭いぶん、少し余裕を持たせる */
   }
 
@@ -639,6 +648,11 @@ img {
 
   .fp-logo {
     font-size: 0.8rem;
+  }
+
+  .fp-logo-icon {
+    height: 10px;
+    width: 10px;
   }
 
   /* ナビ縮小 */
@@ -664,7 +678,7 @@ img {
   }
 
   .fp-lang-icon {
-    font-size: 1.2rem;
+    font-size: var(--fp-font-base);
   }
 
   .fp-title {
@@ -688,7 +702,7 @@ img {
     padding: 48px 0;
   }
   .fp-footer-title {
-    font-size: 1.2rem;
+    font-size: var(--fp-font-base);
   }
   .fp-footer-links {
     gap: 0.75rem;

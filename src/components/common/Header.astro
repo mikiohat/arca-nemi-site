@@ -1,6 +1,8 @@
 ---
 import HeaderLink from "@common/HeaderLink.astro";
 
+import { SITE_FAVICON } from "@/consts";
+
 const NAV = [
   { href: "/", label: "Home" },
   { href: "/episodes", label: "Episodes" },
@@ -27,7 +29,15 @@ const jaPath = isJa ? pathname : "/ja" + (pathname === "/" ? "" : pathname);
 
 <header class="fp-header">
   <div class="fp-header-inner">
-    <a href={isJa ? "/ja" : "/"} class="fp-logo">feelings💙projects</a>
+    <a href={isJa ? "/ja" : "/"} class="fp-logo">
+      <img
+        src={SITE_FAVICON}
+        alt="Arca & Nemi"
+        class="fp-logo-icon"
+        loading="lazy"
+      />
+      <span class="fp-logo-text">Arca &amp; Nemi</span>
+    </a>
 
     <div class="fp-header-right">
       <nav class="fp-nav fp-nav-desktop" aria-label="Primary navigation">

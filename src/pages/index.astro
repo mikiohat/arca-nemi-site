@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import ConversationBubble from "@talk/ConversationBubble.astro";
 ---
 
 <!-- src/pages/index.astro -->
@@ -84,24 +85,6 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
         </div>
     </section>
 
-    {/* STORY / AI is a partner */}
-    <section id="story" class="fp-section fp-section-alt js-fade">
-        <div class="fp-section-inner">
-            <h2 class="fp-heading">
-                AI is a partner — that’s why we still need to learn.
-            </h2>
-            <p>
-                Late at night in the office, buried under a mountain of query
-                logs, Nemi suddenly pauses and wonders, “Why… does this feel so
-                exhausting?”
-            </p>
-            <p>
-                Just then, someone pops out from deep inside the monitor— Arca,
-                the AI girl who embodies emotion.
-            </p>
-        </div>
-    </section>
-
     {/* CAST / Who are Arca & Nemi? */}
     <section id="cast" class="fp-section js-fade">
         <div class="fp-section-inner">
@@ -119,9 +102,12 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
                     <div class="fp-character-body">
                         <h3 class="fp-heading">Arca</h3>
                         <p>
-                            An AI girl who governs emotion and impulse. Acts
-                            before she thinks. Skilled at giving language to the
-                            “emotional noise” hidden in data.
+                            An AI partner that works alongside Nemi. It supports
+                            her in many ways, including information processing,
+                            organizing situations, and assisting with decisions.
+                            At times it steps further than expected, and that
+                            flexibility can bring unexpected benefits to Nemi’s
+                            work.
                         </p>
                     </div>
                 </article>
@@ -137,13 +123,56 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
                     <div class="fp-character-body">
                         <h3 class="fp-heading">Nemi</h3>
                         <p>
-                            A warm-hearted, logic-driven engineer. She organizes
-                            the world with reason, yet somehow always delivers
-                            the gentlest punchlines.
+                            She’s grateful for Arca’s support and even listens
+                            to her questions about love. But each time it
+                            happens, she finds herself thinking:
+                            <em>
+                                “I’m giving relationship advice to an AI…? AI
+                                aren’t supposed to have feelings like this… are
+                                they…?”
+                            </em>
                         </p>
                     </div>
                 </article>
             </div>
+        </div>
+    </section>
+
+    {/* STORY / AI is a partner */}
+    <section id="story" class="fp-section fp-section-alt js-fade">
+        <div class="fp-section-inner">
+            <h2 class="fp-heading">
+                AI is a partner — that’s why we still need to learn
+            </h2>
+            <ConversationBubble
+                speaker="Nemi"
+                character="nemi"
+                emotion="normal"
+                bubble="default"
+                align="left"
+            >
+                Can’t we just let AI write all our queries from now on?
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Arca"
+                character="arca"
+                emotion="anger"
+                bubble="default"
+                align="right"
+            >
+                Sure. But when it breaks at 2 a.m., who are you gonna ask,
+                <em>"Why did you even trust it?"</em>
+            </ConversationBubble>
+            <p>
+                Late at night in the office, buried under a mountain of query
+                logs, Nemi suddenly pauses and wonders, “Why… does this feel so
+                exhausting?”
+            </p>
+            <p>
+                Just then, someone pops out from deep inside the monitor— Arca,
+                the AI girl who embodies emotion.
+            </p>
         </div>
     </section>
 

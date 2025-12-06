@@ -1,10 +1,13 @@
 ---
 interface Props {
-    speaker: string; // 表示名（"Arca" / "Nemi" / "Narration" など）
-    character?: "arca" | "nemi"; // アバター用のキャラID
-    emotion?: "normal" | "happy" | "anger" | "sad" | "joy"; // 表情
+    speaker: string; // 表示名
+    character?: "arca" | "nemi";
+    emotion?: "normal" | "happy" | "anger" | "sad" | "joy";
     align?: "left" | "right" | "center";
     tone?: "light" | "dark" | "narration";
+
+    // 吹き出し背景のバリエーション（追加）
+    bubble?: "default" | "pink" | "white";
 }
 
 const {
@@ -13,6 +16,7 @@ const {
     emotion = "normal",
     align = "left",
     tone = "light",
+    bubble = "default",
 } = Astro.props;
 
 type Character = "arca" | "nemi";
@@ -51,12 +55,28 @@ const toneClass =
 
 const avatarSrc = tone === "narration" ? null : AVATAR_MAP[character][emotion];
 
-// イニシャル用（とりあえず1文字だけ出す）
+// イニシャル用
 const initial = speaker.slice(0, 1);
+
+// 吹き出し背景のバリエーション（透明度入り）
+const BUBBLE_BG_MAP: Record<string, string> = {
+    // ダーク系グラデ（デフォルト）
+    default:
+        "radial-gradient(circle at 0 0, rgba(129, 140, 248, 0.26), transparent 55%), rgba(9, 12, 26, 0.96)",
+    // pink
+    pink: "radial-gradient(circle at 0 0, rgba(236, 72, 153, 0.24), transparent 55%), rgba(9, 12, 26, 0.96)",
+    // 読みやすさ重視の白（ほんの少しだけ透けさせる）
+    white: "rgba(255, 255, 255, 0.96)",
+};
+
+const bubbleBg = BUBBLE_BG_MAP[bubble] ?? BUBBLE_BG_MAP.default;
+
+// CSS 変数で吹き出し背景を渡す
+const bubbleStyle = `--cb-bg:${bubbleBg};`;
 ---
 
 <div class={`cb-row ${alignmentClass}`}>
-    <div class={`cb ${toneClass}`}>
+    <div class={`cb ${toneClass}`} style={bubbleStyle}>
         {
             tone !== "narration" && (
                 <div class="cb-avatar" aria-hidden="true">
@@ -98,12 +118,11 @@ const initial = speaker.slice(0, 1);
         justify-content: flex-end;
     }
 
-    /* 中央寄せ（narration 用） */
     .cb-row--center {
         justify-content: center;
     }
 
-    /* narration 専用トーン（少しフラットで静かな感じ） */
+    /* narration 用 */
     .cb--tone-narration {
         max-width: 620px;
         border-radius: 999px;
@@ -114,7 +133,6 @@ const initial = speaker.slice(0, 1);
         justify-content: center;
     }
 
-    /* narration では名前は消して、テキストだけ残す */
     .cb--tone-narration .cb-meta {
         display: none;
     }
@@ -127,55 +145,61 @@ const initial = speaker.slice(0, 1);
 
     .cb {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
+        flex-direction: row;
         gap: 0.55rem;
         max-width: min(100%, 560px);
         padding: 0.55rem 0.85rem;
         border-radius: 18px;
         border: 1px solid rgba(148, 163, 184, 0.45);
-        background: radial-gradient(
+
+        /* ★ ここを CSS 変数経由にして、背景を優先順位で切り替え */
+        background: var(
+            --cb-bg,
+            radial-gradient(
                 circle at 0 0,
                 rgba(129, 140, 248, 0.18),
                 transparent 55%
             ),
-            rgba(9, 12, 26, 0.96);
+            rgba(9, 12, 26, 0.96)
+        );
         box-shadow: 0 10px 24px rgba(15, 23, 42, 0.8);
-        transform: translateY(0) scale(1);
-        transition:
-            transform 170ms cubic-bezier(0.16, 1.1, 0.3, 1),
-            box-shadow 170ms ease-out,
-            border-color 170ms ease-out,
-            background 170ms ease-out;
     }
 
-    /* 右側のときは並びを反転 */
     .cb-row--right .cb {
         flex-direction: row-reverse;
     }
 
-    .cb:hover {
-        transform: translateY(-1px) scale(1.02);
-        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.95);
-        border-color: rgba(191, 219, 254, 0.85);
-    }
-
+    /* ★ 四角いアバター（角丸） */
     .cb-avatar {
         flex: 0 0 auto;
-        width: 28px;
-        height: 28px;
-        border-radius: 999px;
-        background: radial-gradient(
-            circle at 30% 0%,
-            rgba(248, 250, 252, 0.95),
-            rgba(129, 140, 248, 0.9)
-        );
+        width: 52px;
+        height: 52px;
+        border-radius: 14px; /* 0 にすれば完全な四角 */
+        overflow: hidden;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: #0b1120;
-        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.9);
+        background: transparent;
+        box-shadow: 0 2px 4px rgba(51, 63, 90, 0.9);
+
+        /* ★ ホバー用のアニメーション準備 */
+        transform: translateY(0) scale(1);
+        transition:
+            transform 170ms cubic-bezier(0.16, 1.1, 0.3, 1),
+            box-shadow 170ms ease-out;
+    }
+
+    /* アイコンに hover したとき、大きく＆影を強く */
+    .cb-avatar:hover {
+        transform: translateY(-1px) scale(2.5); /* 1.05〜1.10 くらいで調整 */
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+    }
+
+    .cb-avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .cb-body {
@@ -183,6 +207,7 @@ const initial = speaker.slice(0, 1);
     }
 
     .cb-meta {
+        display: none;
         font-size: 0.72rem;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -195,46 +220,20 @@ const initial = speaker.slice(0, 1);
     }
 
     .cb-text {
-        font-size: 0.9rem;
+        font-size: var(--fp-font-base);
+
         line-height: 1.7;
         color: var(--fp-text, #e5e7eb);
         word-wrap: break-word;
     }
 
-    .cb-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 999px;
-        overflow: hidden;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: #e5e7eb;
-    }
-
-    .cb-avatar-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    /* tone違い（ネミ側を少しダーク寄りに） */
+    /* tone違い（ダーク寄せ） */
     .cb--tone-dark {
-        background: radial-gradient(
-                circle at 0 0,
-                rgba(56, 78, 183, 0.25),
-                transparent 55%
-            ),
-            rgba(9, 10, 24, 0.98);
         border-color: rgba(107, 114, 128, 0.8);
     }
 
-    .cb--tone-dark .cb-avatar {
-        background: radial-gradient(
-            circle at 30% 0%,
-            rgba(248, 250, 252, 0.98),
-            rgba(56, 189, 248, 0.9)
-        );
+    .cb--tone-light {
+        border-color: rgba(148, 163, 184, 0.55);
     }
 
     @media (max-width: 720px) {
@@ -249,7 +248,7 @@ const initial = speaker.slice(0, 1);
         }
 
         .cb-text {
-            font-size: 0.88rem;
+            font-size: calc(var(--fp-font-base) * 0.83);
         }
     }
 </style>
