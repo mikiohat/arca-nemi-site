@@ -354,6 +354,7 @@ img {
 .fp-footer-copy {
   text-align: center;
   font-size: 0.8rem;
+  font-weight: 500;
   color: #64748b;
 }
 
@@ -365,6 +366,10 @@ img {
   margin-top: 4px; /* コピーライトの直下に添える */
 }
 
+.fp-footer-credit a {
+  color: inherit;
+  text-decoration: underline;
+}
 
 /* ------------------------ */
 /*  セクション */
