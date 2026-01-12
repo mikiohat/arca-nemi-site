@@ -93,12 +93,14 @@ import ConversationBubble from "@talk/ConversationBubble.astro";
             <div class="fp-cards fp-cards--character">
                 <!-- Arca -->
                 <article class="fp-card fp-card--character">
-                    <img
-                        src="/assets/arca_full.webp"
-                        alt="Arca illustration"
-                        class="fp-character-img"
-                        loading="lazy"
-                    />
+                    <div class="fp-character-zoom">
+                        <img
+                            src="/assets/arca_full.webp"
+                            alt="Arca illustration"
+                            class="fp-character-img"
+                            loading="lazy"
+                        />
+                    </div>
                     <div class="fp-character-body">
                         <h3 class="fp-heading">Arca</h3>
                         <p>
@@ -144,6 +146,8 @@ import ConversationBubble from "@talk/ConversationBubble.astro";
             <h2 class="fp-heading">
                 AI is a partner — that’s why we still need to learn
             </h2>
+
+            {/* Responsibility */}
             <ConversationBubble
                 speaker="Nemi"
                 character="nemi"
@@ -151,7 +155,7 @@ import ConversationBubble from "@talk/ConversationBubble.astro";
                 bubble="default"
                 align="left"
             >
-                Can’t we just let AI write all our queries from now on?
+                Honestly, can’t we just let AI handle the whole system?
             </ConversationBubble>
 
             <ConversationBubble
@@ -161,18 +165,215 @@ import ConversationBubble from "@talk/ConversationBubble.astro";
                 bubble="default"
                 align="right"
             >
-                Sure. But when it breaks at 2 a.m., who are you gonna ask,
-                <em>"Why did you even trust it?"</em>
+                Sure. Then when it breaks at 2 a.m., who you gonna ask,
+                <em>“Why did you trust this thing?”</em>
             </ConversationBubble>
-            <p>
-                Late at night in the office, buried under a mountain of query
-                logs, Nemi suddenly pauses and wonders, “Why… does this feel so
-                exhausting?”
-            </p>
-            <p>
-                Just then, someone pops out from deep inside the monitor— Arca,
-                the AI girl who embodies emotion.
-            </p>
+
+            <ConversationBubble
+                speaker="Nemi"
+                character="nemi"
+                emotion="normal"
+                bubble="default"
+                align="left"
+            >
+                …Yeah. That’d be me.
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Arca"
+                character="arca"
+                emotion="normal"
+                bubble="default"
+                align="right"
+            >
+                I give answers. But taking responsibility? That’s always on
+                humans.
+            </ConversationBubble>
+
+            {/* Distance / Arca's quiet limitation */}
+            <ConversationBubble
+                speaker="Arca"
+                character="arca"
+                emotion="normal"
+                bubble="default"
+                align="right"
+            >
+                Human relationships are the same.
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Arca"
+                character="arca"
+                emotion="sad"
+                bubble="default"
+                align="right"
+            >
+                I only see them through you, Nemi. I don’t get to step into that
+                circle myself.
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Nemi"
+                character="nemi"
+                emotion="sad"
+                bubble="default"
+                align="left"
+            >
+                …
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Nemi"
+                character="nemi"
+                emotion="normal"
+                bubble="default"
+                align="left"
+            >
+                …So that’s why you snapped earlier?
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Arca"
+                character="arca"
+                emotion="normal"
+                bubble="default"
+                align="right"
+            >
+                Nah. That’s why I just want you to think.
+            </ConversationBubble>
+
+            {/* Director */}
+            <ConversationBubble
+                speaker="Nemi"
+                character="nemi"
+                emotion="normal"
+                bubble="default"
+                align="left"
+            >
+                Alright then… what are humans supposed to do?
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Arca"
+                character="arca"
+                emotion="normal"
+                bubble="default"
+                align="right"
+            >
+                Decide things.
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Nemi"
+                character="nemi"
+                emotion="normal"
+                bubble="default"
+                align="left"
+            >
+                Decide?
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Arca"
+                character="arca"
+                emotion="normal"
+                bubble="default"
+                align="right"
+            >
+                What to use. How far to rely on me. And what you’re willing to
+                take on yourself.
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Nemi"
+                character="nemi"
+                emotion="happy"
+                bubble="default"
+                align="left"
+            >
+                …So basically, I’m the director?
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Arca"
+                character="arca"
+                emotion="joy"
+                bubble="default"
+                align="right"
+            >
+                Yeah. The one keeping the whole thing together.
+            </ConversationBubble>
+
+            {/* Technology change */}
+            <ConversationBubble
+                speaker="Nemi"
+                character="nemi"
+                emotion="normal"
+                bubble="default"
+                align="left"
+            >
+                Technology’s moving crazy fast, though.
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Arca"
+                character="arca"
+                emotion="normal"
+                bubble="default"
+                align="right"
+            >
+                True. I can do more than ever now. But I’m not someone who can
+                make claims as my own.
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Nemi"
+                character="nemi"
+                emotion="normal"
+                bubble="default"
+                align="left"
+            >
+                Figures. So even if things get easier…
+            </ConversationBubble>
+
+            {/* Closing */}
+            <ConversationBubble
+                speaker="Nemi"
+                character="nemi"
+                emotion="joy"
+                bubble="default"
+                align="left"
+            >
+                thinking’s still on us, huh.
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Narration"
+                align="center"
+                tone="narration"
+            >
+                🌀
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Nemi"
+                character="nemi"
+                emotion="normal"
+                bubble="default"
+                align="left"
+            >
+                Guess humans can’t really escape learning after all.
+            </ConversationBubble>
+
+            <ConversationBubble
+                speaker="Arca"
+                character="arca"
+                emotion="happy"
+                bubble="default"
+                align="right"
+            >
+                Guess not.
+            </ConversationBubble>
         </div>
     </section>
 
