@@ -1,12 +1,30 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ConversationBubble from "@talk/ConversationBubble.astro";
+import { sqlEpisodes } from "@/content/sqlEpisodes";
+import { SERIES } from "@/consts/series";
+import { formatEpisodeNumber } from "@/utils/format";
+
+const episode = sqlEpisodes.find(
+    (e) => e.slug === "even-an-ai-wants-to-fall-in-love",
+);
 ---
 
-<BaseLayout title="Episode 01: Even an AI Wants to Fall in Love">
+<BaseLayout
+    title={`${formatEpisodeNumber(episode.order)}: ${episode.title}`}
+    description={episode.description}
+>
     <section class="fp-section js-fade">
-        <p class="fp-kicker">feelings 💙 SQL</p>
-        <h1 class="fp-title">Episode 01: Even an AI Wants to Fall in Love.</h1>
+        <p class="fp-kicker">
+            <a href="/">Home</a> /
+            <a href="/episodes">Episodes</a> /
+            <a href={`/episodes/${SERIES.FEELINGS_SQL.slug}`}>
+                {SERIES.FEELINGS_SQL.title}
+            </a> / {formatEpisodeNumber(episode.order)}
+        </p>
+        <h1 class="fp-title">
+            {formatEpisodeNumber(episode.order)}: {episode.title}
+        </h1>
         <p class="fp-subtitle">— Love is not ACID-compliant.</p>
 
         <ConversationBubble
@@ -113,18 +131,4 @@ import ConversationBubble from "@talk/ConversationBubble.astro";
             connection. Ain’t that just the same as us humans? 🌀
         </ConversationBubble>
     </section>
-
-    <!-- <style>
-        .fp-kicker {
-            opacity: 0.85;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            margin: 0 0 0.5rem;
-        }
-        .fp-subtitle {
-            opacity: 0.85;
-            margin: 0 0 1.25rem;
-        }
-    </style> -->
 </BaseLayout>

@@ -64,7 +64,8 @@ a:hover {
 .fp-main {
   max-width: var(--site-max-width);
   margin: 0 auto;
-  padding: 72px 16px 96px;
+  padding: 20px 16px 64px;
+  /* padding: 72px 16px 96px; */
 }
 
 /* 見出し・本文のベース */
@@ -117,6 +118,10 @@ img {
   clip: rect(1px, 1px, 1px, 1px);
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+.fp-muted {
+  color: var(--fp-muted);
 }
 
 
@@ -481,10 +486,16 @@ img {
 /* ========== cards ========== */
 .fp-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1rem;
   margin-top: 1.4rem;
 }
+
+.fp-cards--character {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+/* .fp-character-img {} */
 
 .fp-card {
   padding: 0.9rem 1rem;
@@ -643,7 +654,7 @@ img {
 
   /* 本文の左右 padding を 10px に */
   .fp-main {
-    padding: 72px 10px 96px;
+    padding: 20px 10px 64px;
   }
 
   .fp-header-right {
@@ -748,7 +759,7 @@ img {
 .fp-heading-sub,
 .fp-logo,
 .fp-kicker,
-.episode__title {
+.fp-subtitle {
   font-family: "Kurale", serif;
 }
 
