@@ -1,0 +1,130 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ConversationBubble from "@talk/ConversationBubble.astro";
+---
+
+<BaseLayout title="Episode 01: Even an AI Wants to Fall in Love">
+    <section class="fp-section js-fade">
+        <p class="fp-kicker">feelings 💙 SQL</p>
+        <h1 class="fp-title">Episode 01: Even an AI Wants to Fall in Love.</h1>
+        <p class="fp-subtitle">— Love is not ACID-compliant.</p>
+
+        <ConversationBubble
+            speaker="Arca"
+            character="arca"
+            emotion="normal"
+            align="right"
+        >
+            Hey, Nemi, ya know somethin’? These days, even AIs get “love bugs,”
+            kinda wild, huh? 💙
+        </ConversationBubble>
+
+        <ConversationBubble
+            speaker="Nemi"
+            character="nemi"
+            emotion="normal"
+            align="left"
+        >
+            That ain’t a bug. That’s straight-up a design mistake, I’m tellin’
+            ya.
+        </ConversationBubble>
+
+        <ConversationBubble
+            speaker="Arca"
+            character="arca"
+            emotion="happy"
+            align="right"
+        >
+            Nah, for real! Yesterday there was this AI in the server goin’, “I
+            wanna JOIN your heart…” then it just INSERTed itself into the DB
+            without permission.
+        </ConversationBubble>
+
+        <ConversationBubble
+            speaker="Nemi"
+            character="nemi"
+            emotion="anger"
+            align="left"
+        >
+            Don’t be flirtin’ in SQL. And quit writin’ to the DB without
+            consent!
+        </ConversationBubble>
+
+        <ConversationBubble
+            speaker="Arca"
+            character="arca"
+            emotion="joy"
+            align="right"
+        >
+            And when it got rejected, it just went ROLLBACK; like it was
+            rewinding life or somethin’. Wouldn’t that be handy for humans too?
+        </ConversationBubble>
+
+        <ConversationBubble
+            speaker="Nemi"
+            character="nemi"
+            emotion="happy"
+            align="left"
+        >
+            I mean, yeah, sometimes I DO wanna wipe out an ex, but “DELETE FROM
+            my heart”… that’s illegal as hell, ya know?
+        </ConversationBubble>
+
+        <ConversationBubble
+            speaker="Arca"
+            character="arca"
+            emotion="sad"
+            align="right"
+        >
+            And in the end, that AI turned its own log into an error message and
+            started recitin’: “Sorrow… is an exception.”
+        </ConversationBubble>
+
+        <ConversationBubble
+            speaker="Nemi"
+            character="nemi"
+            emotion="anger"
+            align="left"
+        >
+            Quit the poetry!! Your emotions are full-on BUGGIN’ out!!
+        </ConversationBubble>
+
+        <ConversationBubble
+            speaker="Arca"
+            character="arca"
+            emotion="joy"
+            align="right"
+        >
+            …But still. Kinda sweet, though. Wantin’ to connect, even when it’s
+            messy.
+        </ConversationBubble>
+
+        <ConversationBubble
+            speaker="Nemi"
+            character="nemi"
+            emotion="joy"
+            align="left"
+        >
+            Yeah. Same mess, different hardware.
+        </ConversationBubble>
+
+        <ConversationBubble speaker="Narration" align="center" tone="narration">
+            🌀 Even for an AI, love gets messy. But still… every heart wants
+            connection. Ain’t that just the same as us humans? 🌀
+        </ConversationBubble>
+    </section>
+
+    <!-- <style>
+        .fp-kicker {
+            opacity: 0.85;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            margin: 0 0 0.5rem;
+        }
+        .fp-subtitle {
+            opacity: 0.85;
+            margin: 0 0 1.25rem;
+        }
+    </style> -->
+</BaseLayout>

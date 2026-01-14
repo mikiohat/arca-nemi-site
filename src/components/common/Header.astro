@@ -42,9 +42,13 @@ const jaPath = isJa ? pathname : "/ja" + (pathname === "/" ? "" : pathname);
     <div class="fp-header-right">
       <nav class="fp-nav fp-nav-desktop" aria-label="Primary navigation">
         {
-          NAV.map((item) => (
-            <HeaderLink href={item.href}>{item.label}</HeaderLink>
-          ))
+          NAV.map((item) => {
+            const localizedHref = isJa
+              ? "/ja" + (item.href === "/" ? "" : item.href)
+              : item.href;
+
+            return <HeaderLink href={localizedHref}>{item.label}</HeaderLink>;
+          })
         }
       </nav>
 

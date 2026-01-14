@@ -428,6 +428,11 @@ img {
   margin-top: 0.3rem;
 }
 
+.fp-subtitle {
+    opacity: 0.85;
+    margin: 0 0 1.25rem;
+}
+
 .fp-lead {
   margin-top: 1.4rem;
 }

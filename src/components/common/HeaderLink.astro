@@ -5,34 +5,62 @@ type Props = HTMLAttributes<"a">;
 
 const { href = "/", class: className, ...props } = Astro.props as Props;
 
-// ベースURLを除いたパスを取得
-const rawPath = Astro.url.pathname.replace(import.meta.env.BASE_URL, "");
-const pathname = rawPath === "" ? "/" : rawPath;
+// --- helpers ---
+const normalize = (p: string) => (p !== "/" ? p.replace(/\/+$/, "") : "/");
+const stripJa = (p: string) => p.replace(/^\/ja(?=\/|$)/, "") || "/";
+
+// BASE_URL を安全に剥がす（"/" のときは剥がさない）
+const stripBase = (p: string) => {
+	const baseRaw = import.meta.env.BASE_URL ?? "/";
+	const base = baseRaw !== "/" ? baseRaw.replace(/\/+$/, "") : "";
+
+	if (base && p.startsWith(base)) {
+		const sliced = p.slice(base.length);
+		return sliced === ""
+			? "/"
+			: sliced.startsWith("/")
+				? sliced
+				: `/${sliced}`;
+	}
+	return p;
+};
+
+// pathname を正規化
+const pathname = normalize(stripJa(stripBase(Astro.url.pathname)));
+
+// href を string に正規化してから正規化
+const rawHref =
+	typeof href === "string" ? href : href instanceof URL ? href.pathname : "/";
+
+const linkHref = normalize(stripJa(stripBase(rawHref)));
 
 let isActive = false;
 
 // Home
-if (href === "/") {
+if (linkHref === "/") {
 	isActive = pathname === "/";
 }
-// Episodes ハブ & /sql/episodes, /python/episodes, /sql/episodes/episode-1 など
-else if (href === "/episodes") {
-	isActive =
-		pathname === "/episodes" || /^\/[^/]+\/episodes(\/|$)/.test(pathname);
+// Episodes： /episodes と /episodes/* すべて
+else if (linkHref === "/episodes") {
+	isActive = pathname === "/episodes" || pathname.startsWith("/episodes/");
 }
-// Playground ハブ & /sql/playground, /python/playground など
-else if (href === "/playground") {
+// Playground： /playground と /playground/* すべて
+else if (linkHref === "/playground") {
 	isActive =
-		pathname === "/playground" ||
-		/^\/[^/]+\/playground(\/|$)/.test(pathname);
+		pathname === "/playground" || pathname.startsWith("/playground/");
 }
-// About など、その他のパターン
+// その他：完全一致 or 配下
 else {
-	isActive = pathname === href || pathname.startsWith(href + "/");
+	isActive = pathname === linkHref || pathname.startsWith(linkHref + "/");
 }
 ---
 
-<a href={href} class:list={[className, { active: isActive }]} {...props}>
+<a
+	href={href}
+	data-astro-prefetch
+	class:list={[className, { active: isActive }]}
+	{...props}
+>
 	<slot />
 </a>
 

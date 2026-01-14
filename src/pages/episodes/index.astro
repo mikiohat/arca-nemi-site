@@ -1,0 +1,62 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import TopicCards from "@/components/topics/TopicCards.astro";
+
+const episodeCategories = [
+    {
+        eyebrow: "Read",
+        title: "SQL Episodes",
+        description:
+            "Short logs where an AI observes human emotions through SQL concepts. Love is not ACID-compliant.",
+        episodeHref: "/episodes/sql/",
+        playgroundHref: "/playground/sql/",
+        tags: ["SQL", "feelings", "Arca & Nemi"],
+    },
+    {
+        eyebrow: "Read",
+        title: "Python Episodes",
+        description:
+            "A curious AI tries to understand humans by defining, breaking down, and rebuilding the world with Python.",
+        episodeHref: "/episodes/python/",
+        playgroundHref: "/playground/python/",
+        tags: ["Python", "definitions", "experiments"],
+    },
+    {
+        eyebrow: "Read",
+        title: "Data-Oriented App Design",
+        description:
+            "Design is responsibility. An AI learns how structure, rules, and ownership shape human systems.",
+        episodeHref: "/episodes/data-oriented-app-design/",
+        playgroundHref: "/playground/data-oriented-app-design/",
+        tags: ["Design", "data", "responsibility"],
+    },
+];
+---
+
+<BaseLayout title="Episodes">
+    <main class="ep-index">
+        <section class="fp-section js-fade">
+            <p class="fp-kicker">Episodes</p>
+            <h1 class="ep-title">Episodes</h1>
+            <p class="ep-lead">
+                Start with Arca and Nemi’s conversations. Then try it in the
+                playground.
+            </p>
+
+            <TopicCards topics={episodeCategories} />
+        </section>
+
+        <section class="fp-section js-fade">
+            <h2 class="ep-h2">How to read</h2>
+            <ol class="ep-steps">
+                <li><b>Pick a topic.</b> Choose SQL, Python, or Design.</li>
+                <li>
+                    <b>Read a short log.</b> Follow the dialogue, notice the keywords.
+                </li>
+                <li>
+                    <b>Try it yourself.</b> Jump into the playground in one click.
+                </li>
+            </ol>
+        </section>
+    </main>
+</BaseLayout>
