@@ -187,6 +187,11 @@ img {
     flex-shrink: 0; /* ← つぶされないようにする */
   }
 
+  /* ヘッダーロゴは下線アニメ無効 */
+  .fp-logo::after {
+    content: none;
+  }
+
   .fp-logo-icon {
     width: 12px;
     height: 12px;
@@ -359,7 +364,12 @@ img {
 
   .fp-footer-link-icon:hover img {
     opacity: 1;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+  }
+
+  /* フッターのアイコンリンクも下線アニメ無効 */
+  .fp-footer-link-icon::after {
+    content: none;
   }
 
   /* コピーライトを中央揃えに */
