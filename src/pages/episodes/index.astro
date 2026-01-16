@@ -1,15 +1,16 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { SERIES } from "@/consts/series";
+import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
 ---
 
 <!-- src/pages/episodes/index.astro -->
 <BaseLayout title="Episodes">
     <main class="fp-main">
         <section class="fp-section js-fade">
-            <p class="fp-kicker">
-                <a href="/">Home</a> / Episodes
-            </p>
+            <Breadcrumbs
+                items={[{ label: "Home", href: "/" }, { label: "Episodes" }]}
+            />
             <div class="fp-cards">
                 <!-- SQL -->
                 <article class="fp-card">

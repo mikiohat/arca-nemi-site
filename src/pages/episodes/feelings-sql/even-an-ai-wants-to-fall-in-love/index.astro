@@ -4,10 +4,15 @@ import ConversationBubble from "@talk/ConversationBubble.astro";
 import { sqlEpisodes } from "@/content/sqlEpisodes";
 import { SERIES } from "@/consts/series";
 import { formatEpisodeNumber } from "@/utils/format";
+import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
 
 const episode = sqlEpisodes.find(
     (e) => e.slug === "even-an-ai-wants-to-fall-in-love",
 );
+
+if (!episode) {
+    throw new Error("Episode not found: even-an-ai-wants-to-fall-in-love");
+}
 ---
 
 <BaseLayout
@@ -15,17 +20,21 @@ const episode = sqlEpisodes.find(
     description={episode.description}
 >
     <section class="fp-section js-fade">
-        <p class="fp-kicker">
-            <a href="/">Home</a> /
-            <a href="/episodes">Episodes</a> /
-            <a href={`/episodes/${SERIES.FEELINGS_SQL.slug}`}>
-                {SERIES.FEELINGS_SQL.title}
-            </a> / {formatEpisodeNumber(episode.order)}
-        </p>
+        <Breadcrumbs
+            items={[
+                { label: "Home", href: "/" },
+                { label: "Episodes", href: "/episodes" },
+                {
+                    label: SERIES.FEELINGS_SQL.title,
+                    href: `/episodes/${SERIES.FEELINGS_SQL.slug}`,
+                },
+                { label: formatEpisodeNumber(episode.order) }, // 現在地なので href なし
+            ]}
+        />
         <h1 class="fp-title">
             {formatEpisodeNumber(episode.order)}: {episode.title}
         </h1>
-        <p class="fp-subtitle">— Love is not ACID-compliant.</p>
+        <p class="fp-subtitle">{episode.subtitle}</p>
 
         <ConversationBubble
             speaker="Arca"

@@ -59,6 +59,7 @@ const avatarSrc = tone === "narration" ? null : AVATAR_MAP[character][emotion];
 const initial = speaker.slice(0, 1);
 
 // 吹き出し背景のバリエーション（透明度入り）
+type Bubble = "default" | "pink" | "white";
 const BUBBLE_BG_MAP: Record<string, string> = {
     // ダーク系グラデ（デフォルト）
     default:
@@ -83,7 +84,7 @@ const bubbleStyle = `--cb-bg:${bubbleBg};`;
                     {avatarSrc ? (
                         <img
                             src={avatarSrc}
-                            alt={speaker}
+                            alt={`${speaker} avatar`}
                             class="cb-avatar-img"
                             loading="lazy"
                         />
@@ -94,9 +95,6 @@ const bubbleStyle = `--cb-bg:${bubbleBg};`;
             )
         }
         <div class="cb-body">
-            <div class="cb-meta">
-                <span class="cb-name">{speaker}</span>
-            </div>
             <div class="cb-text">
                 <slot />
             </div>
@@ -133,14 +131,10 @@ const bubbleStyle = `--cb-bg:${bubbleBg};`;
         justify-content: center;
     }
 
-    .cb--tone-narration .cb-meta {
-        display: none;
-    }
-
     .cb--tone-narration .cb-text {
         font-size: 0.9rem;
         line-height: 1.8;
-        color: #e5e7eb;
+        color: var(--fp-text, #e5e7eb);
     }
 
     .cb {
@@ -204,19 +198,6 @@ const bubbleStyle = `--cb-bg:${bubbleBg};`;
 
     .cb-body {
         min-width: 0;
-    }
-
-    .cb-meta {
-        display: none;
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--fp-muted, #9ca3af);
-        margin-bottom: 0.15rem;
-    }
-
-    .cb-name {
-        opacity: 0.9;
     }
 
     .cb-text {

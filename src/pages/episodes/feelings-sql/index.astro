@@ -1,46 +1,20 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import EpisodesIndex from "@/components/episodes/EpisodesIndex.astro";
 import { sqlEpisodes } from "@/content/sqlEpisodes";
 import { SERIES } from "@/consts/series";
-import { formatEpisodeNumber } from "@/utils/format";
 ---
 
-<BaseLayout title="SQL Episodes">
-    <main class="fp-main">
-        <section class="fp-section js-fade">
-            <p class="fp-kicker">
-                <a href="/">Home</a> /
-                <a href="/episodes">Episodes</a> / {SERIES.FEELINGS_SQL.title}
-            </p>
-
-            <h1 class="fp-heading">SQL Episodes</h1>
-
-            <ul class="fp-list">
-                {
-                    sqlEpisodes.map((episode) => (
-                        <li>
-                            <a
-                                href={`/episodes/${SERIES.FEELINGS_SQL.slug}/${episode.slug}`}
-                            >
-                                {formatEpisodeNumber(episode.order)}:{" "}
-                                {episode.title}
-                            </a>
-                        </li>
-                    ))
-                }
-            </ul>
-        </section>
-
-        <section class="fp-section js-fade">
-            <h2 class="fp-heading-sub">Topics</h2>
-
-            <ul class="fp-list">
-                <li>JOIN</li>
-                <li>ROLLBACK</li>
-                <li>TRANSACTION</li>
-                <li>WHERE</li>
-                <li>ORDER BY</li>
-            </ul>
-        </section>
-    </main>
-</BaseLayout>
+<!-- src/pages/episodes/feelings-sql/index.astro -->
+<EpisodesIndex
+    title={SERIES.FEELINGS_SQL.title}
+    description={SERIES.FEELINGS_SQL.description}
+    heading="A slightly off-kilter SQL love log"
+    seriesSlug={SERIES.FEELINGS_SQL.slug}
+    episodes={sqlEpisodes}
+    hideTag="SQL"
+    breadcrumbs={[
+        { label: "Home", href: "/" },
+        { label: "Episodes", href: "/episodes" },
+        { label: SERIES.FEELINGS_SQL.title },
+    ]}
+/>
