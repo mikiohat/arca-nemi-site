@@ -1,8 +1,4 @@
 ---
-import SeriesSwitcherBar from "@/components/nav/SeriesSwitcherBar.astro";
-import { SERIES } from "@/consts/series";
-import TwinTabs from "@/components/nav/TwinTabs.astro";
-
 export type Crumb = {
     label: string;
     href?: string; // 現在地は href なし
@@ -49,17 +45,3 @@ const { items } = Astro.props as Props;
         }
     </ol>
 </nav>
-
-<SeriesSwitcherBar
-    seriesLabel={SERIES.FEELINGS_SQL.title}
-    seriesHref={`/episodes/${SERIES.FEELINGS_SQL.slug}`}
-    mode="episodes"
-    episodesHref={`/episodes/${SERIES.FEELINGS_SQL.slug}`}
-    playgroundHref={`/playground/${SERIES.FEELINGS_SQL.slug}`}
-/>
-
-<TwinTabs
-    current="playground"
-    episodesHref={`/episodes/${SERIES.FEELINGS_SQL.slug}`}
-    playgroundHref={`/playground/${SERIES.FEELINGS_SQL.slug}`}
-/>

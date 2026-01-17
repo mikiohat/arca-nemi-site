@@ -1,0 +1,74 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
+import { SERIES } from "@/consts/series";
+import { sqlLedger } from "@/content/sqlLedger";
+
+// Feelings SQL のみ抽出（並び順そのまま）
+const entries = sqlLedger
+    .filter((e) => e.series === SERIES.FEELINGS_SQL)
+    .sort((a, b) => a.order - b.order);
+---
+
+<!-- src/pages/playground/feelings-sql/index.astro -->
+<BaseLayout
+    title={`${SERIES.FEELINGS_SQL.title} Playground`}
+    description="Explore the world of SQL through play. Pick a puzzle, run it, and see what changes."
+>
+    <main class="fp-main">
+        <section class="fp-section js-fade">
+            <Breadcrumbs
+                items={[
+                    { label: "Home", href: "/" },
+                    { label: "Playground", href: "/playground" },
+                    { label: SERIES.FEELINGS_SQL.title },
+                ]}
+            />
+
+            <!-- ヒーロー -->
+            <header class="fp-hero">
+                <h1 class="fp-heading">
+                    {SERIES.FEELINGS_SQL.title} Playground
+                </h1>
+
+                <p class="fp-lead">
+                    遊びながら、SQLの世界を探検する。<br />
+                    パズルを選んで、実行して、変化をのぞいてみよう。
+                </p>
+            </header>
+
+            <!-- Playground list -->
+            <div class="fp-list">
+                {
+                    entries.map((entry) => (
+                        <article class="fp-list-item">
+                            <h2 class="fp-list-title">{entry.title}</h2>
+
+                            <p class="fp-muted">{entry.episode.subtitleJa}</p>
+
+                            <div class="fp-tags">
+                                {entry.tags.map((tag) => (
+                                    <span class="fp-tag">{tag}</span>
+                                ))}
+                            </div>
+
+                            <p>
+                                <a
+                                    href={`/playground/feelings-sql/${entry.slug}/`}
+                                >
+                                    Open playground →
+                                </a>
+                            </p>
+
+                            {entry.playground.statusText && (
+                                <p class="fp-muted">
+                                    {entry.playground.statusText}
+                                </p>
+                            )}
+                        </article>
+                    ))
+                }
+            </div>
+        </section>
+    </main>
+</BaseLayout>

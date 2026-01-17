@@ -1,6 +1,6 @@
 ---
 import EpisodesIndex from "@/components/episodes/EpisodesIndex.astro";
-import { sqlEpisodes } from "@/content/sqlEpisodes";
+import { sqlLedger } from "@/content/sqlLedger";
 import { SERIES } from "@/consts/series";
 ---
 
@@ -10,7 +10,7 @@ import { SERIES } from "@/consts/series";
     description={SERIES.FEELINGS_SQL.description}
     heading="A slightly off-kilter SQL love log"
     seriesSlug={SERIES.FEELINGS_SQL.slug}
-    episodes={sqlEpisodes}
+    episodes={sqlLedger}
     hideTag="SQL"
     breadcrumbs={[
         { label: "Home", href: "/" },

@@ -1,23 +1,23 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ConversationBubble from "@talk/ConversationBubble.astro";
-import { sqlEpisodes } from "@/content/sqlEpisodes";
+import { sqlLedger } from "@/content/sqlLedger";
 import { SERIES } from "@/consts/series";
-import { formatEpisodeNumber } from "@/utils/format";
+import { formatLedgerNumber } from "@/utils/format";
 import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
 
-const episode = sqlEpisodes.find(
+const ledger = sqlLedger.find(
     (e) => e.slug === "even-an-ai-wants-to-fall-in-love",
 );
 
-if (!episode) {
+if (!ledger) {
     throw new Error("Episode not found: even-an-ai-wants-to-fall-in-love");
 }
 ---
 
 <BaseLayout
-    title={`${formatEpisodeNumber(episode.order)}: ${episode.title}`}
-    description={episode.description}
+    title={`${formatLedgerNumber(ledger.order)}: ${ledger.title}`}
+    description={ledger.description}
 >
     <section class="fp-section js-fade">
         <Breadcrumbs
@@ -28,13 +28,13 @@ if (!episode) {
                     label: SERIES.FEELINGS_SQL.title,
                     href: `/episodes/${SERIES.FEELINGS_SQL.slug}`,
                 },
-                { label: formatEpisodeNumber(episode.order) }, // 現在地なので href なし
+                { label: formatLedgerNumber(ledger.order) }, // 現在地なので href なし
             ]}
         />
         <h1 class="fp-title">
-            {formatEpisodeNumber(episode.order)}: {episode.title}
+            {formatLedgerNumber(ledger.order)}: {ledger.title}
         </h1>
-        <p class="fp-subtitle">{episode.subtitle}</p>
+        <p class="fp-subtitle">{ledger.episode.subtitle}</p>
 
         <ConversationBubble
             speaker="Arca"

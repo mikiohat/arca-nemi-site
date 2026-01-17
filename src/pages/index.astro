@@ -2,7 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ConversationBubble from "@talk/ConversationBubble.astro";
 import TopicCards from "@/components/topics/TopicCards.astro";
-import { sqlEpisodes } from "@/content/sqlEpisodes";
+import { sqlLedger } from "@/content/sqlLedger";
 ---
 
 <!-- src/pages/index.astro -->
@@ -409,8 +409,8 @@ import { sqlEpisodes } from "@/content/sqlEpisodes";
                 playground.
             </p>
 
-            <TopicCards
-                topics={sqlEpisodes
+            <!-- <TopicCards
+                topics={sqlLedger
                     .filter((e) => e.featured)
                     .sort((a, b) => a.order - b.order)
                     .map((e) => ({
@@ -421,7 +421,7 @@ import { sqlEpisodes } from "@/content/sqlEpisodes";
                         playgroundHref: e.playgroundHref,
                         tags: e.tags,
                     }))}
-            />
+            /> -->
         </div>
     </section>
     <!-- <section id="topics" class="fp-section fp-section-alt js-fade">

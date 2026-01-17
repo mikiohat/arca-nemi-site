@@ -1,4 +1,4 @@
-export const formatEpisodeNumber = (
+export const formatLedgerNumber = (
   order: number,
   locale: "en" | "ja" = "en"
 ) => {

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
-import { formatEpisodeNumber } from "@/utils/format";
+import { formatLedgerNumber } from "@/utils/format";
 
 type Episode = {
     slug: string;
@@ -60,7 +60,7 @@ const {
                                         class="fp-episode-link"
                                         href={`/episodes/${seriesSlug}/${episode.slug}`}
                                     >
-                                        {formatEpisodeNumber(episode.order)}:{" "}
+                                        {formatLedgerNumber(episode.order)}:{" "}
                                         {episode.title}
                                     </a>
 
