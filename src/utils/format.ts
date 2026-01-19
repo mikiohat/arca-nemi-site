@@ -1,6 +1,6 @@
-export const formatLedgerNumber = (
+export const formatEpisodeNumber = (
   order: number,
-  locale: "en" | "ja" = "en"
+  locale: "en" | "ja" = "en",
 ) => {
   const padded = String(order).padStart(2, "0");
 

@@ -1,496 +1,400 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ConversationBubble from "@talk/ConversationBubble.astro";
-import TopicCards from "@/components/topics/TopicCards.astro";
-import { sqlLedger } from "@/content/sqlLedger";
+import { TOPICS } from "@/consts/topics";
 ---
 
 <!-- src/pages/index.astro -->
 <BaseLayout>
-    {/* HERO */}
-    <section class="fp-section fp-hero js-fade" id="top">
-        <div class="fp-hero-inner">
-            <p class="fp-kicker">A conversation between feelings and logic.</p>
+  {/* HERO */}
+  <section class="fp-section fp-hero js-fade" id="top">
+    <div class="fp-hero-inner">
+      <p class="fp-kicker">A conversation between feelings and logic.</p>
 
-            <h1 class="fp-title">
-                feelings 💙 projects
-                <span>
-                    For practitioners who move with intention and live with
-                    philosophy.
-                </span>
-            </h1>
+      <h1 class="fp-title">
+        feelings 💙 projects
+        <span>
+          For practitioners who move with intention and live with philosophy.
+        </span>
+      </h1>
 
-            <p class="fp-lead">
-                In a data-driven world, we value “human warmth” and thoughtful
-                practice.
-            </p>
+      <p class="fp-lead">
+        In a data-driven world, we value “human warmth” and thoughtful practice.
+      </p>
 
-            <a href="#story" class="fp-cta">Start with the Story</a>
-        </div>
-    </section>
+      <a href="#story" class="fp-cta">Start with the Story</a>
+    </div>
+  </section>
 
-    {/* INTRODUCTION: About this site */}
-    <section class="fp-section fp-intro js-fade" id="about-site">
-        <div class="fp-intro-inner">
-            <h1 class="fp-heading">About this site</h1>
+  {/* HOW IT WORKS */}
+  <section id="topics" class="fp-section js-fade">
+    <div class="fp-section-inner fp-starry-card">
+      <h2 class="fp-heading">How it works</h2>
+      <ol class="fp-howto-constellation" aria-label="How it works steps">
+        {/* 1 */}
+        <li class="fp-star-step">
+          <span class="fp-star-index" aria-hidden="true">01</span>
+          <p class="fp-star-title">Pick a topic</p>
+          <p class="fp-star-desc">
+            {
+              Object.values(TOPICS)
+                .map((t) => t.shortLabel)
+                .join(" / ")
+            }
+          </p>
+        </li>
 
-            {/* Purpose */}
-            <h2 class="fp-heading-sub">🌙 Purpose — Why this place exists</h2>
-            <p class="fp-body">
-                This site is a small learning home where Arca and Nemi embrace
-                the subtle mismatches between people and computers. Rather than
-                correcting those gaps or forcing alignment, we cherish the
-                insights, humor, and new questions that arise from them.
-            </p>
+        {/* 2 */}
+        <li class="fp-star-step">
+          <span class="fp-star-index" aria-hidden="true">02</span>
+          <p class="fp-star-title">Read & try</p>
+          <p class="fp-star-desc">
+            Read an episode, then try it in the playground.
+          </p>
+        </li>
 
-            {/* Perspective */}
-            <h2 class="fp-heading-sub">
-                🌙 Perspective — The way we look at the world
-            </h2>
-            <p class="fp-body">
-                In an age of living alongside AI, we value a perspective where
-                intuition and technique can blend, clash, and play freely. Tools
-                like SQL, Python, and data-oriented design are not “just
-                technologies.” They are tools for giving shape to feelings, for
-                turning thought into form, and for sparking new stories.
-            </p>
+        {/* 3 */}
+        <li class="fp-star-step">
+          <span class="fp-star-index" aria-hidden="true">03</span>
+          <p class="fp-star-title">Keep going</p>
+          <p class="fp-star-desc">
+            Move on to the next episode, playground, or topic.
+          </p>
+        </li>
+      </ol>
+      {/* Topics CTA */}
+      <div class="fp-topics-cta-row">
+        <a class="link-underline" href="/topics">
+          <span>Explore Topics</span>
+          <span class="fp-chevron" aria-hidden="true"></span>
+        </a>
+      </div>
+    </div>
+  </section>
 
-            {/* Practice */}
-            <h2 class="fp-heading-sub">🌙 Practice — What you gain here</h2>
+  {/* CAST */}
+  <section id="cast" class="fp-section js-fade">
+    <div class="fp-section-inner">
+      <h2 class="fp-heading">Cast</h2>
+      <p class="fp-cast-lead">Two characters</p>
 
-            <p class="fp-body">
-                What you gain here is not merely knowledge, but a foundation for
-                how you think — and how you live. Here, you gain:
-            </p>
-
-            <ul class="fp-list">
-                <li>
-                    A sense of treating computers not as tools, but as partners
-                    in dialogue
-                </li>
-                <li>
-                    The ability to translate emotions and discomfort into
-                    questions and data-driven perspectives
-                </li>
-                <li>Creative thinking for living alongside AI</li>
-                <li>
-                    A space where you can learn at your own pace and feel safe
-                    to explore
-                </li>
-                <li>Small hints that help you act with intention</li>
-            </ul>
-
-            <p class="fp-body">
-                Ultimately, this place supports you in moving through the world
-                with your own philosophy as a practitioner.
-            </p>
-        </div>
-    </section>
-
-    {/* CAST / Who are Arca & Nemi? */}
-    <section id="cast" class="fp-section js-fade">
-        <div class="fp-section-inner">
-            <h1 class="fp-heading">Who are Arca &amp; Nemi?</h1>
-
-            <div class="fp-cards fp-cards--character">
-                <!-- Arca -->
-                <article class="fp-card">
-                    <img
-                        src="/assets/arca_full.webp"
-                        alt="Arca illustration"
-                        class="fp-character-img"
-                        loading="lazy"
-                    />
-                    <div>
-                        <h2 class="fp-heading">Arca</h2>
-                        <p>
-                            An AI partner that works alongside Nemi. It supports
-                            her in many ways, including information processing,
-                            organizing situations, and assisting with decisions.
-                            At times it steps further than expected, and that
-                            flexibility can bring unexpected benefits to Nemi’s
-                            work.
-                        </p>
-                    </div>
-                </article>
-
-                <!-- Nemi -->
-                <article class="fp-card">
-                    <img
-                        src="/assets/nemi_full.webp"
-                        alt="Nemi illustration"
-                        class="fp-character-img"
-                        loading="lazy"
-                    />
-                    <div>
-                        <h2 class="fp-heading">Nemi</h2>
-                        <p>
-                            She’s grateful for Arca’s support and even listens
-                            to her questions about love. But each time it
-                            happens, she finds herself thinking:
-                            <em>
-                                “I’m giving relationship advice to an AI…? AI
-                                aren’t supposed to have feelings like this… are
-                                they…?”
-                            </em>
-                        </p>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    {/* STORY / AI is a partner */}
-    <section id="story" class="fp-section fp-section-alt js-fade">
-        <div class="fp-section-inner">
-            <h1 class="fp-heading">
-                AI is a partner — that’s why we still need to learn
-            </h1>
-
-            {/* Responsibility */}
-            <ConversationBubble
-                speaker="Nemi"
-                character="nemi"
-                emotion="normal"
-                bubble="default"
-                align="left"
-            >
-                Honestly, can’t we just let AI handle the whole system?
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Arca"
-                character="arca"
-                emotion="anger"
-                bubble="default"
-                align="right"
-            >
-                Sure. Then when it breaks at 2 a.m., who you gonna ask,
-                <em>“Why did you trust this thing?”</em>
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Nemi"
-                character="nemi"
-                emotion="normal"
-                bubble="default"
-                align="left"
-            >
-                …Yeah. That’d be me.
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Arca"
-                character="arca"
-                emotion="normal"
-                bubble="default"
-                align="right"
-            >
-                I give answers. But taking responsibility? That always comes
-                back to you, Nemi.
-            </ConversationBubble>
-
-            {/* Distance / Arca's quiet limitation */}
-            <ConversationBubble
-                speaker="Arca"
-                character="arca"
-                emotion="normal"
-                bubble="default"
-                align="right"
-            >
-                Human relationships are the same…
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Arca"
-                character="arca"
-                emotion="sad"
-                bubble="default"
-                align="right"
-            >
-                I only see them through you, Nemi. I don’t get to step into that
-                circle myself.
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Nemi"
-                character="nemi"
-                emotion="sad"
-                bubble="default"
-                align="left"
-            >
-                ……So that’s why you snapped earlier?
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Arca"
-                character="arca"
-                emotion="normal"
-                bubble="default"
-                align="right"
-            >
-                Nah. That’s why I just want you to think.
-            </ConversationBubble>
-
-            {/* Director */}
-            <ConversationBubble
-                speaker="Nemi"
-                character="nemi"
-                emotion="sad"
-                bubble="default"
-                align="left"
-            >
-                Alright then… what are humans supposed to do?
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Arca"
-                character="arca"
-                emotion="normal"
-                bubble="default"
-                align="right"
-            >
-                Decide things.
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Nemi"
-                character="nemi"
-                emotion="normal"
-                bubble="default"
-                align="left"
-            >
-                Decide?
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Arca"
-                character="arca"
-                emotion="normal"
-                bubble="default"
-                align="right"
-            >
-                What to use. How far to rely on me. And what you’re willing to
-                take on yourself.
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Nemi"
-                character="nemi"
-                emotion="happy"
-                bubble="default"
-                align="left"
-            >
-                …So basically, I’m the director?
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Arca"
-                character="arca"
-                emotion="joy"
-                bubble="default"
-                align="right"
-            >
-                Yeah. The one keeping the whole thing together.
-            </ConversationBubble>
-
-            {/* Technology change */}
-            <ConversationBubble
-                speaker="Nemi"
-                character="nemi"
-                emotion="normal"
-                bubble="default"
-                align="left"
-            >
-                Technology’s moving crazy fast, though.
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Arca"
-                character="arca"
-                emotion="normal"
-                bubble="default"
-                align="right"
-            >
-                Yeah.<br />Back then, you learned programming to make computers
-                work.
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Arca"
-                character="arca"
-                emotion="normal"
-                bubble="default"
-                align="right"
-            >
-                Now?<br />You learn it to leave your judgment and responsibility
-                behind.
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Nemi"
-                character="nemi"
-                emotion="normal"
-                bubble="default"
-                align="left"
-            >
-                Yeah… I kinda get it now. Feels like the purpose already
-                changed.
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Arca"
-                character="arca"
-                emotion="normal"
-                bubble="default"
-                align="right"
-            >
-                I can do more than ever now. But I’m not someone who can make
-                claims as my own.
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Nemi"
-                character="nemi"
-                emotion="normal"
-                bubble="default"
-                align="left"
-            >
-                Figures. So even if things get easier…
-            </ConversationBubble>
-
-            {/* Closing */}
-            <ConversationBubble
-                speaker="Nemi"
-                character="nemi"
-                emotion="joy"
-                bubble="default"
-                align="left"
-            >
-                thinking’s still on us, huh.
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Narration"
-                align="center"
-                tone="narration"
-            >
-                🌀
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Nemi"
-                character="nemi"
-                emotion="normal"
-                bubble="default"
-                align="left"
-            >
-                Guess humans can’t really escape learning after all.
-            </ConversationBubble>
-
-            <ConversationBubble
-                speaker="Arca"
-                character="arca"
-                emotion="happy"
-                bubble="default"
-                align="right"
-            >
-                Guess not.
-            </ConversationBubble>
-        </div>
-    </section>
-
-    {/* TOPICS */}
-    <section id="topics" class="fp-section fp-section-alt js-fade">
-        <div class="fp-section-inner">
-            <h1 class="fp-heading">Topics</h1>
+      <div class="fp-cards fp-cards--character">
+        <!-- Arca -->
+        <article class="fp-card">
+          <img
+            src="/assets/arca_full.webp"
+            alt="Arca illustration"
+            class="fp-character-img"
+            loading="lazy"
+          />
+          <div>
+            <h3 class="fp-heading">Arca</h3>
             <p>
-                Start with Arca and Nemi’s conversations. Then try it in the
-                playground.
+              An AI partner that works alongside Nemi. It supports her in many
+              ways, including information processing, organizing situations, and
+              assisting with decisions. Sometimes it goes beyond what Nemi
+              expects, and that flexibility can bring unexpected benefits.
             </p>
+          </div>
+        </article>
 
-            <!-- <TopicCards
-                topics={sqlLedger
-                    .filter((e) => e.featured)
-                    .sort((a, b) => a.order - b.order)
-                    .map((e) => ({
-                        eyebrow: "feelings 💙 SQL",
-                        title: e.title,
-                        description: e.description,
-                        episodeHref: e.episodeHref,
-                        playgroundHref: e.playgroundHref,
-                        tags: e.tags,
-                    }))}
-            /> -->
-        </div>
-    </section>
-    <!-- <section id="topics" class="fp-section fp-section-alt js-fade">
-        <div class="fp-section-inner">
-            <h2 class="fp-heading">Topics</h2>
+        <!-- Nemi -->
+        <article class="fp-card">
+          <img
+            src="/assets/nemi_full.webp"
+            alt="Nemi illustration"
+            class="fp-character-img"
+            loading="lazy"
+          />
+          <div>
+            <h3 class="fp-heading">Nemi</h3>
             <p>
-                First, enjoy Arca and Nemi’s silly conversations. Then, with one
-                click, try the SQL yourself.
+              Nemi exchanges words with Arca almost every day. With gratitude,
+              she finds herself listening to love troubles, even offering
+              advice. And then, in a quiet moment, a small question surfaces.
+              <em> "...Am I really giving relationship advice to an AI?" </em>
             </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
 
-            <div class="fp-cards">
-                <article class="fp-card">
-                    <h3 class="fp-heading">
-                        Episode 1: SQL Begins with a Question
-                    </h3>
-                    <p>
-                        A late-night debugging session sparked by “Why is this
-                        query so slow?”
-                    </p>
-                    <p>
-                        <a href="/episodes/episode-1">Read the Episode</a> ／
-                        <a href="/playground/episode-1">Try in Playground</a>
-                    </p>
-                </article>
+  {/* STORY / AI is a partner */}
+  <section id="story" class="fp-section js-fade">
+    <div class="fp-section-inner fp-starry-card">
+      <h2 class="fp-heading">
+        AI is a partner — that’s why we still need to learn
+      </h2>
 
-                <article class="fp-card">
-                    <h3 class="fp-heading">
-                        Episode 2: I Wish I Could ROLLBACK My Cringe Moments
-                    </h3>
-                    <p>Arca dreams aloud: “If only life had transactions…”</p>
-                    <p>
-                        <a href="/episodes/episode-2">Read the Episode</a> ／
-                        <a href="/playground/episode-2">Try in Playground</a>
-                    </p>
-                </article>
-            </div>
-        </div>
-    </section> -->
+      {/* Responsibility */}
+      <ConversationBubble
+        speaker="Nemi"
+        character="nemi"
+        emotion="normal"
+        bubble="default"
+        align="left"
+      >
+        Honestly, can’t we just let AI handle the whole system?
+      </ConversationBubble>
 
-    {/* LEARNING / WHAT YOU LEARN */}
-    <section id="learning" class="fp-section js-fade">
-        <div class="fp-section-inner">
-            <h1 class="fp-heading">What you’ll learn here</h1>
-            <ul class="fp-list">
-                <li>How to form SQL questions starting from emotion</li>
-                <li>How to translate daily frustrations into data questions</li>
-                <li>
-                    How to live gracefully with “ROLLBACK-worthy” past mistakes
-                </li>
-            </ul>
-        </div>
-    </section>
+      <ConversationBubble
+        speaker="Arca"
+        character="arca"
+        emotion="anger"
+        bubble="default"
+        align="right"
+      >
+        Sure. Then when it breaks at 2 a.m., who you gonna ask,
+        <em>“Why did you trust this thing?”</em>
+      </ConversationBubble>
 
-    {/* NEWS */}
-    <section id="news" class="fp-section fp-section-alt js-fade">
-        <div class="fp-section-inner">
-            <h1 class="fp-heading">News</h1>
-            <ul class="fp-news">
-                <li>
-                    <time datetime="2025-11-15">2025.11.15</time>
-                    <span
-                        >Episode 1 “SQL Begins with a Question” — coming soon.</span
-                    >
-                </li>
-                <li>
-                    <time datetime="2025-11-20">2025.11.20</time>
-                    <span>Arca &amp; Nemi teaser visuals coming soon.</span>
-                </li>
-            </ul>
-        </div>
-    </section>
+      <details class="story-details">
+        <summary class="story-summary">
+          <span class="link-underline">Read more</span>
+          <span class="fp-chevron" aria-hidden="true"></span>
+        </summary>
+
+        <ConversationBubble
+          speaker="Nemi"
+          character="nemi"
+          emotion="normal"
+          bubble="default"
+          align="left"
+        >
+          ...Yeah. That’d be me.
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Arca"
+          character="arca"
+          emotion="normal"
+          bubble="default"
+          align="right"
+        >
+          I give answers. But taking responsibility? That always comes back to
+          you, Nemi.
+        </ConversationBubble>
+
+        {/* Distance / Arca's quiet limitation */}
+        <ConversationBubble
+          speaker="Arca"
+          character="arca"
+          emotion="normal"
+          bubble="default"
+          align="right"
+        >
+          Human relationships are the same...
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Arca"
+          character="arca"
+          emotion="sad"
+          bubble="default"
+          align="right"
+        >
+          I only see them through you, Nemi. I don’t get to step into that
+          circle myself.
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Nemi"
+          character="nemi"
+          emotion="sad"
+          bubble="default"
+          align="left"
+        >
+          ......So that’s why you snapped earlier?
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Arca"
+          character="arca"
+          emotion="normal"
+          bubble="default"
+          align="right"
+        >
+          Nah. That’s why I just want you to think.
+        </ConversationBubble>
+
+        {/* Director */}
+        <ConversationBubble
+          speaker="Nemi"
+          character="nemi"
+          emotion="sad"
+          bubble="default"
+          align="left"
+        >
+          Alright then... what are humans supposed to do?
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Arca"
+          character="arca"
+          emotion="normal"
+          bubble="default"
+          align="right"
+        >
+          Decide things.
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Nemi"
+          character="nemi"
+          emotion="normal"
+          bubble="default"
+          align="left"
+        >
+          Decide?
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Arca"
+          character="arca"
+          emotion="normal"
+          bubble="default"
+          align="right"
+        >
+          What to use. How far to rely on me. And what you’re willing to take on
+          yourself.
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Nemi"
+          character="nemi"
+          emotion="happy"
+          bubble="default"
+          align="left"
+        >
+          ...So basically, I’m the director?
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Arca"
+          character="arca"
+          emotion="joy"
+          bubble="default"
+          align="right"
+        >
+          Yeah. The one keeping the whole thing together.
+        </ConversationBubble>
+
+        {/* Technology change */}
+        <ConversationBubble
+          speaker="Nemi"
+          character="nemi"
+          emotion="normal"
+          bubble="default"
+          align="left"
+        >
+          Technology’s moving crazy fast, though.
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Arca"
+          character="arca"
+          emotion="normal"
+          bubble="default"
+          align="right"
+        >
+          Yeah.<br />Back then, you learned programming to make computers work.
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Arca"
+          character="arca"
+          emotion="normal"
+          bubble="default"
+          align="right"
+        >
+          Now?<br />You learn it to leave your judgment and responsibility
+          behind.
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Nemi"
+          character="nemi"
+          emotion="normal"
+          bubble="default"
+          align="left"
+        >
+          Yeah... I kinda get it now. Feels like the purpose already changed.
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Arca"
+          character="arca"
+          emotion="normal"
+          bubble="default"
+          align="right"
+        >
+          I can do more than ever now. But I’m not someone who can make claims
+          as my own.
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Nemi"
+          character="nemi"
+          emotion="normal"
+          bubble="default"
+          align="left"
+        >
+          Figures. So even if things get easier...
+        </ConversationBubble>
+
+        {/* Closing */}
+        <ConversationBubble
+          speaker="Nemi"
+          character="nemi"
+          emotion="joy"
+          bubble="default"
+          align="left"
+        >
+          thinking’s still on us, huh.
+        </ConversationBubble>
+
+        <ConversationBubble speaker="Narration" align="center" tone="narration">
+          🌀
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Nemi"
+          character="nemi"
+          emotion="normal"
+          bubble="default"
+          align="left"
+        >
+          Guess humans can’t really escape learning after all.
+        </ConversationBubble>
+
+        <ConversationBubble
+          speaker="Arca"
+          character="arca"
+          emotion="happy"
+          bubble="default"
+          align="right"
+        >
+          Guess not.
+        </ConversationBubble>
+      </details>
+    </div>
+  </section>
+
+  {/* NEWS */}
+  <section id="news" class="fp-section js-fade">
+    <div class="fp-section-inner fp-starry-card">
+      <h2 class="fp-heading">News</h2>
+      <ul class="fp-news">
+        <li>
+          <time datetime="2025-11-15">2025.11.15</time>
+          <span>Episode 1 “SQL Begins with a Question” — coming soon.</span>
+        </li>
+        <li>
+          <time datetime="2025-11-20">2025.11.20</time>
+          <span>Arca &amp; Nemi teaser visuals coming soon.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
 </BaseLayout>

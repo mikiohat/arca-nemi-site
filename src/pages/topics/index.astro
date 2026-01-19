@@ -1,0 +1,57 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { TOPICS } from "@/consts/topics";
+import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
+---
+
+<!-- src/pages/topics/index.astro -->
+<BaseLayout>
+  <main class="fp-main">
+    <section class="fp-section js-fade">
+      <Breadcrumbs
+        items={[{ label: "Home", href: "/" }, { label: "Topics" }]}
+      />
+      <div class="fp-cards">
+        <!-- SQL -->
+        <article class="fp-card">
+          <h1 class="fp-heading">{TOPICS.SQL.title}</h1>
+
+          <p>
+            A slightly off-kilter love log, told through SQL. Emotions rarely
+            behave as specified.
+          </p>
+
+          <div class="fp-card-actions">
+            <a href={`/topics/${TOPICS.SQL.slug}`} class="link-underline">
+              Read Episodes <span class="fp-chevron" aria-hidden="true"></span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Python -->
+        <article class="fp-card">
+          <h1 class="fp-heading">{TOPICS.PYTHON.title}</h1>
+
+          <p>
+            Arca can’t stop thinking about sweet treats. So it starts defining
+            the world with Python.
+          </p>
+
+          <p class="fp-muted">Coming soon…</p>
+        </article>
+
+        <!-- Data Design -->
+        <article class="fp-card">
+          <h1 class="fp-heading">{TOPICS.DOAD.title}</h1>
+
+          <p>
+            Design as responsibility. How structure, rules, and ownership shape
+            human systems.
+          </p>
+
+          <p class="fp-muted">Coming soon…</p>
+        </article>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

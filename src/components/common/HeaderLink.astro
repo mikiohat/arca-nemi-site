@@ -40,6 +40,10 @@ let isActive = false;
 if (linkHref === "/") {
 	isActive = pathname === "/";
 }
+// Topics： /topics と /topics/* すべて
+else if (linkHref === "/topics") {
+	isActive = pathname === "/topics" || pathname.startsWith("/topics/");
+}
 // Episodes： /episodes と /episodes/* すべて
 else if (linkHref === "/episodes") {
 	isActive = pathname === "/episodes" || pathname.startsWith("/episodes/");
@@ -51,7 +55,9 @@ else if (linkHref === "/playground") {
 }
 // その他：完全一致 or 配下
 else {
-	isActive = pathname === linkHref || pathname.startsWith(linkHref + "/");
+	isActive =
+		pathname === linkHref ||
+		(linkHref !== "/" && pathname.startsWith(linkHref + "/"));
 }
 ---
 

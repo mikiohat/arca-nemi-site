@@ -1,0 +1,25 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
+import LedgerIndex from "@/components/ledger/LedgerIndex.astro";
+import { TOPICS } from "@/consts/topics.ts";
+import { sqlLedger } from "@/content/ledger/sql";
+---
+
+<BaseLayout title={TOPICS.SQL.title} description={TOPICS.SQL.description}>
+  <main class="fp-main">
+    <section class="fp-section js-fade">
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Topics", href: "/topics" },
+          { label: TOPICS.SQL.shortLabel },
+        ]}
+      />
+
+      <h1 class="fp-heading">{TOPICS.SQL.summary}</h1>
+
+      <LedgerIndex topicSlug={TOPICS.SQL.slug} ledgers={sqlLedger} />
+    </section>
+  </main>
+</BaseLayout>

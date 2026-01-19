@@ -1,0 +1,244 @@
+---
+import type { LedgerUnit } from "@/content/ledger/sql";
+
+type Props = {
+  topicSlug: string; // "sql"
+  ledgers: LedgerUnit[];
+  hideTag?: string; // default: "SQL"
+};
+
+const { topicSlug, ledgers, hideTag = "SQL" } = Astro.props as Props;
+
+const uniqueVisibleTags = (tags: string[] | undefined) => {
+  const t = tags ?? [];
+  return [...new Set(t)]
+    .map((x) => x.trim())
+    .filter(Boolean)
+    .filter((x) => x !== hideTag);
+};
+
+const episodeHref = (slug: string) => `/topics/${topicSlug}/episodes/${slug}`;
+const playgroundHref = (slug: string) =>
+  `/topics/${topicSlug}/playground/${slug}`;
+---
+
+<ul class="fp-list ledger-index" aria-label="Ledger list">
+  {
+    ledgers.map((ledger) => {
+      const visibleTags = uniqueVisibleTags(ledger.tags);
+
+      return (
+        <li class="ledger-item">
+          {/* Title row */}
+          <div class="ledger-rowbar">
+            <p class="ledger-title">
+              {String(ledger.order).padStart(2, "0")}: {ledger.title}
+            </p>
+
+            {/* Actions (hover/click menu) */}
+            <details class="ledger-action-switch">
+              <summary aria-label="Open actions">
+                <span class="ledger-action-trigger" aria-hidden="true">
+                  ⋯
+                </span>
+              </summary>
+
+              <ul class="ledger-action-menu" role="menu" aria-label="Actions">
+                <li role="none">
+                  <a role="menuitem" href={episodeHref(ledger.slug)}>
+                    Read Episode
+                    <span class="fp-chevron" aria-hidden="true" />
+                  </a>
+                </li>
+                <li role="none">
+                  <a role="menuitem" href={playgroundHref(ledger.slug)}>
+                    Try Playground
+                    <span class="fp-chevron" aria-hidden="true" />
+                  </a>
+                </li>
+              </ul>
+            </details>
+          </div>
+
+          {/* Tags under title */}
+          {visibleTags.length > 0 && (
+            <ul class="fp-tags ledger-tags" aria-label="Ledger topics">
+              {visibleTags.map((tag) => (
+                <li class="fp-tag">{tag}</li>
+              ))}
+            </ul>
+          )}
+        </li>
+      );
+    })
+  }
+</ul>
+
+<script>
+  // Close any open action menu when clicking outside.
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+    if (!(target instanceof Element)) return;
+
+    const openMenus = document.querySelectorAll(".ledger-action-switch[open]");
+    openMenus.forEach((d) => {
+      if (!(d instanceof HTMLDetailsElement)) return;
+      if (!d.contains(target)) d.removeAttribute("open");
+    });
+  });
+
+  // Optional: close menu immediately after choosing an item.
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+    if (!(target instanceof Element)) return;
+
+    const a = target.closest(".ledger-action-menu a");
+    if (!a) return;
+
+    const details = a.closest(".ledger-action-switch");
+    if (details instanceof HTMLDetailsElement) {
+      details.removeAttribute("open");
+    }
+  });
+</script>
+
+<style>
+  /* =========================
+     LedgerIndex scope
+  ========================= */
+  .ledger-item {
+    margin: 0;
+    padding: 0.15rem 0;
+  }
+
+  /* Title + trigger */
+  .ledger-rowbar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+
+  .ledger-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  /* Tags under title (closer + slightly quieter) */
+  .ledger-tags {
+    margin-top: 0.18rem;
+    font-size: 0.65rem;
+    opacity: 0.82;
+  }
+
+  /* (2) Remove ✦ ONLY inside LedgerIndex */
+  .ledger-index .fp-tag::before {
+    content: none;
+  }
+
+  /* =========================
+     Action switch (details/summary)
+  ========================= */
+  .ledger-action-switch {
+    position: relative;
+    flex: 0 0 auto;
+  }
+
+  .ledger-action-switch > summary {
+    list-style: none;
+    cursor: pointer;
+    user-select: none;
+  }
+  .ledger-action-switch > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ledger-action-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 1.55rem;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: rgba(15, 23, 42, 0.1);
+    font-size: 0.95rem;
+    line-height: 1;
+    opacity: 0.72;
+  }
+
+  .ledger-item:hover .ledger-action-trigger,
+  .ledger-action-switch:focus-within .ledger-action-trigger {
+    opacity: 0.92;
+  }
+
+  /* Menu panel */
+  .ledger-action-menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.35rem);
+    min-width: 12.5rem;
+
+    margin: 0;
+    padding: 0.35rem;
+    list-style: none;
+
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    background: rgba(15, 23, 42, 0.92);
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition:
+      opacity 140ms ease,
+      transform 140ms ease;
+    z-index: 10;
+  }
+
+  /* (2) Remove any bullet/marker-like prefixes in the hover menu */
+  .ledger-action-menu li::marker {
+    content: "";
+  }
+  .ledger-action-menu a::before {
+    content: none;
+  }
+
+  /* (3) Bigger font in hover menu */
+  .ledger-action-menu a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+
+    padding: 0.6rem 0.65rem;
+    border-radius: 12px;
+
+    text-decoration: none;
+    font-size: 0.82rem;
+    opacity: 0.95;
+  }
+
+  /* (5) Hover background on each item */
+  .ledger-action-menu a:hover,
+  .ledger-action-menu a:focus-visible {
+    background: rgba(148, 163, 184, 0.12);
+    outline: none;
+  }
+
+  /* show on hover OR open */
+  .ledger-action-switch:hover .ledger-action-menu,
+  .ledger-action-switch[open] .ledger-action-menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 860px) {
+    .ledger-action-menu {
+      min-width: 11.5rem;
+    }
+  }
+</style>

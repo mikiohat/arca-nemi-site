@@ -1,10 +1,9 @@
 ---
 import HeaderLink from "@common/HeaderLink.astro";
-
 import { SITE_FAVICON } from "@/consts";
 
 const NAV = [
-  { href: "/", label: "Home" },
+  { href: "/topics", label: "Topics" },
   { href: "/episodes", label: "Episodes" },
   { href: "/playground", label: "Playground" },
   { href: "/about", label: "About" },
@@ -41,10 +40,14 @@ const jaPath = isJa ? pathname : "/ja" + (pathname === "/" ? "" : pathname);
 
     <div class="fp-header-right">
       <nav class="fp-nav" aria-label="Primary navigation">
+        {/* Nav links */}
         {
           NAV.map((item) => {
+            const [pathOnly, hash = ""] = item.href.split("#");
             const localizedHref = isJa
-              ? "/ja" + (item.href === "/" ? "" : item.href)
+              ? "/ja" +
+                (pathOnly === "/" ? "" : pathOnly) +
+                (hash ? `#${hash}` : "")
               : item.href;
 
             return <HeaderLink href={localizedHref}>{item.label}</HeaderLink>;

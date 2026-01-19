@@ -1,0 +1,119 @@
+---
+import type { LedgerUnit } from "@/content/ledger/sql";
+
+type Props = {
+  topicSlug: string; // "sql"
+  ledgers: LedgerUnit[];
+  hideTag?: string; // default: "SQL"
+};
+
+const { topicSlug, ledgers, hideTag = "SQL" } = Astro.props as Props;
+
+const uniqueVisibleTags = (tags: string[] | undefined) => {
+  const t = tags ?? [];
+  return [...new Set(t)]
+    .map((x) => x.trim())
+    .filter(Boolean)
+    .filter((x) => x !== hideTag);
+};
+
+const episodeHref = (slug: string) => `/topics/${topicSlug}/episodes/${slug}`;
+const playgroundHref = (slug: string) =>
+  `/topics/${topicSlug}/playground/${slug}`;
+---
+
+<!-- str/componets/ledger/LedgerIndex.astro -->
+<ul class="fp-list ledger-index" aria-label="Ledger list">
+  {
+    ledgers.map((ledger) => {
+      const visibleTags = uniqueVisibleTags(ledger.tags);
+
+      return (
+        <li>
+          <div>
+            {/* Title (not a link) */}
+            <p class="ledger-title">
+              {String(ledger.order).padStart(2, "0")}: {ledger.title}
+            </p>
+
+            {/* Tags */}
+            {visibleTags.length > 0 && (
+              <ul class="fp-tags" aria-label="Ledger topics">
+                {visibleTags.map((tag) => (
+                  <li class="fp-tag">{tag}</li>
+                ))}
+              </ul>
+            )}
+
+            {/* Actions (always present) */}
+            <div class="ledger-actions" aria-label="Ledger actions">
+              <a class="link-underline" href={episodeHref(ledger.slug)}>
+                Read Episode <span class="fp-chevron" aria-hidden="true" />
+              </a>
+
+              <span class="ledger-separator" aria-hidden="true">
+                |
+              </span>
+
+              <a class="link-underline" href={playgroundHref(ledger.slug)}>
+                Try Playground <span class="fp-chevron" aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  /* LedgerIndex 専用 */
+  .ledger-index .ledger-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 0.1rem;
+  }
+
+  /* LedgerIndex 内の tags だけ調整 */
+  .ledger-index .fp-tags {
+    margin-top: 0.15rem; /* タイトルに近づける */
+    font-size: 0.65rem;
+    opacity: 0.8;
+  }
+
+  /* ✦ を使ってる場合の保険 */
+  .ledger-index .fp-tag::before {
+    content: none;
+  }
+
+  .ledger-index .ledger-actions {
+    margin-top: 0.35rem;
+    font-size: 1rem;
+    opacity: 1;
+  }
+
+  .ledger-index .ledger-actions a {
+    text-decoration-thickness: 1px;
+  }
+
+  .ledger-index .ledger-separator {
+    margin: 0 0.6rem;
+    opacity: 0.4;
+  }
+
+  /* .ledger-index li .ledger-actions {
+    margin-top: 0.45rem;
+    opacity: 0;
+    transform: translateY(-2px);
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease;
+  } */
+
+  /* .ledger-index li:hover .ledger-actions,
+  .ledger-index li:focus-within .ledger-actions {
+    opacity: 0.75;
+    transform: translateY(0);
+  } */
+</style>
