@@ -71,7 +71,7 @@ export const sqlLedger: LedgerUnit[] = [
     descriptionJa:
       "SQL Ledgerの次章。物語と実験が形になり次第、詳細が明らかになる。",
 
-    tags: ["SQL"],
+    tags: ["SQL", "TEST", "TEST"],
 
     episode: {
       enabled: "soon",

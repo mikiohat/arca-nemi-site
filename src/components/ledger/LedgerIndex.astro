@@ -22,49 +22,47 @@ const playgroundHref = (slug: string) =>
   `/topics/${topicSlug}/playground/${slug}`;
 ---
 
-<ul class="fp-list ledger-index" aria-label="Ledger list">
+<ul class="ledger" aria-label="Ledger list">
   {
     ledgers.map((ledger) => {
       const visibleTags = uniqueVisibleTags(ledger.tags);
 
       return (
-        <li class="ledger-item">
-          {/* Title row */}
-          <div class="ledger-rowbar">
-            <p class="ledger-title">
+        <li class="ledger__item">
+          <div class="ledger__row">
+            <p class="ledger__title">
               {String(ledger.order).padStart(2, "0")}: {ledger.title}
             </p>
 
-            {/* Actions (hover/click menu) */}
-            <details class="ledger-action-switch">
-              <summary aria-label="Open actions">
-                <span class="ledger-action-trigger" aria-hidden="true">
-                  ⋯
+            <details class="ledger__actions">
+              <summary class="ledger__trigger" aria-label="Open actions">
+                <span class="ledger__trigger-pill" aria-hidden="true">
+                  <span class="fp-chevron" />
                 </span>
               </summary>
 
-              <ul class="ledger-action-menu" role="menu" aria-label="Actions">
-                <li role="none">
-                  <a role="menuitem" href={episodeHref(ledger.slug)}>
+              <ul class="ledger__menu" aria-label="Actions">
+                <li>
+                  <a class="ledger__menu-link" href={episodeHref(ledger.slug)}>
                     Read Episode
-                    <span class="fp-chevron" aria-hidden="true" />
                   </a>
                 </li>
-                <li role="none">
-                  <a role="menuitem" href={playgroundHref(ledger.slug)}>
+                <li>
+                  <a
+                    class="ledger__menu-link"
+                    href={playgroundHref(ledger.slug)}
+                  >
                     Try Playground
-                    <span class="fp-chevron" aria-hidden="true" />
                   </a>
                 </li>
               </ul>
             </details>
           </div>
 
-          {/* Tags under title */}
           {visibleTags.length > 0 && (
-            <ul class="fp-tags ledger-tags" aria-label="Ledger topics">
+            <ul class="ledger__tags" aria-label="Ledger topics">
               {visibleTags.map((tag) => (
-                <li class="fp-tag">{tag}</li>
+                <li class="ledger__tag">{tag}</li>
               ))}
             </ul>
           )}
@@ -75,87 +73,137 @@ const playgroundHref = (slug: string) =>
 </ul>
 
 <script>
-  // Close any open action menu when clicking outside.
   document.addEventListener("click", (e) => {
     const target = e.target;
     if (!(target instanceof Element)) return;
 
-    const openMenus = document.querySelectorAll(".ledger-action-switch[open]");
-    openMenus.forEach((d) => {
-      if (!(d instanceof HTMLDetailsElement)) return;
-      if (!d.contains(target)) d.removeAttribute("open");
+    // ① メニュー内リンクをクリック → そのメニューだけ閉じる
+    const menuLink = target.closest(".ledger__menu-link");
+    if (menuLink) {
+      const details = menuLink.closest(".ledger__actions");
+      if (details instanceof HTMLDetailsElement) {
+        details.removeAttribute("open");
+      }
+      return;
+    }
+
+    // ② メニュー外をクリック → 開いてるメニューを全部閉じる
+    document.querySelectorAll(".ledger__actions[open]").forEach((d) => {
+      if (d instanceof HTMLDetailsElement) {
+        d.removeAttribute("open");
+      }
     });
   });
 
-  // Optional: close menu immediately after choosing an item.
-  document.addEventListener("click", (e) => {
-    const target = e.target;
-    if (!(target instanceof Element)) return;
+  // ③ Escape キーで閉じる（そのままでOK）
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
 
-    const a = target.closest(".ledger-action-menu a");
-    if (!a) return;
+    document.querySelectorAll(".ledger__actions[open]").forEach((d) => {
+      if (d instanceof HTMLDetailsElement) {
+        d.removeAttribute("open");
+      }
+    });
 
-    const details = a.closest(".ledger-action-switch");
-    if (details instanceof HTMLDetailsElement) {
-      details.removeAttribute("open");
-    }
+    const active = document.activeElement;
+    if (active instanceof HTMLElement) active.blur();
   });
 </script>
 
 <style>
   /* =========================
-     LedgerIndex scope
-  ========================= */
-  .ledger-item {
+   LedgerIndex (scoped)
+========================= */
+
+  /* ---------- list / layout ---------- */
+  .ledger {
+    list-style: none;
     margin: 0;
-    padding: 0.15rem 0;
+    padding: 0;
+    --ledger-indent: 1.2rem;
   }
 
-  /* Title + trigger */
-  .ledger-rowbar {
+  .ledger__menu,
+  .ledger__tags {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ledger__item {
     display: flex;
-    align-items: baseline;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.2rem 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .ledger__row {
+    width: 100%;
+    display: flex;
     justify-content: space-between;
+    align-items: baseline;
     gap: 0.8rem;
   }
 
-  .ledger-title {
+  /* ---------- title ---------- */
+  .ledger__title {
+    position: relative;
+    padding-left: var(--ledger-indent);
     margin: 0;
     font-size: 1.25rem;
     font-weight: 500;
     line-height: 1.4;
   }
 
-  /* Tags under title (closer + slightly quieter) */
-  .ledger-tags {
-    margin-top: 0.18rem;
+  .ledger__title::before {
+    content: "✦";
+    position: absolute;
+    left: 0;
+    top: 0.15em;
+    opacity: 0.6;
+    line-height: 1;
+  }
+
+  /* ---------- tags ---------- */
+  .ledger__tags {
+    width: 100%;
+    margin-top: 0.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+
+    padding-left: calc(var(--ledger-indent) - 0.2rem);
     font-size: 0.65rem;
     opacity: 0.82;
   }
 
-  /* (2) Remove ✦ ONLY inside LedgerIndex */
-  .ledger-index .fp-tag::before {
-    content: none;
+  .ledger__tag {
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: rgba(15, 23, 42, 0.16);
   }
 
-  /* =========================
-     Action switch (details/summary)
-  ========================= */
-  .ledger-action-switch {
+  /* ---------- actions (layers + trigger) ---------- */
+  .ledger__actions {
     position: relative;
-    flex: 0 0 auto;
+    z-index: 1; /* base layer */
   }
 
-  .ledger-action-switch > summary {
+  .ledger__actions[open] {
+    z-index: 50; /* active row layer */
+  }
+
+  .ledger__trigger {
     list-style: none;
     cursor: pointer;
-    user-select: none;
   }
-  .ledger-action-switch > summary::-webkit-details-marker {
+  .ledger__trigger::-webkit-details-marker {
     display: none;
   }
 
-  .ledger-action-trigger {
+  .ledger__trigger-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -165,80 +213,99 @@ const playgroundHref = (slug: string) =>
     border: 1px solid rgba(148, 163, 184, 0.16);
     background: rgba(15, 23, 42, 0.1);
     font-size: 0.95rem;
-    line-height: 1;
-    opacity: 0.72;
+    color: var(--fp-accent);
   }
 
-  .ledger-item:hover .ledger-action-trigger,
-  .ledger-action-switch:focus-within .ledger-action-trigger {
-    opacity: 0.92;
+  .ledger__trigger:hover .ledger__trigger-pill,
+  .ledger__trigger:focus-visible .ledger__trigger-pill {
+    background: rgba(148, 163, 184, 0.14);
+    border-color: var(--fp-accent);
   }
 
-  /* Menu panel */
-  .ledger-action-menu {
+  /* ---------- menu (visual + motion) ---------- */
+  .ledger__menu {
     position: absolute;
     right: 0;
-    top: calc(100% + 0.35rem);
-    min-width: 12.5rem;
 
-    margin: 0;
+    /* 下に出すのをやめる */
+    top: auto;
+
+    /* 常に上に出す */
+    bottom: calc(100% + 0.35rem);
+
+    min-width: 12rem;
     padding: 0.35rem;
-    list-style: none;
-
     border-radius: 14px;
-    border: 1px solid rgba(148, 163, 184, 0.14);
-    background: rgba(15, 23, 42, 0.92);
+    border: none;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.22);
+    background: rgba(15, 23, 42, 0.96);
+
+    z-index: 60;
 
     opacity: 0;
     pointer-events: none;
-    transform: translateY(-4px);
+
+    /* 上に出る前提なので +4px が自然 */
+    transform: translateY(4px);
+
     transition:
       opacity 140ms ease,
       transform 140ms ease;
-    z-index: 10;
   }
 
-  /* (2) Remove any bullet/marker-like prefixes in the hover menu */
-  .ledger-action-menu li::marker {
-    content: "";
-  }
-  .ledger-action-menu a::before {
-    content: none;
-  }
-
-  /* (3) Bigger font in hover menu */
-  .ledger-action-menu a {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.8rem;
-
-    padding: 0.6rem 0.65rem;
-    border-radius: 12px;
-
-    text-decoration: none;
-    font-size: 0.82rem;
-    opacity: 0.95;
-  }
-
-  /* (5) Hover background on each item */
-  .ledger-action-menu a:hover,
-  .ledger-action-menu a:focus-visible {
-    background: rgba(148, 163, 184, 0.12);
-    outline: none;
-  }
-
-  /* show on hover OR open */
-  .ledger-action-switch:hover .ledger-action-menu,
-  .ledger-action-switch[open] .ledger-action-menu {
+  .ledger__actions[open] .ledger__menu {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
   }
 
-  @media (max-width: 860px) {
-    .ledger-action-menu {
-      min-width: 11.5rem;
+  /* hover がある端末だけ hover-open */
+  @media (hover: hover) and (pointer: fine) {
+    .ledger__actions:hover .ledger__menu {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
     }
+  }
+
+  /* ---------- menu links ---------- */
+  .ledger__menu-link {
+    display: block;
+    padding: 0.6rem 0.65rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  .ledger__menu-link:hover,
+  .ledger__menu-link:focus-visible {
+    background: rgba(148, 163, 184, 0.12);
+  }
+
+  /* ---------- tap highlight kill (Android) ---------- */
+  .ledger__trigger,
+  .ledger__trigger-pill,
+  .ledger__menu-link {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .ledger__trigger:active,
+  .ledger__menu-link:active {
+    background: transparent;
+  }
+
+  .ledger__trigger:focus {
+    outline: none;
+  }
+
+  .ledger__trigger:focus-visible .ledger__trigger-pill {
+    outline: 2px solid var(--fp-accent);
+    outline-offset: 2px;
+  }
+
+  .ledger__menu-link:focus-visible {
+    outline: 2px solid var(--fp-accent);
+    outline-offset: 2px;
+    border-radius: 12px;
   }
 </style>
