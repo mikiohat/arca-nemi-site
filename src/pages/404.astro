@@ -1,20 +1,46 @@
 ---
 // src/pages/404.astro
-// 本来望んでいたリンク先でないものとしてGA4でちゃんと認識されている
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { SITE_FAVICON } from "../consts";
 ---
 
 <BaseLayout title="404 - not found">
-    <main
-        style="min-height:60vh;display:grid;place-items:center;text-align:center;"
-    >
-        <div>
-            <img src={SITE_FAVICON} alt="site icon" width="96" height="96" />
-            <h2>404</h2>
-            <h2>Arca: “Oops… looks like we wandered off the query!”</h2>
-            <p><code>{Astro.url.pathname}</code> is nowhere to be found.</p>
-            <a href="/">Go back home</a>
-        </div>
-    </main>
+  <main
+    style="min-height:60vh;display:grid;place-items:center;text-align:center;"
+  >
+    <div>
+      <img src={SITE_FAVICON} alt="site icon" width="96" height="96" />
+
+      <h2>404</h2>
+      <h2>Arca: “Oops… looks like we wandered off the query!”</h2>
+
+      <p><code>{Astro.url.pathname}</code> is nowhere to be found.</p>
+
+      <a
+        href="/"
+        id="back-link"
+        aria-label="Go back to the previous page if possible, otherwise go home"
+        style="display:inline-block;margin-top:12px;text-decoration:underline;"
+      >
+        Go back
+      </a>
+    </div>
+  </main>
+
+  <script is:inline>
+    (function () {
+      const link = document.getElementById("back-link");
+      if (!link) return;
+
+      link.addEventListener("click", function (e) {
+        // historyがあるなら「さっきのページへ」
+        if (window.history.length > 1) {
+          e.preventDefault();
+          window.history.back();
+          return;
+        }
+        // それ以外はhref="/"のままHomeへ（保険）
+      });
+    })();
+  </script>
 </BaseLayout>
