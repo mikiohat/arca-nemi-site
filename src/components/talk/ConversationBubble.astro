@@ -1,235 +1,176 @@
 ---
 interface Props {
-    speaker: string; // 表示名
-    character?: "arca" | "nemi";
-    emotion?: "normal" | "happy" | "anger" | "sad" | "joy";
-    align?: "left" | "right" | "center";
-    tone?: "light" | "dark" | "narration";
-
-    // 吹き出し背景のバリエーション（追加）
-    bubble?: "default" | "pink" | "white";
+  speaker: "arca" | "nemi" | "narration";
+  emotion?: "normal" | "happy" | "anger" | "sad" | "joy";
 }
 
-const {
-    speaker,
-    character = "arca",
-    emotion = "normal",
-    align = "left",
-    tone = "light",
-    bubble = "default",
-} = Astro.props;
+const { speaker, emotion = "normal" } = Astro.props;
 
-type Character = "arca" | "nemi";
-type Emotion = "normal" | "joy" | "anger" | "sad" | "happy";
+// speaker から自動決定
+const isNarration = speaker === "narration";
+const align =
+  speaker === "arca" ? "right" : speaker === "nemi" ? "left" : "center";
 
-const AVATAR_MAP: Record<Character, Record<Emotion, string>> = {
-    arca: {
-        normal: "/avatars/arca/normal.webp",
-        happy: "/avatars/arca/happy.webp",
-        anger: "/avatars/arca/anger.webp",
-        sad: "/avatars/arca/sad.webp",
-        joy: "/avatars/arca/joy.webp",
-    },
-    nemi: {
-        normal: "/avatars/nemi/normal.webp",
-        happy: "/avatars/nemi/happy.webp",
-        anger: "/avatars/nemi/anger.webp",
-        sad: "/avatars/nemi/sad.webp",
-        joy: "/avatars/nemi/joy.webp",
-    },
-} as const;
+// class 決定
+const rowClass =
+  align === "right"
+    ? "cb-row cb-row--right"
+    : align === "left"
+      ? "cb-row cb-row--left"
+      : "cb-row cb-row--center";
 
-const alignmentClass =
-    align === "right"
-        ? "cb-row--right"
-        : align === "center"
-          ? "cb-row--center"
-          : "cb-row--left";
-
-const toneClass =
-    tone === "dark"
-        ? "cb--tone-dark"
-        : tone === "narration"
-          ? "cb--tone-narration"
-          : "cb--tone-light";
-
-const avatarSrc = tone === "narration" ? null : AVATAR_MAP[character][emotion];
-
-// イニシャル用
-const initial = speaker.slice(0, 1);
-
-// 吹き出し背景のバリエーション（透明度入り）
-type Bubble = "default" | "pink" | "white";
-const BUBBLE_BG_MAP: Record<string, string> = {
-    // ダーク系グラデ（デフォルト）
-    default:
-        "radial-gradient(circle at 0 0, rgba(129, 140, 248, 0.26), transparent 55%), rgba(9, 12, 26, 0.96)",
-    // pink
-    pink: "radial-gradient(circle at 0 0, rgba(236, 72, 153, 0.24), transparent 55%), rgba(9, 12, 26, 0.96)",
-    // 読みやすさ重視の白（ほんの少しだけ透けさせる）
-    white: "rgba(255, 255, 255, 0.96)",
+// avatar（narration はなし）
+const AVATAR_MAP = {
+  arca: {
+    normal: "/avatars/arca/normal.webp",
+    happy: "/avatars/arca/happy.webp",
+    anger: "/avatars/arca/anger.webp",
+    sad: "/avatars/arca/sad.webp",
+    joy: "/avatars/arca/joy.webp",
+  },
+  nemi: {
+    normal: "/avatars/nemi/normal.webp",
+    happy: "/avatars/nemi/happy.webp",
+    anger: "/avatars/nemi/anger.webp",
+    sad: "/avatars/nemi/sad.webp",
+    joy: "/avatars/nemi/joy.webp",
+  },
 };
 
-const bubbleBg = BUBBLE_BG_MAP[bubble] ?? BUBBLE_BG_MAP.default;
-
-// CSS 変数で吹き出し背景を渡す
-const bubbleStyle = `--cb-bg:${bubbleBg};`;
+const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
 ---
 
-<div class={`cb-row ${alignmentClass}`}>
-    <div class={`cb ${toneClass}`} style={bubbleStyle}>
-        {
-            tone !== "narration" && (
-                <div class="cb-avatar" aria-hidden="true">
-                    {avatarSrc ? (
-                        <img
-                            src={avatarSrc}
-                            alt={`${speaker} avatar`}
-                            class="cb-avatar-img"
-                            loading="lazy"
-                        />
-                    ) : (
-                        <span>{initial}</span>
-                    )}
-                </div>
-            )
-        }
-        <div class="cb-body">
-            <div class="cb-text">
-                <slot />
-            </div>
+<div class={rowClass}>
+  <div class={`cb ${isNarration ? "cb--narration" : ""}`}>
+    {
+      !isNarration && avatarSrc && (
+        <div class="cb-avatar" aria-hidden="true">
+          <img
+            src={avatarSrc}
+            alt={speaker}
+            class="cb-avatar-img"
+            loading="lazy"
+          />
         </div>
+      )
+    }
+
+    <div class="cb-body">
+      <div class="cb-text">
+        <slot />
+      </div>
     </div>
+  </div>
 </div>
 
 <style>
+  .cb-row {
+    display: flex;
+    margin: 0.35rem 0;
+  }
+
+  .cb-row--left {
+    justify-content: flex-start;
+  }
+
+  .cb-row--right {
+    justify-content: flex-end;
+  }
+
+  .cb-row--center {
+    justify-content: center;
+  }
+
+  .cb {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.55rem;
+    max-width: min(100%, 560px);
+    padding: 0.55rem 0.85rem;
+    border-radius: 18px;
+    border: 1px solid rgba(148, 163, 184, 0.45);
+
+    /* ★ ここを CSS 変数経由にして、背景を優先順位で切り替え */
+    background: var(
+      --cb-bg,
+      radial-gradient(
+        circle at 0 0,
+        rgba(129, 140, 248, 0.18),
+        transparent 55%
+      ),
+      rgba(9, 12, 26, 0.96)
+    );
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.8);
+  }
+
+  .cb-row--right .cb {
+    flex-direction: row-reverse;
+  }
+
+  .cb--narration {
+    max-width: 620px;
+    border-radius: 999px;
+    text-align: center;
+  }
+
+  /* ★ 四角いアバター（角丸） */
+  .cb-avatar {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px; /* 0 にすれば完全な四角 */
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    box-shadow: 0 2px 4px rgba(51, 63, 90, 0.9);
+
+    /* ★ ホバー用のアニメーション準備 */
+    transform: translateY(0) scale(1);
+    transition:
+      transform 170ms cubic-bezier(0.16, 1.1, 0.3, 1),
+      box-shadow 170ms ease-out;
+  }
+
+  /* アイコンに hover したとき、大きく＆影を強く */
+  .cb-avatar:hover {
+    transform: translateY(-1px) scale(2.5); /* 1.05〜1.10 くらいで調整 */
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+  }
+
+  .cb-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cb-body {
+    min-width: 0;
+  }
+
+  .cb-text {
+    font-size: var(--fp-font-base);
+
+    line-height: 1.7;
+    color: var(--fp-text);
+    word-wrap: break-word;
+  }
+
+  @media (max-width: 720px) {
     .cb-row {
-        display: flex;
-        margin: 0.35rem 0;
-    }
-
-    .cb-row--left {
-        justify-content: flex-start;
-    }
-
-    .cb-row--right {
-        justify-content: flex-end;
-    }
-
-    .cb-row--center {
-        justify-content: center;
-    }
-
-    /* narration 用 */
-    .cb--tone-narration {
-        max-width: 620px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.85);
-        border-color: rgba(148, 163, 184, 0.55);
-        box-shadow: none;
-        text-align: left;
-        justify-content: center;
-    }
-
-    .cb--tone-narration .cb-text {
-        font-size: 0.9rem;
-        line-height: 1.8;
-        color: var(--fp-text, #e5e7eb);
+      margin: 0.3rem 0;
     }
 
     .cb {
-        display: flex;
-        align-items: center;
-        flex-direction: row;
-        gap: 0.55rem;
-        max-width: min(100%, 560px);
-        padding: 0.55rem 0.85rem;
-        border-radius: 18px;
-        border: 1px solid rgba(148, 163, 184, 0.45);
-
-        /* ★ ここを CSS 変数経由にして、背景を優先順位で切り替え */
-        background: var(
-            --cb-bg,
-            radial-gradient(
-                circle at 0 0,
-                rgba(129, 140, 248, 0.18),
-                transparent 55%
-            ),
-            rgba(9, 12, 26, 0.96)
-        );
-        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.8);
-    }
-
-    .cb-row--right .cb {
-        flex-direction: row-reverse;
-    }
-
-    /* ★ 四角いアバター（角丸） */
-    .cb-avatar {
-        flex: 0 0 auto;
-        width: 52px;
-        height: 52px;
-        border-radius: 14px; /* 0 にすれば完全な四角 */
-        overflow: hidden;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-        box-shadow: 0 2px 4px rgba(51, 63, 90, 0.9);
-
-        /* ★ ホバー用のアニメーション準備 */
-        transform: translateY(0) scale(1);
-        transition:
-            transform 170ms cubic-bezier(0.16, 1.1, 0.3, 1),
-            box-shadow 170ms ease-out;
-    }
-
-    /* アイコンに hover したとき、大きく＆影を強く */
-    .cb-avatar:hover {
-        transform: translateY(-1px) scale(2.5); /* 1.05〜1.10 くらいで調整 */
-        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
-    }
-
-    .cb-avatar-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .cb-body {
-        min-width: 0;
+      max-width: 100%;
+      padding: 0.5rem 0.75rem;
+      border-radius: 16px;
     }
 
     .cb-text {
-        font-size: var(--fp-font-base);
-
-        line-height: 1.7;
-        color: var(--fp-text, #e5e7eb);
-        word-wrap: break-word;
+      font-size: calc(var(--fp-font-base) * 0.83);
     }
-
-    /* tone違い（ダーク寄せ） */
-    .cb--tone-dark {
-        border-color: rgba(107, 114, 128, 0.8);
-    }
-
-    .cb--tone-light {
-        border-color: rgba(148, 163, 184, 0.55);
-    }
-
-    @media (max-width: 720px) {
-        .cb-row {
-            margin: 0.3rem 0;
-        }
-
-        .cb {
-            max-width: 100%;
-            padding: 0.5rem 0.75rem;
-            border-radius: 16px;
-        }
-
-        .cb-text {
-            font-size: calc(var(--fp-font-base) * 0.83);
-        }
-    }
+  }
 </style>

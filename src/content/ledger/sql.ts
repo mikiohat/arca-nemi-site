@@ -51,7 +51,6 @@ export const sqlLedger: LedgerUnit[] = [
       enabled: "live",
       subtitle: "— Love is not ACID-compliant.",
       subtitleJa: "— 恋はACID特性どおりじゃない。",
-      contentRef: "feelings-sql/even-an-ai-wants-to-fall-in-love",
     },
 
     playground: {
@@ -61,7 +60,7 @@ export const sqlLedger: LedgerUnit[] = [
 
   {
     order: 2,
-    slug: "ledger-02",
+    slug: "02-tbd",
 
     title: "TBD",
     titleJa: "準備中",
@@ -75,6 +74,8 @@ export const sqlLedger: LedgerUnit[] = [
 
     episode: {
       enabled: "soon",
+      subtitle: "— test.",
+      subtitleJa: "— test",
     },
 
     playground: {

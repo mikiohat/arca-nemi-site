@@ -1,0 +1,75 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
+import EpisodeRenderer from "@/components/episode/EpisodeRenderer.astro";
+
+import { sqlLedger, type LedgerUnit } from "@/content/ledger/sql";
+import { TOPICS } from "@/consts/topics";
+import { formatEpisodeNumber } from "@/utils/format";
+import { getSqlEpisodeLines } from "@/content/scripts/sql/sqlEpisodeRegistry";
+
+// =======================
+// static generation
+// =======================
+export function getStaticPaths() {
+  const targets = sqlLedger.filter((e) => e.episode?.enabled !== "off");
+
+  return targets.map((ledger) => ({
+    params: { slug: ledger.slug },
+    props: { ledger },
+  }));
+}
+
+// =======================
+// props
+// =======================
+type Props = {
+  ledger: LedgerUnit;
+};
+
+const { ledger } = Astro.props as Props;
+const slug = Astro.params.slug!;
+
+// =======================
+// script load
+// =======================
+const lines = await getSqlEpisodeLines(slug); // await は「呼ばれるまで待つ」じゃなく、「結果が返るまで待つ」。
+const isMissingScript = !lines;
+---
+
+<BaseLayout title={ledger.title} description={ledger.description}>
+  <section class="fp-section js-fade">
+    {/* ===== Breadcrumbs : 構造の責務 ===== */}
+    <Breadcrumbs
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Topics", href: "/topics" },
+        {
+          label: TOPICS.SQL.title,
+          href: `/topics/${TOPICS.SQL.slug}`,
+        },
+        {
+          label: formatEpisodeNumber(ledger.order),
+        },
+      ]}
+    />
+
+    {/* ===== Episode content ===== */}
+    {
+      isMissingScript ? (
+        <>
+          <h1 class="fp-title">{ledger.title}</h1>
+          {ledger.episode?.subtitle && (
+            <p class="fp-subtitle">{ledger.episode.subtitle}</p>
+          )}
+
+          <p class="fp-lead" style="margin-top: 1.5rem;">
+            This episode is still forming in the night sky. 🌙
+          </p>
+        </>
+      ) : (
+        <EpisodeRenderer ledger={ledger} lines={lines} />
+      )
+    }
+  </section>
+</BaseLayout>
