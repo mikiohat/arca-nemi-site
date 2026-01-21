@@ -1,7 +1,7 @@
 // src/content/ledger/sql.ts
 // Single Source of Truth for the SQL topic ledger (Episodes + Playground)
 
-export type PublishState = "live" | "wip" | "soon" | "off";
+export type PublishState = "live" | "soon" | "off";
 
 export type LedgerUnit = {
   order: number;
@@ -54,7 +54,7 @@ export const sqlLedger: LedgerUnit[] = [
     },
 
     playground: {
-      enabled: "wip",
+      enabled: "soon",
     },
   },
 
@@ -73,7 +73,7 @@ export const sqlLedger: LedgerUnit[] = [
     tags: ["SQL", "TEST", "TEST"],
 
     episode: {
-      enabled: "soon",
+      enabled: "live",
       subtitle: "— test.",
       subtitleJa: "— test",
     },

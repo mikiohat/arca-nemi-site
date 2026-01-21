@@ -17,7 +17,7 @@ const uniqueVisibleTags = (tags: string[] | undefined) => {
     .filter((x) => x !== hideTag);
 };
 
-const episodeHref = (slug: string) => `/topics/${topicSlug}/episodes/${slug}`;
+const episodeHref = (slug: string) => `/topics/${topicSlug}/episode/${slug}`;
 const playgroundHref = (slug: string) =>
   `/topics/${topicSlug}/playground/${slug}`;
 ---

@@ -10,3 +10,16 @@ export const formatEpisodeNumber = (
 
   return `Episode ${padded}`;
 };
+
+export const formatPlaygroundNumber = (
+  order: number,
+  locale: "en" | "ja" = "en",
+) => {
+  const padded = String(order).padStart(2, "0");
+
+  if (locale === "ja") {
+    return `第${padded}回`;
+  }
+
+  return `Playground ${padded}`;
+};

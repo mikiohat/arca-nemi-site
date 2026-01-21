@@ -2,10 +2,11 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
 import EpisodeRenderer from "@/components/episode/EpisodeRenderer.astro";
+import ContentPager from "@/components/nav/ContentPager.astro";
 
 import { sqlLedger, type LedgerUnit } from "@/content/ledger/sql";
 import { TOPICS } from "@/consts/topics";
-import { formatEpisodeNumber } from "@/utils/format";
+import { formatPlaygroundNumber } from "@/utils/format";
 import { getSqlEpisodeLines } from "@/content/scripts/sql/sqlEpisodeRegistry";
 
 // =======================
@@ -35,6 +36,27 @@ const slug = Astro.params.slug!;
 // =======================
 const lines = await getSqlEpisodeLines(slug); // await は「呼ばれるまで待つ」じゃなく、「結果が返るまで待つ」。
 const isMissingScript = !lines;
+
+// =======================
+// prev / next
+// =======================
+const navigable = sqlLedger
+  .filter((e) => e.episode?.enabled !== "off")
+  .sort((a, b) => a.order - b.order);
+
+const idx = navigable.findIndex((e) => e.slug === slug);
+const prevLedger = idx > 0 ? navigable[idx - 1] : null;
+const nextLedger = idx >= 0 && idx < navigable.length - 1 ? navigable[idx + 1] : null;
+
+const toEpisodeHref = (s: string) => `/topics/${TOPICS.SQL.slug}/playground/${s}`;
+
+const prev = prevLedger
+  ? { href: toEpisodeHref(prevLedger.slug), title: prevLedger.title }
+  : null;
+
+const next = nextLedger
+  ? { href: toEpisodeHref(nextLedger.slug), title: nextLedger.title }
+  : null;
 ---
 
 <BaseLayout title={ledger.title} description={ledger.description}>
@@ -49,7 +71,7 @@ const isMissingScript = !lines;
           href: `/topics/${TOPICS.SQL.slug}`,
         },
         {
-          label: formatEpisodeNumber(ledger.order),
+          label: formatPlaygroundNumber(ledger.order),
         },
       ]}
     />
@@ -71,5 +93,8 @@ const isMissingScript = !lines;
         <EpisodeRenderer ledger={ledger} lines={lines} />
       )
     }
+            {/* ===== Prev / Next ===== */}
+    <ContentPager prev={prev} next={next} />
+
   </section>
 </BaseLayout>

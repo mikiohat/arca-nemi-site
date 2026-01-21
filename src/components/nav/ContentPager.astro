@@ -1,0 +1,100 @@
+---
+type PagerItem = { href: string; title: string };
+
+type Props = {
+  prev?: PagerItem | null;
+  next?: PagerItem | null;
+};
+
+const { prev = null, next = null } = Astro.props as Props;
+---
+
+<nav class="fp-content-pager" aria-label="Content navigation">
+  <div class="fp-content-pager-inner">
+    <div class="fp-content-pager-prev">
+      {
+        prev ? (
+          <a class="fp-content-pager-link" href={prev.href}>
+            <span class="fp-content-pager-kicker">← Previous</span>
+            <span class="fp-content-pager-title">{prev.title}</span>
+          </a>
+        ) : (
+          <span class="fp-content-pager-disabled" aria-disabled="true">
+            <span class="fp-content-pager-kicker">← Previous</span>
+            <span class="fp-content-pager-title">None</span>
+          </span>
+        )
+      }
+    </div>
+
+    <div class="fp-content-pager-next">
+      {
+        next ? (
+          <a class="fp-content-pager-link" href={next.href}>
+            <span class="fp-content-pager-kicker">Next →</span>
+            <span class="fp-content-pager-title">{next.title}</span>
+          </a>
+        ) : (
+          <span class="fp-content-pager-disabled" aria-disabled="true">
+            <span class="fp-content-pager-kicker">Next →</span>
+            <span class="fp-content-pager-title">None</span>
+          </span>
+        )
+      }
+    </div>
+  </div>
+</nav>
+
+<style>
+    /* ===== Content Pager ===== */
+.fp-content-pager {
+  margin-top: 2.25rem;
+}
+
+.fp-content-pager-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.fp-content-pager-link,
+.fp-content-pager-disabled {
+  display: grid;
+  gap: 6px;
+  padding: 14px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(15, 23, 42, 0.25);
+}
+
+.fp-content-pager-link {
+  text-decoration: none;
+}
+
+.fp-content-pager-link:hover {
+  border-color: rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.fp-content-pager-disabled {
+  opacity: 0.55;
+}
+
+.fp-content-pager-kicker {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.fp-content-pager-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+@media (max-width: 520px) {
+  .fp-content-pager-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+    </style>
