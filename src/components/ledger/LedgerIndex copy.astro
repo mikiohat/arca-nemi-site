@@ -41,7 +41,6 @@ const playgroundHref = (slug: string) =>
                 </span>
               </summary>
 
-              {/* Morph target: this menu is the “thing” that appears in the same place */}
               <ul class="ledger__menu" aria-label="Actions">
                 <li>
                   <a class="ledger__menu-link" href={episodeHref(ledger.slug)}>
@@ -74,57 +73,36 @@ const playgroundHref = (slug: string) =>
 </ul>
 
 <script>
-  // Close animation duration (must match CSS feel)
-  const CLOSE_MS = 170;
-
-  /**
-   * Close with a short "closing" state so the morph feels continuous.
-   * @param {Element | null} node
-   */
-  const closeWithMotion = (node: Element | null) => {
-    if (!(node instanceof HTMLDetailsElement)) return;
-    const details = node;
-    if (!details.hasAttribute("open")) return;
-
-    // Already closing? ignore
-    if (details.dataset.state === "closing") return;
-
-    details.dataset.state = "closing";
-
-    window.setTimeout(() => {
-      details.removeAttribute("open");
-      delete details.dataset.state;
-    }, CLOSE_MS);
-  };
-
   document.addEventListener("click", (e) => {
     const target = e.target;
     if (!(target instanceof Element)) return;
 
-    // ① Click inside menu link → close that menu (then navigation happens)
+    // ① メニュー内リンクをクリック → そのメニューだけ閉じる
     const menuLink = target.closest(".ledger__menu-link");
     if (menuLink) {
       const details = menuLink.closest(".ledger__actions");
-      closeWithMotion(details);
+      if (details instanceof HTMLDetailsElement) {
+        details.removeAttribute("open");
+      }
       return;
     }
 
-    // ② Click outside any open menu → close all
+    // ② メニュー外をクリック → 開いてるメニューを全部閉じる
     document.querySelectorAll(".ledger__actions[open]").forEach((d) => {
-      // If the click was on its own summary, let native toggle handle it.
-      const clickedSummary = target.closest("summary");
-      if (clickedSummary && d.contains(clickedSummary)) return;
-
-      closeWithMotion(d);
+      if (d instanceof HTMLDetailsElement) {
+        d.removeAttribute("open");
+      }
     });
   });
 
-  // ③ Escape closes all open menus
+  // ③ Escape キーで閉じる（そのままでOK）
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
 
     document.querySelectorAll(".ledger__actions[open]").forEach((d) => {
-      closeWithMotion(d);
+      if (d instanceof HTMLDetailsElement) {
+        d.removeAttribute("open");
+      }
     });
 
     const active = document.activeElement;
@@ -224,7 +202,6 @@ const playgroundHref = (slug: string) =>
     display: none;
   }
 
-  /* The pill (trigger) */
   .ledger__trigger-pill {
     display: inline-flex;
     align-items: center;
@@ -235,13 +212,6 @@ const playgroundHref = (slug: string) =>
     border: 1px solid var(--fp-border-soft);
     font-size: calc(var(--fp-font-size-base) * 0.792);
     color: var(--fp-accent);
-
-    /* morph out */
-    transition:
-      opacity 120ms ease,
-      transform 180ms cubic-bezier(0.16, 1.2, 0.36, 1);
-    transform: translateY(0) scale(1);
-    opacity: 1;
   }
 
   .ledger__trigger:hover .ledger__trigger-pill,
@@ -250,21 +220,18 @@ const playgroundHref = (slug: string) =>
     border-color: var(--fp-border);
   }
 
-  /* When open/closing: pill disappears (same spot) */
-  .ledger__actions[open] .ledger__trigger-pill,
-  .ledger__actions[data-state="closing"] .ledger__trigger-pill {
-    opacity: 0;
-    transform: translateY(2px) scale(0.92);
-    pointer-events: none;
-  }
-
   /* ---------- menu (visual + motion) ---------- */
   .ledger__menu {
     position: absolute;
     right: 0;
-    bottom: 0; /* same anchor as the pill */
-    z-index: 60;
 
+    /* 下に出すのをやめる */
+    top: auto;
+
+    /* 常に上に出す */
+    bottom: calc(100% + 0.35rem);
+
+    min-width: unset;
     width: fit-content;
     padding: 0.35rem;
     border-radius: 14px;
@@ -272,33 +239,32 @@ const playgroundHref = (slug: string) =>
     box-shadow: inset 0 0 0 1px var(--fp-border-faint);
     background: var(--fp-card-background-alt);
 
+    z-index: 60;
+
     opacity: 0;
     pointer-events: none;
 
-    /* Morph in place: grow from the pill’s corner and expand upward/left */
-    transform-origin: right bottom;
-    transform: translateY(0) scale(0.18);
+    /* 上に出る前提なので +4px が自然 */
+    transform: translateY(4px);
 
     transition:
-      opacity 120ms ease,
-      transform 230ms cubic-bezier(0.16, 1.2, 0.36, 1);
+      opacity 140ms ease,
+      transform 140ms ease;
   }
 
-  /* Open: the menu appears right where the pill was */
   .ledger__actions[open] .ledger__menu {
     opacity: 1;
     pointer-events: auto;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 
-  /* Closing: reverse a bit smoother */
-  .ledger__actions[data-state="closing"] .ledger__menu {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(0) scale(0.18);
-    transition:
-      opacity 120ms ease,
-      transform 180ms cubic-bezier(0.2, 0.9, 0.2, 1);
+  /* hover がある端末だけ hover-open */
+  @media (hover: hover) and (pointer: fine) {
+    .ledger__actions:hover .ledger__menu {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
   }
 
   /* ---------- menu links ---------- */
