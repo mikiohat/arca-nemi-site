@@ -1,15 +1,6 @@
 ---
-import HeaderLink from "@common/HeaderLink.astro";
 import { SITE_FAVICON } from "@/consts";
 
-const NAV = [
-  { href: "/topics", label: "Topics" },
-  { href: "/episodes", label: "Episodes" },
-  { href: "/playground", label: "Playground" },
-  { href: "/about", label: "About" },
-];
-
-// 現在のパスを取得
 const { pathname } = Astro.url;
 
 // 日本語ページかどうか判定（/ja ではじまるか）
@@ -24,11 +15,19 @@ const enPath = isJa
 
 // 日本語側のURL（先頭に /ja をつけたもの）
 const jaPath = isJa ? pathname : "/ja" + (pathname === "/" ? "" : pathname);
+
+const NAV = [
+  { href: "/topics", label: "Topics" },
+  { href: "/episodes", label: "Episodes" },
+  { href: "/playground", label: "Playground" },
+  { href: "/about", label: "About" },
+];
 ---
 
 <header class="fp-header">
   <div class="fp-header-inner">
-    <a href={isJa ? "/ja" : "/"} class="fp-logo">
+    {/* Logo */}
+    <a href="/" class="fp-logo">
       <img
         src={SITE_FAVICON}
         alt="Arca & Nemi"
@@ -39,23 +38,18 @@ const jaPath = isJa ? pathname : "/ja" + (pathname === "/" ? "" : pathname);
     </a>
 
     <div class="fp-header-right">
+      {/* Nav */}
       <nav class="fp-nav" aria-label="Primary navigation">
-        {/* Nav links */}
         {
-          NAV.map((item) => {
-            const [pathOnly, hash = ""] = item.href.split("#");
-            const localizedHref = isJa
-              ? "/ja" +
-                (pathOnly === "/" ? "" : pathOnly) +
-                (hash ? `#${hash}` : "")
-              : item.href;
-
-            return <HeaderLink href={localizedHref}>{item.label}</HeaderLink>;
-          })
+          NAV.map((item) => (
+            <a href={item.href} data-astro-prefetch class="link-underline">
+              {item.label}
+            </a>
+          ))
         }
       </nav>
 
-      {/* Language switcher */}
+      {/* Language switcher (kept as-is) */}
       <details class="fp-lang-switch">
         <summary aria-label="Change language">
           <svg
@@ -64,22 +58,11 @@ const jaPath = isJa ? pathname : "/ja" + (pathname === "/" ? "" : pathname);
             role="img"
             aria-hidden="true"
           >
-            <!-- 外側の丸 -->
             <circle cx="12" cy="12" r="9"></circle>
-
-            <!-- 経線（縦方向の曲線）→ 楕円のまま残す -->
             <ellipse cx="12" cy="12" rx="4.5" ry="9"></ellipse>
-
-            <!-- 中央の縦線（直線） -->
             <path d="M12 3v18"></path>
-
-            <!-- 赤道（中央の横線） -->
             <path d="M3 12h18"></path>
-
-            <!-- 上の緯度線（直線） -->
             <path d="M4.5 8.5h15"></path>
-
-            <!-- 下の緯度線（直線） -->
             <path d="M4.5 15.5h15"></path>
           </svg>
         </summary>
