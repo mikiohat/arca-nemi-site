@@ -1,100 +1,128 @@
 ---
 type PagerItem = { href: string; title: string };
+type TopItem = { href: string; label: string };
 
 type Props = {
   prev?: PagerItem | null;
   next?: PagerItem | null;
+  top?: TopItem | null;
 };
 
-const { prev = null, next = null } = Astro.props as Props;
+const { prev = null, next = null, top = null } = Astro.props as Props;
 ---
 
-<nav class="fp-content-pager" aria-label="Content navigation">
-  <div class="fp-content-pager-inner">
-    <div class="fp-content-pager-prev">
+<nav class="cp-content-pager" aria-label="Content navigation">
+  <div class="cp-content-pager-inner">
+    <div class="cp-content-pager-prev">
       {
         prev ? (
-          <a class="fp-content-pager-link" href={prev.href}>
-            <span class="fp-content-pager-kicker">← Previous</span>
-            <span class="fp-content-pager-title">{prev.title}</span>
+          <a class="cp-content-pager-link" href={prev.href}>
+            <span class="cp-content-pager-kicker">← Previous</span>
+            <span class="cp-content-pager-title">{prev.title}</span>
           </a>
         ) : (
-          <span class="fp-content-pager-disabled" aria-disabled="true">
-            <span class="fp-content-pager-kicker">← Previous</span>
-            <span class="fp-content-pager-title">None</span>
+          <span class="cp-content-pager-disabled" aria-disabled="true">
+            <span class="cp-content-pager-kicker">← Previous</span>
+            <span class="cp-content-pager-title">None</span>
           </span>
         )
       }
     </div>
 
-    <div class="fp-content-pager-next">
+    <div class="cp-content-pager-next">
       {
         next ? (
-          <a class="fp-content-pager-link" href={next.href}>
-            <span class="fp-content-pager-kicker">Next →</span>
-            <span class="fp-content-pager-title">{next.title}</span>
+          <a class="cp-content-pager-link" href={next.href}>
+            <span class="cp-content-pager-kicker">Next →</span>
+            <span class="cp-content-pager-title">{next.title}</span>
           </a>
         ) : (
-          <span class="fp-content-pager-disabled" aria-disabled="true">
-            <span class="fp-content-pager-kicker">Next →</span>
-            <span class="fp-content-pager-title">None</span>
+          <span class="cp-content-pager-disabled" aria-disabled="true">
+            <span class="cp-content-pager-kicker">Next →</span>
+            <span class="cp-content-pager-title">None</span>
           </span>
         )
       }
     </div>
   </div>
+
+  {
+    top ? (
+      <div class="cp-content-pager-top">
+        <a class="cp-content-pager-toplink link-underline" href={top.href}>
+          {top.label}
+        </a>
+      </div>
+    ) : null
+  }
 </nav>
 
 <style>
-    /* ===== Content Pager ===== */
-.fp-content-pager {
-  margin-top: 2.25rem;
-}
-
-.fp-content-pager-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.fp-content-pager-link,
-.fp-content-pager-disabled {
-  display: grid;
-  gap: 6px;
-  padding: 14px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  background: rgba(15, 23, 42, 0.25);
-}
-
-.fp-content-pager-link {
-  text-decoration: none;
-}
-
-.fp-content-pager-link:hover {
-  border-color: rgba(148, 163, 184, 0.6);
-  background: rgba(15, 23, 42, 0.35);
-}
-
-.fp-content-pager-disabled {
-  opacity: 0.55;
-}
-
-.fp-content-pager-kicker {
-  font-size: 0.8rem;
-  color: #94a3b8;
-}
-
-.fp-content-pager-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #e2e8f0;
-}
-
-@media (max-width: 520px) {
-  .fp-content-pager-inner {
-    grid-template-columns: 1fr;
+  /* ===== Content Pager ===== */
+  .cp-content-pager {
+    margin-top: 2.25rem;
   }
-}
 
-    </style>
+  .cp-content-pager-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .cp-content-pager-link,
+  .cp-content-pager-disabled {
+    display: grid;
+    gap: 6px;
+    padding: 14px 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    background: rgba(15, 23, 42, 0.25);
+  }
+
+  .cp-content-pager-link {
+    text-decoration: none;
+  }
+
+  .cp-content-pager-link:hover {
+    border-color: rgba(148, 163, 184, 0.6);
+    background: rgba(15, 23, 42, 0.35);
+  }
+
+  .cp-content-pager-disabled {
+    opacity: 0.55;
+  }
+
+  .cp-content-pager-kicker {
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+
+  .cp-content-pager-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e2e8f0;
+  }
+
+  /* TOP link */
+  .cp-content-pager-top {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .cp-content-pager-toplink {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    text-decoration: none; /* underline handled by link-underline */
+  }
+
+  @media (max-width: 520px) {
+    .cp-content-pager-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .cp-content-pager-top {
+      justify-content: flex-start;
+    }
+  }
+</style>
