@@ -41,7 +41,6 @@ const playgroundHref = (slug: string) =>
                 </span>
               </summary>
 
-              {/* Morph target: this menu is the “thing” that appears in the same place */}
               <ul class="ledger__menu" aria-label="Actions">
                 <li>
                   <a class="ledger__menu-link" href={episodeHref(ledger.slug)}>
@@ -74,52 +73,65 @@ const playgroundHref = (slug: string) =>
 </ul>
 
 <script>
-  // Close animation duration (must match CSS feel)
   const CLOSE_MS = 170;
 
   /**
-   * Close with a short "closing" state so the morph feels continuous.
    * @param {Element | null} node
    */
   const closeWithMotion = (node: Element | null) => {
     if (!(node instanceof HTMLDetailsElement)) return;
     const details = node;
-    if (!details.hasAttribute("open")) return;
 
-    // Already closing? ignore
+    if (!details.hasAttribute("open")) return;
     if (details.dataset.state === "closing") return;
 
+    // closing開始
     details.dataset.state = "closing";
 
+    // ✅ ここで即 open を外す → chevron が先に戻る
+    details.removeAttribute("open");
+
+    // ✅ 少し待って closing解除 → メニューがそのタイミングで閉じる
     window.setTimeout(() => {
-      details.removeAttribute("open");
       delete details.dataset.state;
     }, CLOSE_MS);
   };
 
-  document.addEventListener("click", (e) => {
-    const target = e.target;
-    if (!(target instanceof Element)) return;
+  document.addEventListener(
+    "click",
+    (e) => {
+      const target = e.target;
+      if (!(target instanceof Element)) return;
 
-    // ① Click inside menu link → close that menu (then navigation happens)
-    const menuLink = target.closest(".ledger__menu-link");
-    if (menuLink) {
-      const details = menuLink.closest(".ledger__actions");
-      closeWithMotion(details);
-      return;
-    }
+      const summary = target.closest(".ledger__trigger");
+      if (summary) {
+        const details = summary.closest(".ledger__actions");
+        if (
+          details instanceof HTMLDetailsElement &&
+          details.hasAttribute("open")
+        ) {
+          e.preventDefault();
+          closeWithMotion(details);
+          return;
+        }
+        return;
+      }
 
-    // ② Click outside any open menu → close all
-    document.querySelectorAll(".ledger__actions[open]").forEach((d) => {
-      // If the click was on its own summary, let native toggle handle it.
-      const clickedSummary = target.closest("summary");
-      if (clickedSummary && d.contains(clickedSummary)) return;
+      const menuLink = target.closest(".ledger__menu-link");
+      if (menuLink) {
+        const details = menuLink.closest(".ledger__actions");
+        closeWithMotion(details);
+        return;
+      }
 
-      closeWithMotion(d);
-    });
-  });
+      document.querySelectorAll(".ledger__actions[open]").forEach((d) => {
+        if (d instanceof Element && d.contains(target)) return;
+        closeWithMotion(d);
+      });
+    },
+    true,
+  );
 
-  // ③ Escape closes all open menus
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
 
@@ -137,7 +149,6 @@ const playgroundHref = (slug: string) =>
    LedgerIndex (scoped)
 ========================= */
 
-  /* ---------- list / layout ---------- */
   .ledger {
     list-style: none;
     margin: 0;
@@ -168,7 +179,6 @@ const playgroundHref = (slug: string) =>
     gap: 0.8rem;
   }
 
-  /* ---------- title ---------- */
   .ledger__title {
     position: relative;
     padding-left: var(--ledger-indent);
@@ -187,7 +197,6 @@ const playgroundHref = (slug: string) =>
     line-height: 1;
   }
 
-  /* ---------- tags ---------- */
   .ledger__tags {
     width: 100%;
     margin-top: 0.2rem;
@@ -206,25 +215,25 @@ const playgroundHref = (slug: string) =>
     border: 1px solid var(--fp-border-faint);
   }
 
-  /* ---------- actions (layers + trigger) ---------- */
   .ledger__actions {
     position: relative;
-    z-index: 1; /* base layer */
+    z-index: 1;
   }
 
   .ledger__actions[open] {
-    z-index: 50; /* active row layer */
+    z-index: 50;
   }
 
   .ledger__trigger {
     list-style: none;
     cursor: pointer;
   }
+
   .ledger__trigger::-webkit-details-marker {
     display: none;
   }
 
-  /* The pill (trigger) */
+  /* pillは消さない */
   .ledger__trigger-pill {
     display: inline-flex;
     align-items: center;
@@ -236,12 +245,9 @@ const playgroundHref = (slug: string) =>
     font-size: calc(var(--fp-font-size-base) * 0.792);
     color: var(--fp-accent);
 
-    /* morph out */
     transition:
-      opacity 120ms ease,
-      transform 180ms cubic-bezier(0.16, 1.2, 0.36, 1);
-    transform: translateY(0) scale(1);
-    opacity: 1;
+      background 140ms ease,
+      border-color 140ms ease;
   }
 
   .ledger__trigger:hover .ledger__trigger-pill,
@@ -250,58 +256,42 @@ const playgroundHref = (slug: string) =>
     border-color: var(--fp-border);
   }
 
-  /* When open/closing: pill disappears (same spot) */
-  .ledger__actions[open] .ledger__trigger-pill,
-  .ledger__actions[data-state="closing"] .ledger__trigger-pill {
-    opacity: 0;
-    transform: translateY(2px) scale(0.92);
-    pointer-events: none;
-  }
-
-  /* ---------- menu (visual + motion) ---------- */
+  /* ===== menu: 箱はふわっと、文字はcloseで即消す ===== */
   .ledger__menu {
     position: absolute;
     right: 0;
-    bottom: 0; /* same anchor as the pill */
-    z-index: 60;
+    bottom: calc(100% + 0.35rem); /* ピルの上に出す */
 
     width: fit-content;
+
     padding: 0.35rem;
     border-radius: 14px;
-    border: none;
-    box-shadow: inset 0 0 0 1px var(--fp-border-faint);
     background: var(--fp-card-background-alt);
+    box-shadow: inset 0 0 0 1px var(--fp-border-faint);
 
     opacity: 0;
     pointer-events: none;
 
-    /* Morph in place: grow from the pill’s corner and expand upward/left */
     transform-origin: right bottom;
-    transform: translateY(0) scale(0.18);
+    transform: translateY(6px); /* scaleは使わない（文字が縮む不自然さ回避） */
 
     transition:
       opacity 120ms ease,
-      transform 230ms cubic-bezier(0.16, 1.2, 0.36, 1);
+      transform 160ms ease;
   }
 
-  /* Open: the menu appears right where the pill was */
-  .ledger__actions[open] .ledger__menu {
+  /* open中も closing中も、メニューは表示したまま（重複整理版） */
+  .ledger__actions:is([open], [data-state="closing"]) .ledger__menu {
     opacity: 1;
     pointer-events: auto;
-    transform: translateY(0) scale(1);
-  }
+    transform: translateY(0);
 
-  /* Closing: reverse a bit smoother */
-  .ledger__actions[data-state="closing"] .ledger__menu {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(0) scale(0.18);
     transition:
-      opacity 120ms ease,
-      transform 180ms cubic-bezier(0.2, 0.9, 0.2, 1);
+      opacity 140ms ease,
+      transform 220ms cubic-bezier(0.16, 1.2, 0.36, 1);
   }
 
-  /* ---------- menu links ---------- */
+  /* リンクは open時だけ見せる。close開始で即消す */
   .ledger__menu-link {
     display: block;
     padding: 0.6rem 0.65rem;
@@ -309,18 +299,24 @@ const playgroundHref = (slug: string) =>
     font-size: calc(var(--fp-font-size-base) * 0.708);
     text-decoration: none;
     white-space: nowrap;
+
+    opacity: 0; /* デフォは非表示 */
+    transition: opacity 120ms ease;
+  }
+
+  .ledger__actions[open] .ledger__menu-link {
+    opacity: 1;
+    transition-delay: 40ms; /* 箱の出現に少し追従して気持ちよく */
+  }
+
+  .ledger__actions[data-state="closing"] .ledger__menu-link {
+    opacity: 0;
+    transition: none; /* close時、文字は即消す */
   }
 
   .ledger__menu-link:hover,
   .ledger__menu-link:focus-visible {
-    background: rgba(184, 148, 164, 0.12);
-  }
-
-  /* ---------- tap highlight kill (Android) ---------- */
-  .ledger__trigger,
-  .ledger__trigger-pill,
-  .ledger__menu-link {
-    -webkit-tap-highlight-color: transparent;
+    background: var(--fp-menu-hover);
   }
 
   .ledger__trigger:active,
@@ -341,5 +337,21 @@ const playgroundHref = (slug: string) =>
     outline: 2px solid var(--fp-accent);
     outline-offset: 2px;
     border-radius: 12px;
+  }
+
+  /* chevron（今の角度でOK） */
+  .ledger__trigger-pill .fp-chevron {
+    display: inline-block;
+    transform: rotate(-45deg);
+    transition: transform 180ms cubic-bezier(0.16, 1.2, 0.36, 1);
+  }
+
+  .ledger__actions[open] .ledger__trigger-pill .fp-chevron {
+    transform: rotate(-135deg);
+  }
+
+  .ledger__actions[open] .ledger__trigger-pill {
+    border-color: var(--fp-border);
+    background: var(--fp-border-faint);
   }
 </style>

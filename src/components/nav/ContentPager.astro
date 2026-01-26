@@ -12,117 +12,65 @@ const { prev = null, next = null, top = null } = Astro.props as Props;
 ---
 
 <nav class="cp-content-pager" aria-label="Content navigation">
-  <div class="cp-content-pager-inner">
-    <div class="cp-content-pager-prev">
+  <div class="cp-content-pager-row">
+    <div class="cp-content-pager-left">
       {
-        prev ? (
-          <a class="cp-content-pager-link" href={prev.href}>
-            <span class="cp-content-pager-kicker">← Previous</span>
-            <span class="cp-content-pager-title">{prev.title}</span>
+        prev && (
+          <a class="cp-content-pager-item link-underline" href={prev.href}>
+            {"< Prev"}
           </a>
-        ) : (
-          <span class="cp-content-pager-disabled" aria-disabled="true">
-            <span class="cp-content-pager-kicker">← Previous</span>
-            <span class="cp-content-pager-title">None</span>
-          </span>
         )
       }
     </div>
 
-    <div class="cp-content-pager-next">
+    <div class="cp-content-pager-center">
       {
-        next ? (
-          <a class="cp-content-pager-link" href={next.href}>
-            <span class="cp-content-pager-kicker">Next →</span>
-            <span class="cp-content-pager-title">{next.title}</span>
+        top && (
+          <a class="cp-content-pager-item link-underline" href={top.href}>
+            {top.label}
           </a>
-        ) : (
-          <span class="cp-content-pager-disabled" aria-disabled="true">
-            <span class="cp-content-pager-kicker">Next →</span>
-            <span class="cp-content-pager-title">None</span>
-          </span>
+        )
+      }
+    </div>
+
+    <div class="cp-content-pager-right">
+      {
+        next && (
+          <a class="cp-content-pager-item link-underline" href={next.href}>
+            {"Next >"}
+          </a>
         )
       }
     </div>
   </div>
-
-  {
-    top ? (
-      <div class="cp-content-pager-top">
-        <a class="cp-content-pager-toplink link-underline" href={top.href}>
-          {top.label}
-        </a>
-      </div>
-    ) : null
-  }
 </nav>
 
 <style>
-  /* ===== Content Pager ===== */
   .cp-content-pager {
     margin-top: 2.25rem;
   }
 
-  .cp-content-pager-inner {
+  .cp-content-pager-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: 14px;
   }
 
-  .cp-content-pager-link,
-  .cp-content-pager-disabled {
-    display: grid;
-    gap: 6px;
-    padding: 14px 14px;
-    border-radius: 14px;
-    border: 1px solid rgba(148, 163, 184, 0.35);
-    background: rgba(15, 23, 42, 0.25);
+  .cp-content-pager-left {
+    justify-self: start;
+  }
+  .cp-content-pager-center {
+    justify-self: center;
+  }
+  .cp-content-pager-right {
+    justify-self: end;
   }
 
-  .cp-content-pager-link {
+  .cp-content-pager-item {
+    font-size: calc(var(--fp-font-size-base) * 0.76);
+    color: var(--fp-muted);
     text-decoration: none;
-  }
-
-  .cp-content-pager-link:hover {
-    border-color: rgba(148, 163, 184, 0.6);
-    background: rgba(15, 23, 42, 0.35);
-  }
-
-  .cp-content-pager-disabled {
-    opacity: 0.55;
-  }
-
-  .cp-content-pager-kicker {
-    font-size: 0.8rem;
-    color: #94a3b8;
-  }
-
-  .cp-content-pager-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #e2e8f0;
-  }
-
-  /* TOP link */
-  .cp-content-pager-top {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .cp-content-pager-toplink {
-    font-size: 0.9rem;
-    color: #94a3b8;
-    text-decoration: none; /* underline handled by link-underline */
-  }
-
-  @media (max-width: 520px) {
-    .cp-content-pager-inner {
-      grid-template-columns: 1fr;
-    }
-
-    .cp-content-pager-top {
-      justify-content: flex-start;
-    }
+    white-space: nowrap;
   }
 </style>

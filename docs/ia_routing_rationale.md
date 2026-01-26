@@ -160,7 +160,67 @@ Both are siblings. Neither is subordinate.
 
 ---
 
-## 6. Design Principle (Summary)
+## 6. Navigation and the Role of Color
+
+On this site, link colors are not used merely for visual styling or emphasis.  
+They are treated as part of the **Information Architecture**, conveying the _role_ each navigation element plays.
+
+Navigation is broadly categorized into three roles.
+
+---
+
+### 1. Action-Oriented Navigation (CTA)
+
+Navigation elements that are meant to prompt a clear action carry the strongest intent on the site.
+
+Primary buttons and critical links must communicate, at a glance,  
+that _this is the next meaningful step_.
+
+For this reason, such navigation uses `fp-accent`,  
+a color reserved to indicate **points of action and decision**.
+
+---
+
+### 2. Orientation and Structural Navigation (Current Location)
+
+Navigation such as breadcrumbs does not prompt action.
+
+Instead, it answers fundamental questions:
+
+- Where am I right now?
+- What structure does this content belong to?
+
+This role is **semantically critical**.
+
+By confirming that they are not lost, readers can proceed without anxiety and  
+**focus their attention entirely on understanding the content itself**.
+
+For this reason, orientation-focused navigation is treated as equally important as CTAs,  
+and also uses `fp-accent`.
+
+This aligns with a core principle of the site:
+
+> The URL itself teaches orientation.
+
+Breadcrumbs visually reinforce this same responsibility.
+
+---
+
+### 3. Supportive Navigation (Next Options)
+
+Elements such as header links, footer links, and prev / next / home navigation  
+do not demand immediate action.
+
+They quietly present _possible next choices_ after the current content is complete.
+
+Here, visibility without dominance is key.
+
+These navigation elements use `fp-muted`, ensuring they remain discoverable  
+without competing for attention.
+
+---
+
+## 7. Design Principle (Summary)
 
 - URLs express meaning, not convenience
 - Topics are never implicit
@@ -171,7 +231,7 @@ Both are siblings. Neither is subordinate.
 
 ---
 
-## 7. Short Design Memo (for Future Me)
+## 8. Short Design Memo (for Future Me)
 
 We did not choose `/episodes/[slug]` because:
 

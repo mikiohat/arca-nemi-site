@@ -30,19 +30,24 @@
   --fp-credit: rgba(91, 107, 122, 0.96);
 
   /* Atmosphere */
-  --fp-moonlight-top-right: rgba(180, 190, 255, 1);
+  /* --fp-moonlight-top-right: rgba(180, 190, 255, 1); */
 
   --fp-border: rgba(148, 163, 184, 0.6);
   --fp-border-soft: rgba(148, 163, 184, 0.3);
   --fp-border-faint: rgba(148, 163, 184, 0.16);
 
-  --fp-lang-menu-background: rgba(15, 23, 42, 0.98);
-  --fp-lang-menu-hover: rgba(55, 65, 81, 0.9);
+  --fp-menu-background: rgba(15, 23, 42, 0.98);
+  --fp-menu-hover: rgba(55, 65, 81, 0.9);
 
   --fp-card-background: rgba(129, 140, 248, 0.16);
-  --fp-card-background-alt: rgba(15, 23, 42, 0.94);
+  --fp-card-background-alt: rgba(15, 23, 42, 0.92);
 
   --fp-font-size-base: 1.2rem;
+}
+
+/* Mobile tap highlight: disable for interactive elements */
+:where(a, summary) {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* =========================================================
@@ -570,51 +575,6 @@ img {
   min-width: 6rem;
 }
 
-/* ----- Runner (bottom-right) ----- */
-.fp-runner {
-  position: fixed;
-  right: 12px;
-  bottom: 12px;
-  z-index: 30;
-  transition: transform 200ms ease-out;
-}
-
-.fp-runner-body {
-  padding: 0.45rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.7);
-  background:
-    radial-gradient(circle at 0 0, rgba(129, 140, 248, 0.26), transparent 60%),
-    rgba(3, 7, 18, 0.96);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.9);
-  min-width: 160px;
-}
-
-.fp-runner-label {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--fp-text);
-}
-
-.fp-runner-bar {
-  margin-top: 0.25rem;
-  width: 100%;
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(30, 64, 175, 0.7);
-  overflow: hidden;
-}
-
-.fp-runner-progress {
-  height: 100%;
-  width: 100%;
-  transform-origin: left;
-  transform: scaleX(0.1);
-  background: linear-gradient(to right, #a5b4fc, #f472b6);
-  transition: transform 160ms ease-out;
-}
-
 /* =========================================================
    6. Components (Header / Footer)
    ========================================================= */
@@ -647,7 +607,7 @@ img {
 .fp-header-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   flex-shrink: 0;
 }
 
@@ -702,7 +662,7 @@ img {
   display: block;
   width: 18px;
   height: 18px;
-  stroke: var(--fp-accent);
+  stroke: var(--fp-muted);
   stroke-width: 1.4;
   fill: none;
   opacity: 0.85;
@@ -721,7 +681,7 @@ img {
   min-width: 140px;
   border-radius: 10px;
   border: 1px solid var(--fp-border);
-  background: var(--fp-lang-menu-background);
+  background: var(--fp-menu-background);
   z-index: 20;
 }
 
@@ -738,7 +698,7 @@ img {
 }
 
 .fp-lang-menu a:hover {
-  background: var(--fp-lang-menu-hover);
+  background: var(--fp-menu-hover);
 }
 
 /* ----- Footer ----- */
@@ -791,6 +751,11 @@ img {
   transition:
     opacity 0.15s ease,
     transform 0.15s ease;
+}
+
+/* Buy Me a Coffee だけ少し小さく */
+.fp-footer-link-icon--support img {
+  transform: scale(0.95);
 }
 
 .fp-footer-link-icon:hover img {
@@ -879,7 +844,7 @@ img {
   }
 
   .fp-header-right {
-    gap: 0.6rem;
+    gap: 0.5rem;
   }
 
   .fp-header-inner {
@@ -919,7 +884,7 @@ img {
   }
 
   .fp-nav {
-    gap: 0.7rem;
+    gap: 0.5rem;
     font-size: calc(var(--fp-font-size-base) * 0.67);
   }
 
@@ -937,15 +902,11 @@ img {
   }
 
   .fp-lang-icon {
-    font-size: var(--fp-font-base);
+    font-size: var(--fp-font-size-base);
   }
 
   .fp-title {
     font-size: calc(var(--fp-font-size-base) * 1.333);
-  }
-
-  .fp-runner-body {
-    min-width: 150px;
   }
 }
 

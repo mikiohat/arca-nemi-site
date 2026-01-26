@@ -89,19 +89,19 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
     max-width: min(100%, 560px);
     padding: 0.55rem 0.85rem;
     border-radius: 18px;
-    border: 1px solid rgba(148, 163, 184, 0.45);
+    border: 1px solid var(--fp-border-soft);
 
     /* ★ ここを CSS 変数経由にして、背景を優先順位で切り替え */
     background: var(
       --cb-bg,
       radial-gradient(
         circle at 0 0,
-        rgba(129, 140, 248, 0.18),
+        var(--fp-card-background),
         transparent 55%
       ),
-      rgba(9, 12, 26, 0.96)
+      var(--fp-background-shadow)
     );
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.8);
+    box-shadow: 0 10px 24px var(--fp-card-background-alt);
   }
 
   .cb-row--right .cb {
@@ -125,7 +125,8 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
     align-items: center;
     justify-content: center;
     background: transparent;
-    box-shadow: 0 2px 4px rgba(51, 63, 90, 0.9);
+    box-shadow: 0 2px 4px var(--fp-border-soft);
+    /* box-shadow: 0 2px 4px rgba(51, 63, 90, 0.9); */
 
     /* ★ ホバー用のアニメーション準備 */
     transform: translateY(0) scale(1);
@@ -137,7 +138,7 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
   /* アイコンに hover したとき、大きく＆影を強く */
   .cb-avatar:hover {
     transform: translateY(-1px) scale(2.5); /* 1.05〜1.10 くらいで調整 */
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+    box-shadow: 0 10px 24px var(--fp-card-background-alt);
   }
 
   .cb-avatar-img {
@@ -170,7 +171,7 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
     }
 
     .cb-text {
-      font-size: calc(var(--fp-font-base) * 0.83);
+      font-size: calc(var(--fp-font-size-base) * 0.88);
     }
   }
 </style>

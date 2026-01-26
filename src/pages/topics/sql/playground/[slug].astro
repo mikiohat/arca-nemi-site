@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
 import EpisodeRenderer from "@/components/episode/EpisodeRenderer.astro";
 import ContentPager from "@/components/nav/ContentPager.astro";
+import FloatingSwitcher from "@/components/nav/FloatingSwitcher.astro";
 
 import { sqlLedger, type LedgerUnit } from "@/content/ledger/sql";
 import { TOPICS } from "@/consts/topics";
@@ -46,9 +47,11 @@ const navigable = sqlLedger
 
 const idx = navigable.findIndex((e) => e.slug === slug);
 const prevLedger = idx > 0 ? navigable[idx - 1] : null;
-const nextLedger = idx >= 0 && idx < navigable.length - 1 ? navigable[idx + 1] : null;
+const nextLedger =
+  idx >= 0 && idx < navigable.length - 1 ? navigable[idx + 1] : null;
 
-const toEpisodeHref = (s: string) => `/topics/${TOPICS.SQL.slug}/playground/${s}`;
+const toEpisodeHref = (s: string) =>
+  `/topics/${TOPICS.SQL.slug}/playground/${s}`;
 
 const prev = prevLedger
   ? { href: toEpisodeHref(prevLedger.slug), title: prevLedger.title }
@@ -57,6 +60,23 @@ const prev = prevLedger
 const next = nextLedger
   ? { href: toEpisodeHref(nextLedger.slug), title: nextLedger.title }
   : null;
+
+// =======================
+// epi / play
+// =======================
+const episodeHref = (s: string) => `/topics/${TOPICS.SQL.slug}/episode/${s}`;
+const playgroundHref = (s: string) =>
+  `/topics/${TOPICS.SQL.slug}/playground/${s}`;
+
+const switchLeft = {
+  label: "Episode",
+  href: episodeHref(slug),
+};
+
+const switchRight = {
+  label: "Playground",
+  href: playgroundHref(slug),
+};
 ---
 
 <BaseLayout title={ledger.title} description={ledger.description}>
@@ -93,8 +113,9 @@ const next = nextLedger
         <EpisodeRenderer ledger={ledger} lines={lines} />
       )
     }
-            {/* ===== Prev / Next ===== */}
+    {/* ===== Prev / Next ===== */}
     <ContentPager prev={prev} next={next} />
-
   </section>
+  {/* ===== epi / play ===== */}
+  <FloatingSwitcher left={switchLeft} right={switchRight} active="right" />
 </BaseLayout>
