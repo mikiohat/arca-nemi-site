@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
 import EpisodeRenderer from "@/components/episode/EpisodeRenderer.astro";
 import ContentPager from "@/components/nav/ContentPager.astro";
+import FloatingSwitcher from "@/components/nav/FloatingSwitcher.astro";
 
 import { sqlLedger, type LedgerUnit } from "@/content/ledger/sql";
 import { TOPICS } from "@/consts/topics";
@@ -63,6 +64,23 @@ const top = {
   href: `/topics/${TOPICS.SQL.slug}`,
   label: `${TOPICS.SQL.shortLabel} Home`,
 };
+
+// =======================
+// epi / play
+// =======================
+const episodeHref = (s: string) => `/topics/${TOPICS.SQL.slug}/episode/${s}`;
+const playgroundHref = (s: string) =>
+  `/topics/${TOPICS.SQL.slug}/playground/${s}`;
+
+const switchLeft = {
+  label: "Episode",
+  href: episodeHref(slug),
+};
+
+const switchRight = {
+  label: "Playground",
+  href: playgroundHref(slug),
+};
 ---
 
 <BaseLayout title={ledger.title} description={ledger.description}>
@@ -102,4 +120,6 @@ const top = {
     {/* ===== Prev / Next ===== */}
     <ContentPager prev={prev} next={next} top={top} />
   </section>
+  {/* ===== epi / play ===== */}
+  <FloatingSwitcher left={switchLeft} right={switchRight} active="left" />
 </BaseLayout>

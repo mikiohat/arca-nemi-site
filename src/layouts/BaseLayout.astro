@@ -93,26 +93,10 @@ const lang = Astro.props.lang ?? "en";
 
     <Footer />
 
-    <!-- ★ 右下 runner（進捗バー） -->
-    <div id="runner" class="fp-runner">
-      <div class="fp-runner-body">
-        <span class="fp-runner-label">progress</span>
-        <div class="fp-runner-bar">
-          <div class="fp-runner-progress"></div>
-        </div>
-      </div>
-    </div>
-
     <!-- ★ fade-in と runner 用の軽量スクリプト -->
     <script is:inline>
       if (typeof window !== "undefined") {
         const fadeEls = document.querySelectorAll(".js-fade");
-        const runner = document.getElementById("runner");
-        let runnerProgress = null;
-
-        if (runner) {
-          runnerProgress = runner.querySelector(".fp-runner-progress");
-        }
 
         // セクションのふわっと表示
         const io = new IntersectionObserver(
@@ -128,41 +112,6 @@ const lang = Astro.props.lang ?? "en";
         );
 
         fadeEls.forEach((el) => io.observe(el));
-
-        // runner のスクロール連動（requestAnimationFrame で優しく）
-        let ticking = false;
-
-        const updateRunnerCore = () => {
-          if (!runner || !runnerProgress) {
-            ticking = false;
-            return;
-          }
-
-          const scrollTop = window.scrollY;
-          const doc = document.documentElement;
-          const scrollHeight = doc.scrollHeight - window.innerHeight;
-          const ratio = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
-
-          const maxTranslate = 40; // px
-          const tx = ratio * maxTranslate;
-          runner.style.transform = "translateX(" + tx + "px)";
-
-          const clamped = Math.max(0.05, Math.min(1, ratio));
-          runnerProgress.style.transform = "scaleX(" + clamped + ")";
-
-          ticking = false;
-        };
-
-        const onScroll = () => {
-          if (!ticking) {
-            ticking = true;
-            window.requestAnimationFrame(updateRunnerCore);
-          }
-        };
-
-        window.addEventListener("scroll", onScroll);
-        window.addEventListener("resize", onScroll);
-        onScroll();
       }
     </script>
   </body>
