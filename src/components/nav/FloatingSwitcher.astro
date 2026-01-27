@@ -14,58 +14,49 @@ const { left, right, active } = Astro.props;
 
 // show only the opposite side
 const target = active === "left" ? right : left;
-const targetLabel = active === "left" ? "Playground" : "Episode";
 ---
 
 {
   target ? (
     <>
-      <nav id="sw-switcher" class="sw-switcher" aria-label="Episode / Playground switcher">
+      <nav
+        id="sw-switcher"
+        class="sw-switcher"
+        aria-label="Episode / Playground switcher"
+      >
         <a class="sw-item" href={target.href}>
           <span class="sw-icon" aria-hidden="true">
             <svg class="sw-icon-svg" viewBox="0 0 24 24" fill="none">
-              <path d="M7.5 7.5a7 7 0 0 1 11 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              <path d="M18.5 6.5v4h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M16.5 16.5a7 7 0 0 1-11-2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              <path d="M5.5 17.5v-4h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M7.5 7.5a7 7 0 0 1 11 2.5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <path
+                d="M18.5 6.5v4h-4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M16.5 16.5a7 7 0 0 1-11-2.5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <path
+                d="M5.5 17.5v-4h4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
           </span>
-          <span class="sw-text">{target.label}</span>
         </a>
       </nav>
-
-      <script is:inline>
-        if (typeof window !== "undefined") {
-          const el = document.getElementById("sw-switcher");
-          if (!el) console.log("[sw] element not found");
-
-          let ticking = false;
-
-          const update = () => {
-            const doc = document.documentElement;
-            const max = Math.max(1, doc.scrollHeight - window.innerHeight);
-            const p = Math.min(1, Math.max(0, window.scrollY / max));
-
-            const maxX = 90;
-            const x = Math.round(p * maxX);
-
-
-            el.style.transform = `translateX(${x}px)`;
-
-            ticking = false;
-          };
-
-          const onScroll = () => {
-            if (ticking) return;
-            ticking = true;
-            window.requestAnimationFrame(update);
-          };
-
-          window.addEventListener("scroll", onScroll, { passive: true });
-          window.addEventListener("resize", onScroll);
-          update();
-        }
-      </script>
     </>
   ) : null
 }
@@ -74,10 +65,8 @@ const targetLabel = active === "left" ? "Playground" : "Episode";
   .sw-switcher {
     position: fixed;
     bottom: 16px;
-    right: max(16px, calc((100vw - var(--site-max-width)) / 2 + 16px));
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     z-index: 40;
-
-    will-change: transform;
   }
 
   .sw-item {
@@ -86,14 +75,14 @@ const targetLabel = active === "left" ? "Playground" : "Episode";
     align-items: center;
     justify-content: center;
 
-    inline-size: 150px;
-    padding: 8px 12px;
+    inline-size: 32px;
+    block-size: 32px;
+    padding: 0;
     border-radius: 9999px;
 
     text-decoration: none;
-    color: var(--fp-muted);
+    color: var(--fp-accent);
 
-    /* keep transparency, add presence */
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(148, 163, 184, 0.35);
     box-shadow: 0 10px 26px rgba(15, 23, 42, 0.45);
@@ -102,13 +91,7 @@ const targetLabel = active === "left" ? "Playground" : "Episode";
     white-space: nowrap;
   }
 
-  .sw-text {
-    text-align: center;
-    font-size: calc(var(--fp-font-size-base) * 0.76);
-  }
   .sw-icon {
-    position: absolute;
-    left: 12px; /* アイコンは左に固定 */
     opacity: 0.9;
     line-height: 1;
   }
@@ -117,11 +100,21 @@ const targetLabel = active === "left" ? "Playground" : "Episode";
     width: 16px;
     height: 16px;
     display: block;
-}
+  }
 
   /* subtle hover (desktop) */
   .sw-item:hover {
-    background: rgba(255, 255, 255, 0.085);
-    border-color: rgba(148, 163, 184, 0.5);
+    /* 枠の太さ */
+    border: 1px solid transparent;
+
+    /* 2レイヤー背景で擬似ボーダー */
+    background:
+    /* 内側（塗り） */
+      linear-gradient(#0b1220, #0b1220) padding-box,
+      /* 枠（グラデーション） */ linear-gradient(to right, #a5b4fc, #f472b6)
+        border-box;
+
+    color: var(--fp-muted);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.35);
   }
 </style>
