@@ -220,7 +220,29 @@ without competing for attention.
 
 ---
 
-## 7. Design Principle (Summary)
+## 7. User Experience and CTA(Call To Action) Placement
+
+Based on the user experience, the UI layout clearly differentiates CTA placement according to each CTA’s role and frequency of use.
+
+The navigation to the Playground is placed on the right side of the screen, as it needs to be immediately accessible at the moment a user feels like “trying things out.”  
+Assuming that most users are right-handed, priority is given to a position that is easy to reach with the thumb and allows for intuitive operation.
+
+On the other hand, the FloatingSwitcher is a secondary form of navigation that is used infrequently and only when necessary.  
+For this reason, it prioritizes conveying a sense of presence rather than ease of operation, and is therefore placed on the left side of the screen.
+
+For right-handed users, the left side is an area with lower interaction frequency and is less likely to be obscured by the hand or fingers.  
+As a result, it naturally stays within the user’s field of view, making it easier to notice even when the UI itself is visually subtle.
+
+By intentionally placing the FloatingSwitcher outside the primary interaction zone, the design avoids disrupting the reading experience while maintaining a quiet, persistent presence that signals “it exists,” even with a restrained visual emphasis.
+
+In this way, the site’s CTA placement follows a simple principle:
+
+- Frequently used actions should be easy to operate.
+- Infrequently used actions should not get in the way.
+
+---
+
+## 8. Design Principle (Summary)
 
 - URLs express meaning, not convenience
 - Topics are never implicit
@@ -231,7 +253,7 @@ without competing for attention.
 
 ---
 
-## 8. Short Design Memo (for Future Me)
+## 9. Short Design Memo (for Future Me)
 
 We did not choose `/episodes/[slug]` because:
 
