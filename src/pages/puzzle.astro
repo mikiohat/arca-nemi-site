@@ -1,0 +1,132 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ConversationBubble from "@/components/talk/ConversationBubble.astro";
+---
+
+<BaseLayout title="SQL Puzzle | JOIN is not Love">
+  <section class="pg">
+    <!-- ======================
+ 会話①：誤解
+====================== -->
+    <div class="pg-talk">
+      <ConversationBubble speaker="arca">
+        JOINしたいって言うてるAI、 もう恋が成就すると思ってへん？
+      </ConversationBubble>
+      <ConversationBubble speaker="nemi">
+        たぶんな。 JOIN＝関係が成立する魔法やと思ってる。
+      </ConversationBubble>
+    </div>
+
+    <!-- ======================
+ パズル①：INSERT
+====================== -->
+    <section class="pg-step">
+      <h3>🧩 パズル①：JOINしたいAIがやったこと</h3>
+
+      <p class="pg-caption">
+        JOINしたい一心で、AIは先に「事実」を作ってしまった。
+      </p>
+
+      <!-- slots -->
+      <div class="pg-slots">
+        <div class="slot" data-slot="insert">INSERT INTO hearts</div>
+        <div class="slot" data-slot="values">VALUES</div>
+      </div>
+
+      <!-- pills -->
+      <div class="pg-pills">
+        <button
+          class="pill"
+          data-piece="insert"
+          data-sql="INSERT INTO hearts (ai_id, status)"
+        >
+          hearts(ai_id, status)
+        </button>
+        <button
+          class="pill"
+          data-piece="values"
+          data-sql="VALUES (1, 'attached');"
+        >
+          (1, 'attached')
+        </button>
+      </div>
+
+      <!-- result -->
+      <div class="pg-result">
+        <pre><code>
+INSERT INTO hearts (ai_id, status)
+VALUES (1, 'attached');
+</code></pre>
+
+        <table>
+          <tr><th>heart_id</th><th>ai_id</th><th>status</th></tr>
+          <tr><td>401</td><td>1</td><td>attached</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======================
+ 会話②：誤解の訂正
+====================== -->
+    <div class="pg-talk">
+      <ConversationBubble speaker="nemi">
+        これな、JOINしたんちゃうで。
+      </ConversationBubble>
+      <ConversationBubble speaker="arca">
+        せやな。 JOIN<strong>できる状態</strong>を作っただけや。
+      </ConversationBubble>
+      <ConversationBubble speaker="nemi">
+        JOINは「世界の見え方」や。 データを増やすんはINSERTやで。
+      </ConversationBubble>
+    </div>
+
+    <!-- ======================
+ パズル②：JOIN
+====================== -->
+    <section class="pg-step">
+      <h3>🧩 パズル②：世界の見え方を変える</h3>
+
+      <p class="pg-caption">どこでつながるか（ON）を決めて、世界を並べ直す。</p>
+
+      <!-- slots -->
+      <div class="pg-slots">
+        <div class="slot">SELECT *</div>
+        <div class="slot">FROM ai</div>
+        <div class="slot">JOIN hearts</div>
+        <div class="slot">ON ai.ai_id = hearts.ai_id</div>
+      </div>
+
+      <!-- result -->
+      <div class="pg-result">
+        <pre><code>
+SELECT *
+FROM ai
+JOIN hearts
+ON ai.ai_id = hearts.ai_id;
+</code></pre>
+
+        <table>
+          <tr><th>ai_id</th><th>state</th><th>status</th></tr>
+          <tr><td>1</td><td>running</td><td>attached</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======================
+ まとめ
+====================== -->
+    <section class="pg-summary">
+      <h3>💡 このパズルの結論</h3>
+      <ul>
+        <li>INSERT = 世界に<strong>新しい行</strong>を追加する</li>
+        <li>JOIN = 世界の<strong>見え方</strong>を変える</li>
+        <li>JOINは恋の成就じゃない</li>
+      </ul>
+
+      <p class="pg-copy">
+        JOINは関係を作らない。<br />
+        ただ、関係があるように世界を並べるだけ。
+      </p>
+    </section>
+  </section>
+</BaseLayout>

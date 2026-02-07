@@ -24,7 +24,7 @@ export type LedgerUnit = {
     enabled: PublishState;
     subtitle?: string;
     subtitleJa?: string;
-    contentRef?: string;
+    // contentRef?: string;
   };
 
   playground: {
@@ -54,7 +54,7 @@ export const sqlLedger: LedgerUnit[] = [
     },
 
     playground: {
-      enabled: "soon",
+      enabled: "live",
     },
   },
 

@@ -1,0 +1,960 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ConversationBubble from "@/components/talk/ConversationBubble.astro";
+---
+
+<BaseLayout title="SQL Playground" description="Night playground">
+  <section class="pg">
+    <div class="pg-moon" aria-hidden="true"></div>
+
+    <!-- 導入トーク -->
+    <div class="pg-talk pg-talk--top">
+      <ConversationBubble speaker="arca" emotion="happy">
+        JOINしたいAIって、何したかったんやろ？
+      </ConversationBubble>
+      <ConversationBubble speaker="nemi" emotion="normal">
+        たぶんこんな感じ。まず事件（INSERT）からや。
+      </ConversationBubble>
+    </div>
+
+    <!-- =========================
+         1枚画面：INSERT → JOIN 連続
+    ========================== -->
+    <div class="pg-flow" aria-label="flow">
+      <!-- ===== Step 1: INSERT ===== -->
+      <div class="pg-step" data-step="insert">
+        <div class="pg-step-head">
+          <div class="pg-step-badge">Step 1</div>
+          <div class="pg-step-title">無断で INSERT してしまう世界</div>
+        </div>
+
+        <div class="pg-puzzle" aria-label="INSERT puzzle">
+          <div class="pg-slots" aria-label="insert slots">
+            <button
+              class="slot"
+              type="button"
+              data-slot="ins_head"
+              data-shape="tri"
+              aria-label="INSERT slot"
+            >
+              <span class="slot-shape slot-shape--tri" aria-hidden="true"
+              ></span>
+              <span class="slot-label">INSERT</span>
+              <span class="slot-value" data-slot-value>Drop</span>
+            </button>
+
+            <button
+              class="slot"
+              type="button"
+              data-slot="ins_vals"
+              data-shape="sq"
+              aria-label="VALUES slot"
+            >
+              <span class="slot-shape slot-shape--sq" aria-hidden="true"></span>
+              <span class="slot-label">VALUES</span>
+              <span class="slot-value" data-slot-value>Drop</span>
+            </button>
+
+            <button
+              class="slot"
+              type="button"
+              data-slot="ins_end"
+              data-shape="cir"
+              aria-label="END slot"
+            >
+              <span class="slot-shape slot-shape--cir" aria-hidden="true"
+              ></span>
+              <span class="slot-label">END</span>
+              <span class="slot-value" data-slot-value>Drop</span>
+            </button>
+          </div>
+
+          <div class="pg-divider" aria-hidden="true"></div>
+
+          <div class="pg-pills" aria-label="insert pieces">
+            <button
+              class="pill"
+              type="button"
+              draggable="true"
+              data-piece="ins_head"
+              data-shape="tri"
+              data-sql="INSERT INTO hearts (heart_id, ai_id, temperature, status)"
+            >
+              <span class="pill-shape pill-shape--tri" aria-hidden="true"
+              ></span>
+              <span class="pill-text"
+                >hearts(heart_id, ai_id, temperature, status)</span
+              >
+            </button>
+
+            <button
+              class="pill"
+              type="button"
+              draggable="true"
+              data-piece="ins_vals"
+              data-shape="sq"
+              data-sql="VALUES (401, 1, 38.2, 'attached')"
+            >
+              <span class="pill-shape pill-shape--sq" aria-hidden="true"></span>
+              <span class="pill-text">(401, 1, 38.2, 'attached')</span>
+            </button>
+
+            <button
+              class="pill"
+              type="button"
+              draggable="true"
+              data-piece="ins_end"
+              data-shape="cir"
+              data-sql=";"
+            >
+              <span class="pill-shape pill-shape--cir" aria-hidden="true"
+              ></span>
+              <span class="pill-text">;</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="pg-result" data-result="insert" hidden>
+          <div class="pg-sql">
+            <div class="pg-sql-title">SQL (preview)</div>
+            <pre class="pg-sql-code"><code data-sql-preview="insert" /></pre>
+          </div>
+
+          <div class="pg-incident-grid" aria-label="tables preview">
+            <div class="pg-table">
+              <div class="pg-table-title">ai</div>
+              <div
+                class="pg-table-wrap"
+                role="region"
+                aria-label="ai table"
+                tabindex="0"
+              >
+                <table>
+                  <thead><tr><th>ai_id</th><th>state</th></tr></thead>
+                  <tbody>
+                    <tr><td>1</td><td>running</td></tr>
+                    <tr><td>2</td><td>idle</td></tr>
+                    <tr><td>3</td><td>standby</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="pg-table">
+              <div class="pg-table-title">hearts (after INSERT)</div>
+              <div
+                class="pg-table-wrap"
+                role="region"
+                aria-label="hearts table"
+                tabindex="0"
+              >
+                <table>
+                  <thead>
+                    <tr
+                      ><th>heart_id</th><th>ai_id</th><th>temperature</th><th
+                        >status</th
+                      ></tr
+                    >
+                  </thead>
+                  <tbody>
+                    <tr><td>401</td><td>1</td><td>38.2</td><td>attached</td></tr
+                    >
+                    <tr><td>402</td><td>3</td><td>37.4</td><td>open</td></tr>
+                    <tr
+                      ><td>403</td><td>NULL</td><td>35.7</td><td>dormant</td
+                      ></tr
+                    >
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="pg-talk pg-talk--bottom">
+            <ConversationBubble speaker="nemi" emotion="normal">
+              「JOINしたい…」言うてるのに、先に既成事実（INSERT）作ってもうてん。
+            </ConversationBubble>
+            <ConversationBubble speaker="arca" emotion="normal">
+              なるほど。これを無断書き込みしてしまったんやな。
+            </ConversationBubble>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== connector ===== -->
+      <div class="pg-connector" aria-hidden="true">
+        <div class="pg-connector-line"></div>
+        <div class="pg-connector-dot"></div>
+      </div>
+
+      <!-- ===== Step 2: JOIN（最初はロック） ===== -->
+      <div
+        class="pg-step is-locked"
+        data-step="join"
+        aria-label="JOIN step locked"
+      >
+        <div class="pg-step-head">
+          <div class="pg-step-badge">Step 2</div>
+          <div class="pg-step-title">
+            ON句を決めて、JOINで“見える世界”にする
+          </div>
+          <div class="pg-lock" data-lock>LOCKED</div>
+        </div>
+
+        <div class="pg-puzzle" aria-label="JOIN puzzle">
+          <div class="pg-slots" aria-label="join slots">
+            <button
+              class="slot"
+              type="button"
+              data-slot="sel"
+              data-shape="tri"
+              aria-label="SELECT slot"
+              disabled
+            >
+              <span class="slot-shape slot-shape--tri" aria-hidden="true"
+              ></span>
+              <span class="slot-label">SELECT</span>
+              <span class="slot-value" data-slot-value>Locked</span>
+            </button>
+
+            <button
+              class="slot"
+              type="button"
+              data-slot="frm"
+              data-shape="sq"
+              aria-label="FROM slot"
+              disabled
+            >
+              <span class="slot-shape slot-shape--sq" aria-hidden="true"></span>
+              <span class="slot-label">FROM</span>
+              <span class="slot-value" data-slot-value>Locked</span>
+            </button>
+
+            <button
+              class="slot"
+              type="button"
+              data-slot="jn"
+              data-shape="dia"
+              aria-label="JOIN slot"
+              disabled
+            >
+              <span class="slot-shape slot-shape--dia" aria-hidden="true"
+              ></span>
+              <span class="slot-label">JOIN</span>
+              <span class="slot-value" data-slot-value>Locked</span>
+            </button>
+
+            <button
+              class="slot"
+              type="button"
+              data-slot="on"
+              data-shape="cir"
+              aria-label="ON slot"
+              disabled
+            >
+              <span class="slot-shape slot-shape--cir" aria-hidden="true"
+              ></span>
+              <span class="slot-label">ON</span>
+              <span class="slot-value" data-slot-value>Locked</span>
+            </button>
+          </div>
+
+          <div class="pg-divider" aria-hidden="true"></div>
+
+          <div class="pg-pills" aria-label="join pieces">
+            <button
+              class="pill"
+              type="button"
+              draggable="true"
+              data-piece="sel"
+              data-shape="tri"
+              data-sql="SELECT a.ai_id, a.state, h.temperature, h.status"
+              disabled
+            >
+              <span class="pill-shape pill-shape--tri" aria-hidden="true"
+              ></span>
+              <span class="pill-text"
+                >a.ai_id, a.state, h.temperature, h.status</span
+              >
+            </button>
+
+            <button
+              class="pill"
+              type="button"
+              draggable="true"
+              data-piece="frm"
+              data-shape="sq"
+              data-sql="FROM ai a"
+              disabled
+            >
+              <span class="pill-shape pill-shape--sq" aria-hidden="true"></span>
+              <span class="pill-text">ai a</span>
+            </button>
+
+            <button
+              class="pill"
+              type="button"
+              draggable="true"
+              data-piece="jn"
+              data-shape="dia"
+              data-sql="JOIN hearts h"
+              disabled
+            >
+              <span class="pill-shape pill-shape--dia" aria-hidden="true"
+              ></span>
+              <span class="pill-text">hearts h</span>
+            </button>
+
+            <button
+              class="pill"
+              type="button"
+              draggable="true"
+              data-piece="on"
+              data-shape="cir"
+              data-sql="ON a.ai_id = h.ai_id"
+              disabled
+            >
+              <span class="pill-shape pill-shape--cir" aria-hidden="true"
+              ></span>
+              <span class="pill-text">a.ai_id = h.ai_id</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="pg-result" data-result="join" hidden>
+          <div class="pg-sql">
+            <div class="pg-sql-title">SQL (preview)</div>
+            <pre class="pg-sql-code"><code data-sql-preview="join" /></pre>
+          </div>
+
+          <div class="pg-table">
+            <div class="pg-table-title">Result (JOIN world)</div>
+            <div
+              class="pg-table-wrap"
+              role="region"
+              aria-label="result table"
+              tabindex="0"
+            >
+              <table>
+                <thead>
+                  <tr
+                    ><th>ai_id</th><th>state</th><th>temperature</th><th
+                      >status</th
+                    ></tr
+                  >
+                </thead>
+                <tbody>
+                  <tr
+                    ><td>1</td><td>running</td><td>38.2</td><td>attached</td
+                    ></tr
+                  >
+                  <tr><td>3</td><td>standby</td><td>37.4</td><td>open</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="pg-talk pg-talk--bottom">
+            <ConversationBubble speaker="arca" emotion="normal">
+              JOINするためには、どこでつながるか決めとかないとね。
+            </ConversationBubble>
+            <ConversationBubble speaker="nemi" emotion="normal">
+              せやな。ON句なしは、ただの思い込みや。
+            </ConversationBubble>
+            <ConversationBubble speaker="nemi" emotion="normal">
+              まぁ、けどJOINはあくまで一時的な世界の固定やけどな。
+            </ConversationBubble>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pg-hint" aria-hidden="true">
+      Step1を完成させたら、Step2が解放されるで。
+    </div>
+  </section>
+
+  <script>
+    // @ts-nocheck
+
+    const steps = {
+      insert: document.querySelector('[data-step="insert"]'),
+      join: document.querySelector('[data-step="join"]'),
+    };
+
+    const results = {
+      insert: document.querySelector('[data-result="insert"]'),
+      join: document.querySelector('[data-result="join"]'),
+    };
+
+    const previews = {
+      insert: document.querySelector('[data-sql-preview="insert"]'),
+      join: document.querySelector('[data-sql-preview="join"]'),
+    };
+
+    const lockBadge = document.querySelector("[data-lock]");
+
+    const cfg = {
+      insert: { order: ["ins_head", "ins_vals", "ins_end"] },
+      join: { order: ["sel", "frm", "jn", "on"] },
+    };
+
+    const state = {
+      // stepKey -> Map(slotId -> { pieceId, shape, sql, text })
+      assignments: {
+        insert: new Map(),
+        join: new Map(),
+      },
+      selectedPill: null,
+      unlockedJoin: false,
+    };
+
+    const tinyPop = (el) => {
+      if (!el) return;
+      el.classList.remove("is-pop");
+      void el.offsetWidth;
+      el.classList.add("is-pop");
+    };
+
+    const setSlotValue = (slotEl, text) => {
+      const v = slotEl.querySelector("[data-slot-value]");
+      if (v) v.textContent = text || "Drop";
+      slotEl.classList.toggle("is-filled", Boolean(text));
+    };
+
+    const enableJoin = () => {
+      if (state.unlockedJoin) return;
+      state.unlockedJoin = true;
+
+      steps.join.classList.remove("is-locked");
+      steps.join.setAttribute("aria-label", "JOIN step");
+
+      if (lockBadge) lockBadge.textContent = "UNLOCKED";
+
+      const joinSlots = Array.from(steps.join.querySelectorAll(".slot"));
+      const joinPills = Array.from(steps.join.querySelectorAll(".pill"));
+
+      joinSlots.forEach((s) => {
+        s.disabled = false;
+        setSlotValue(s, "");
+      });
+
+      joinPills.forEach((p) => {
+        p.disabled = false;
+      });
+
+      tinyPop(steps.join);
+      steps.join.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    const computeSql = (stepKey) => {
+      const order = cfg[stepKey].order;
+      const parts = order
+        .map((k) => state.assignments[stepKey].get(k)?.sql)
+        .filter(Boolean);
+      return parts.length ? parts.join("\n") : "";
+    };
+
+    const markPillUsed = (stepKey, pieceId, used) => {
+      const pills = Array.from(steps[stepKey].querySelectorAll(".pill"));
+      const p = pills.find((x) => x.getAttribute("data-piece") === pieceId);
+      if (!p) return;
+      p.toggleAttribute("data-used", used);
+      p.disabled = used ? true : p.disabled; // usedなら強制disable
+      p.classList.toggle("is-used", used);
+      if (!used) p.classList.remove("is-selected");
+    };
+
+    const place = (stepKey, slotEl, pillEl) => {
+      const slotId = slotEl.getAttribute("data-slot");
+      const slotShape = slotEl.getAttribute("data-shape");
+      const pieceId = pillEl.getAttribute("data-piece");
+      const pieceShape = pillEl.getAttribute("data-shape");
+
+      if (slotShape !== pieceShape) {
+        slotEl.classList.add("is-bad");
+        setTimeout(() => slotEl.classList.remove("is-bad"), 220);
+        return;
+      }
+
+      const prev = state.assignments[stepKey].get(slotId);
+      if (prev?.pieceId) markPillUsed(stepKey, prev.pieceId, false);
+
+      const sql = pillEl.getAttribute("data-sql") || "";
+      const text = (pillEl.textContent || "").trim();
+
+      state.assignments[stepKey].set(slotId, {
+        pieceId,
+        shape: pieceShape,
+        sql,
+        text,
+      });
+      setSlotValue(slotEl, text);
+
+      // 使ったピルは「このステップ内で」無効化
+      pillEl.disabled = true;
+      pillEl.classList.add("is-used");
+
+      tinyPop(slotEl);
+      maybeFinish(stepKey);
+    };
+
+    const maybeFinish = (stepKey) => {
+      const order = cfg[stepKey].order;
+      const ok = order.every((k) => state.assignments[stepKey].has(k));
+
+      if (!ok) {
+        results[stepKey].hidden = true;
+        return;
+      }
+
+      const sql = computeSql(stepKey);
+      if (previews[stepKey]) previews[stepKey].textContent = sql;
+
+      results[stepKey].hidden = false;
+      tinyPop(results[stepKey]);
+
+      if (stepKey === "insert") enableJoin();
+    };
+
+    const bindStep = (stepKey) => {
+      const stepEl = steps[stepKey];
+      const slots = Array.from(stepEl.querySelectorAll(".slot"));
+      const pills = Array.from(stepEl.querySelectorAll(".pill"));
+
+      // init values
+      slots.forEach((s) => setSlotValue(s, s.disabled ? "Locked" : ""));
+      results[stepKey].hidden = true;
+
+      // pill click select
+      pills.forEach((p) => {
+        p.addEventListener("click", () => {
+          if (p.disabled) return;
+          if (state.selectedPill === p) {
+            p.classList.remove("is-selected");
+            state.selectedPill = null;
+            return;
+          }
+          document
+            .querySelectorAll(".pill")
+            .forEach((x) => x.classList.remove("is-selected"));
+          p.classList.add("is-selected");
+          state.selectedPill = p;
+        });
+
+        p.addEventListener("dragstart", (ev) => {
+          if (p.disabled || !ev.dataTransfer) return;
+          ev.dataTransfer.effectAllowed = "move";
+          ev.dataTransfer.setData(
+            "text/plain",
+            stepKey + ":" + (p.getAttribute("data-piece") || ""),
+          );
+        });
+      });
+
+      // slot drop/click
+      slots.forEach((s) => {
+        s.addEventListener("dragover", (ev) => {
+          if (s.disabled) return;
+          ev.preventDefault();
+          s.classList.add("is-over");
+        });
+
+        s.addEventListener("dragleave", () => s.classList.remove("is-over"));
+
+        s.addEventListener("drop", (ev) => {
+          if (s.disabled) return;
+          ev.preventDefault();
+          s.classList.remove("is-over");
+
+          const raw = ev.dataTransfer
+            ? ev.dataTransfer.getData("text/plain")
+            : "";
+          const [fromStep, pieceId] = raw.split(":");
+          if (fromStep !== stepKey) return;
+
+          const pillEl = pills.find(
+            (p) => p.getAttribute("data-piece") === pieceId,
+          );
+          if (pillEl) place(stepKey, s, pillEl);
+        });
+
+        s.addEventListener("click", () => {
+          if (s.disabled || !state.selectedPill) return;
+
+          // selected pill must belong to same step
+          const parentStep = state.selectedPill
+            .closest("[data-step]")
+            ?.getAttribute("data-step");
+          if (parentStep !== stepKey) return;
+
+          place(stepKey, s, state.selectedPill);
+          state.selectedPill.classList.remove("is-selected");
+          state.selectedPill = null;
+        });
+      });
+    };
+
+    bindStep("insert");
+    bindStep("join");
+  </script>
+
+  <style>
+    /* ===== Night playground ===== */
+    .pg {
+      position: relative;
+      padding: min(5vw, 36px);
+      border-radius: 28px;
+      border: 1px solid var(--fp-border-soft);
+      background:
+        radial-gradient(
+          1200px 500px at 20% 0%,
+          rgba(120, 80, 255, 0.22),
+          transparent 60%
+        ),
+        radial-gradient(
+          900px 600px at 70% 10%,
+          rgba(80, 200, 255, 0.16),
+          transparent 62%
+        ),
+        radial-gradient(
+          600px 600px at 85% 70%,
+          rgba(140, 90, 255, 0.12),
+          transparent 60%
+        ),
+        linear-gradient(180deg, rgba(10, 12, 24, 0.92), rgba(8, 10, 18, 0.92));
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+    }
+
+    .pg-moon {
+      position: absolute;
+      top: -110px;
+      right: -90px;
+      width: 320px;
+      height: 320px;
+      border-radius: 999px;
+      background: radial-gradient(
+        circle at 35% 35%,
+        rgba(255, 255, 255, 0.92),
+        rgba(210, 220, 255, 0.3) 45%,
+        rgba(120, 140, 255, 0) 70%
+      );
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .pg-talk {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 18px;
+    }
+    .pg-talk--bottom {
+      margin-top: 16px;
+    }
+
+    .pg-flow {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 14px;
+    }
+
+    .pg-step-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0 12px;
+      padding: 0 2px;
+    }
+
+    .pg-step-badge {
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      font-size: 0.85rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.92);
+      flex: 0 0 auto;
+    }
+
+    .pg-step-title {
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .pg-lock {
+      margin-left: auto;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      font-size: 0.75rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(0, 0, 0, 0.18);
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .pg-step.is-locked {
+      opacity: 0.78;
+      filter: saturate(0.9);
+    }
+    .pg-step.is-locked .pg-puzzle {
+      opacity: 0.72;
+    }
+
+    .pg-connector {
+      display: grid;
+      place-items: center;
+      padding: 8px 0;
+    }
+    .pg-connector-line {
+      width: min(520px, 92%);
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.22),
+        transparent
+      );
+    }
+    .pg-connector-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(180, 220, 255, 0.18);
+      margin-top: -5px;
+    }
+
+    .pg-puzzle {
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid var(--fp-border-soft);
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(6px);
+    }
+
+    .pg-slots {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .slot {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 18px;
+      border: 1px dashed rgba(255, 255, 255, 0.22);
+      background: rgba(0, 0, 0, 0.22);
+      color: rgba(255, 255, 255, 0.92);
+      cursor: pointer;
+      text-align: left;
+      transition:
+        transform 160ms ease,
+        border-color 160ms ease,
+        background 160ms ease;
+    }
+    .slot:hover {
+      transform: translateY(-1px);
+    }
+    .slot[disabled] {
+      cursor: default;
+      opacity: 0.85;
+    }
+    .slot.is-over {
+      border-color: rgba(180, 220, 255, 0.65);
+      background: rgba(40, 80, 120, 0.22);
+    }
+    .slot.is-filled {
+      border-style: solid;
+      border-color: rgba(180, 220, 255, 0.45);
+      background: rgba(40, 70, 120, 0.18);
+    }
+    .slot.is-bad {
+      border-color: rgba(255, 120, 160, 0.75);
+      transform: translateY(0) scale(0.985);
+    }
+    .slot.is-pop {
+      animation: pop 240ms cubic-bezier(0.2, 1.2, 0.2, 1);
+    }
+
+    .slot-label {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      opacity: 0.9;
+    }
+    .slot-value {
+      opacity: 0.85;
+      font-size: 0.95em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 22ch;
+    }
+
+    .slot-shape,
+    .pill-shape {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+      opacity: 0.9;
+    }
+    .slot-shape--tri,
+    .pill-shape--tri {
+      clip-path: polygon(50% 8%, 92% 88%, 8% 88%);
+    }
+    .slot-shape--sq,
+    .pill-shape--sq {
+      border-radius: 4px;
+    }
+    .slot-shape--dia,
+    .pill-shape--dia {
+      clip-path: polygon(50% 6%, 94% 50%, 50% 94%, 6% 50%);
+    }
+    .slot-shape--cir,
+    .pill-shape--cir {
+      border-radius: 999px;
+    }
+
+    .pg-divider {
+      height: 1px;
+      margin: 14px 0;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.25),
+        transparent
+      );
+    }
+
+    .pg-pills {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.92);
+      cursor: grab;
+      user-select: none;
+      transition:
+        transform 160ms ease,
+        background 160ms ease,
+        border-color 160ms ease;
+    }
+    .pill:hover {
+      transform: translateY(-1px);
+    }
+    .pill.is-selected {
+      border-color: rgba(180, 220, 255, 0.65);
+      background: rgba(40, 80, 120, 0.18);
+    }
+    .pill.is-used {
+      opacity: 0.45;
+      cursor: default;
+    }
+    .pill[disabled] {
+      cursor: default;
+      opacity: 0.6;
+    }
+
+    .pg-result {
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.2);
+    }
+    .pg-result.is-pop {
+      animation: pop 240ms cubic-bezier(0.2, 1.2, 0.2, 1);
+    }
+
+    .pg-sql-title {
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.92);
+      margin-bottom: 8px;
+    }
+    .pg-sql-code {
+      margin: 0 0 12px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.22);
+      overflow: auto;
+      color: rgba(255, 255, 255, 0.92);
+      font-size: 0.9rem;
+    }
+
+    .pg-table-title {
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.92);
+      margin: 10px 0 8px;
+    }
+    .pg-table-wrap {
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      overflow: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th,
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    th {
+      text-align: left;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.86);
+    }
+    td {
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .pg-incident-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 860px) {
+      .pg-incident-grid {
+        grid-template-columns: 1fr 1.4fr;
+      }
+    }
+
+    .pg-hint {
+      margin-top: 14px;
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 0.92rem;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0.985);
+        opacity: 0.7;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</BaseLayout>

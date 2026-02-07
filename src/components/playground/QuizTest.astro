@@ -1,0 +1,161 @@
+---
+// src/components/playground/Playground.astro
+type LensKey = "join" | "insert" | "rollback" | "acid";
+
+type Choice = { id: string; label: string };
+
+type Puzzle = {
+  id: string;
+  title: string;
+  arca: string;
+  nemi: string;
+  prompt: string;
+  choices: Choice[];
+  answerId: string;
+  correctText: string;
+  wrongText: string;
+};
+
+type Lens = {
+  key: LensKey;
+  label: string;
+  ruleLine: string;
+  puzzles: Puzzle[];
+};
+
+type Episode = {
+  slug: string;
+  title: string;
+  subtitle: string;
+  lenses: Lens[];
+};
+
+type Props = { episode: Episode };
+
+const { episode } = Astro.props as Props;
+
+// 初期表示順を固定したい場合はここ
+const order: LensKey[] = ["join", "insert", "rollback", "acid"];
+const lenses = order
+  .map((k) => episode.lenses.find((l) => l.key === k))
+  .filter(Boolean) as Lens[];
+---
+
+<section class="pg" data-episode={episode.slug}>
+  <header class="pg-head">
+    <h1 class="pg-title">{episode.title}</h1>
+    <p class="pg-subtitle">{episode.subtitle}</p>
+  </header>
+
+  <nav class="pg-lenses" aria-label="Lens switcher">
+    {
+      lenses.map((l) => (
+        <button class="pg-lens-pill" type="button" data-lens={l.key}>
+          {l.label}
+        </button>
+      ))
+    }
+  </nav>
+
+  <div class="pg-stage">
+    {
+      lenses.map((lens) => (
+        <section class="lens" data-lens-panel={lens.key}>
+          <div class="lens-rule">Nemi: {lens.ruleLine}</div>
+
+          <div class="lens-cards">
+            {lens.puzzles.map((p) => (
+              <article class="pz" data-puzzle-id={p.id}>
+                <h2 class="pz-title">{p.title}</h2>
+
+                <p class="pz-line pz-arca">Arca: {p.arca}</p>
+                <p class="pz-line pz-nemi">Nemi: {p.nemi}</p>
+
+                <p class="pz-prompt">{p.prompt}</p>
+
+                <div class="pz-choices" role="group" aria-label="choices">
+                  {p.choices.map((c) => (
+                    <button
+                      class="pz-choice"
+                      type="button"
+                      data-choice={c.id}
+                      data-answer={p.answerId}
+                      data-correct={p.correctText}
+                      data-wrong={p.wrongText}
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div class="pz-feedback" aria-live="polite" />
+              </article>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</section>
+
+<script type="module">
+  const pills = Array.from(document.querySelectorAll(".pg-lens-pill"));
+  const panels = Array.from(document.querySelectorAll("[data-lens-panel]"));
+
+  const setActiveLens = (key) => {
+    pills.forEach((b) => {
+      const on = b.dataset.lens === key;
+      b.classList.toggle("is-active", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+
+    panels.forEach((p) => {
+      const on = p.getAttribute("data-lens-panel") === key;
+      p.classList.toggle("is-active", on);
+    });
+
+    try {
+      localStorage.setItem("pg:lens", key);
+    } catch {}
+  };
+
+  const saved = (() => {
+    try {
+      return localStorage.getItem("pg:lens");
+    } catch {
+      return null;
+    }
+  })();
+
+  setActiveLens(saved || "join");
+
+  pills.forEach((b) =>
+    b.addEventListener("click", () => setActiveLens(b.dataset.lens)),
+  );
+
+  // Choices: click feedback + tiny haptics
+  document.querySelectorAll(".pz").forEach((pz) => {
+    const feedback = pz.querySelector(".pz-feedback");
+    const buttons = Array.from(pz.querySelectorAll(".pz-choice"));
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const picked = btn.dataset.choice;
+        const answer = btn.dataset.answer;
+
+        buttons.forEach((x) => x.classList.remove("is-correct", "is-wrong"));
+        btn.classList.add(picked === answer ? "is-correct" : "is-wrong");
+
+        if (feedback) {
+          feedback.classList.remove("is-correct", "is-wrong");
+          feedback.classList.add(picked === answer ? "is-correct" : "is-wrong");
+          feedback.textContent =
+            picked === answer ? btn.dataset.correct : btn.dataset.wrong;
+        }
+
+        if (navigator.vibrate)
+          navigator.vibrate(picked === answer ? [16, 12, 16] : [28]);
+      });
+    });
+  });
+</script>
