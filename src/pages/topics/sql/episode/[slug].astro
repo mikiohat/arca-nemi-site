@@ -14,7 +14,7 @@ import { getSqlEpisodeLines } from "@/content/scripts/sql/sqlEpisodeRegistry";
 // static generation
 // =======================
 export function getStaticPaths() {
-  const targets = sqlLedger.filter((e) => e.episode?.enabled !== "off");
+  const targets = sqlLedger.filter((e) => e.episode?.enabled == "live");
 
   return targets.map((ledger) => ({
     params: { slug: ledger.slug },
@@ -42,7 +42,7 @@ const isMissingScript = !lines;
 // prev / next
 // =======================
 const navigable = sqlLedger
-  .filter((e) => e.episode?.enabled !== "off")
+  .filter((e) => e.episode?.enabled == "live")
   .sort((a, b) => a.order - b.order);
 
 const idx = navigable.findIndex((e) => e.slug === slug);

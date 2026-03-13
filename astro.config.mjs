@@ -3,13 +3,11 @@ import { defineConfig } from 'astro/config';
 import { fileURLToPath } from 'node:url';
 import mdx from '@astrojs/mdx';
 
-// 必要なら sitemap は後で戻せる
-// import sitemap from '@astrojs/sitemap';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://arca-nemi.dev',
-  integrations: [mdx()],
-  // integrations: [mdx(), sitemap()],
+  integrations: [mdx(), sitemap()],
   server: { host: true },
 
   vite: { 
