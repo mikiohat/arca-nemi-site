@@ -23,7 +23,9 @@ interface Props {
 }
 
 // いったん「生の説明」を取ってから、空白を整える
-const rawTitle = Astro.props.title ?? SITE_TITLE;
+const rawTitle = Astro.props.title
+  ? `${Astro.props.title} | Arca & Nemi`
+  : SITE_TITLE;
 const rawDescription = Astro.props.description ?? SITE_DESCRIPTION;
 
 // 改行や連続スペースを1つのスペースにまとめて、前後の空白を削る
@@ -41,6 +43,7 @@ const lang = Astro.props.lang ?? "en";
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
     <link rel="icon" href={SITE_FAVICON} type="image/svg+xml" />
     <!-- 🔤 Kurale 読み込み（見出し用 serif フォント） -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
