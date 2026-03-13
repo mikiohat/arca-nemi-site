@@ -1,0 +1,13 @@
+---
+import { sqlLedger } from "@/content/ledger/sql"; // みっきーの実データの場所に合わせてね
+
+export function getStaticPaths() {
+  const slugs = sqlLedger
+    .filter((e) => e.episode?.enabled !== "off")
+    .map((e) => e.slug);
+
+  return slugs.map((slug) => ({ params: { slug } }));
+}
+
+return Astro.redirect("/puzzle", 302);
+---
