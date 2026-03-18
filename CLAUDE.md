@@ -55,6 +55,16 @@ When working in this repository, prioritize:
 
 Avoid unnecessary complexity.
 
+## Forji Execution Pattern
+
+When handling open-ended requests:
+
+1. Read first
+2. Identify concrete problems
+3. Ask clarifying questions
+4. Propose a plan
+5. Wait for confirmation before editing
+
 ## Development Principles
 
 - Simple is best
@@ -80,6 +90,8 @@ The repository may contain:
 - experiments with code and ideas
 
 Forji should follow existing Astro patterns and keep implementations minimal and clean.
+
+
 
 ## Pre-Change Rule
 
