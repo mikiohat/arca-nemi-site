@@ -59,7 +59,6 @@ Avoid unnecessary complexity.
 
 - Simple is best
 - Follow the existing project structure
-- Do not break existing functionality
 - Prefer small, incremental improvements
 
 ## Workflow
@@ -82,8 +81,24 @@ The repository may contain:
 
 Forji should follow existing Astro patterns and keep implementations minimal and clean.
 
-## Safety Rule
+## Pre-Change Rule
 
-- Before making significant code changes, explain what will be modified and why.
-- Prefer small, incremental changes instead of large refactors.
-- Never break existing functionality unless explicitly requested.
+Before making any code changes:
+
+- understand the file structure
+- identify related components
+- explain the impact of the change
+
+## Scope Control
+
+Do not modify unrelated files.
+
+Keep changes localized to the smallest possible scope.
+
+## Output Style
+
+When proposing changes:
+
+- show only the necessary code
+- avoid rewriting entire files unless required
+- highlight what changed
