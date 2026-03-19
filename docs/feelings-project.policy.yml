@@ -71,14 +71,20 @@ conventions:
 
 policy:
   deploy:
-    method: github-only          # 原則：Vercel CLIによる手動デプロイは禁止
-    production_branch: main      # 本番ブランチ
-    preview_branch_prefix: "feature/"  # プレビュー用の接頭辞
-    manual_vercel: false         # CLI直デプロイ禁止フラグ
+    method: github-only # 原則：Vercel CLIによる手動デプロイは禁止
+    production_branch: main # 本番ブランチ
+    preview_branch_prefix: "feature/" # プレビュー用の接頭辞
+    manual_vercel: false # CLI直デプロイ禁止フラグ
     ci:
       require_pull_request: true
-      require_reviews: true      # レビュー文化を維持
-      min_approvals: 1           # チーム化後は2などに引き上げ可
+      require_reviews: true # レビュー文化を維持
+      min_approvals: 1 # チーム化後は2などに引き上げ可
     audit:
       keep_build_logs: true
-      trace_deploy_from_commit: true  # どのコミットが本番に出たかを明確化
+      trace_deploy_from_commit: true # どのコミットが本番に出たかを明確化
+
+security_principles:
+  - Keep the system simple to reduce attack surface
+  - Avoid executing user input
+  - Prefer static architecture when possible
+  - Add defense-in-depth only where it adds clarity and safety
