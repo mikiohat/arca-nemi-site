@@ -7,20 +7,17 @@ interface Props {
 
 const { speaker, emotion = "normal", peek } = Astro.props;
 
-// speaker から自動決定
 const isNarration = speaker === "narration";
-const align =
-  speaker === "arca" ? "right" : speaker === "nemi" ? "left" : "center";
+const hasFlip = !isNarration && !!peek;
+const isRight = speaker === "arca";
 
-// class 決定
 const rowClass =
-  align === "right"
+  speaker === "arca"
     ? "cb-row cb-row--right"
-    : align === "left"
+    : speaker === "nemi"
       ? "cb-row cb-row--left"
       : "cb-row cb-row--center";
 
-// avatar（narration はなし）
 const AVATAR_MAP = {
   arca: {
     normal: "/avatars/arca/normal.webp",
@@ -42,37 +39,143 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
 ---
 
 <div class={rowClass}>
-  <div class={`cb ${isNarration ? "cb--narration" : ""}`}>
-    {
-      !isNarration && avatarSrc && (
-        <div class="cb-avatar" aria-hidden="true">
-          <img
-            src={avatarSrc}
-            alt={speaker}
-            class="cb-avatar-img"
-            loading="lazy"
-          />
-        </div>
-      )
-    }
+  {
+    hasFlip ? (
+      <div class="flip-card">
+        <div class="flip-inner">
+          {/* Front face */}
+          <div class={`flip-face flip-front${isRight ? " flip-face--right" : ""}`}>
+            {avatarSrc && (
+              <div class="cb-avatar" aria-hidden="true">
+                <img
+                  src={avatarSrc}
+                  alt={speaker}
+                  class="cb-avatar-img"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            <div class="cb-body">
+              <div class="cb-text">
+                <slot />
+              </div>
+              <button class="flip-btn" aria-label="Show peek">
+                <svg
+                  class="flip-btn-svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M7.5 7.5a7 7 0 0 1 11 2.5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M18.5 6.5v4h-4"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M16.5 16.5a7 7 0 0 1-11-2.5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M5.5 17.5v-4h4"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
 
-    <div class="cb-body">
-      <div class="cb-text">
-        <slot />
+          {/* Back face */}
+          <div class="flip-face flip-back">
+            <div class="cb-body">
+              <p class="peek-back-text">{peek}</p>
+              <button class="flip-btn flip-btn--back" aria-label="Back to dialogue">
+                <svg
+                  class="flip-btn-svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M7.5 7.5a7 7 0 0 1 11 2.5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M18.5 6.5v4h-4"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M16.5 16.5a7 7 0 0 1-11-2.5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M5.5 17.5v-4h4"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      {
-        !isNarration && peek && (
-          <details class="peek">
-            <summary class="peek-trigger">peek</summary>
-            <p class="peek-content">{peek}</p>
-          </details>
-        )
-      }
-    </div>
-  </div>
+    ) : (
+      <div class={`cb ${isNarration ? "cb--narration" : ""}`}>
+        {!isNarration && avatarSrc && (
+          <div class="cb-avatar" aria-hidden="true">
+            <img
+              src={avatarSrc}
+              alt={speaker}
+              class="cb-avatar-img"
+              loading="lazy"
+            />
+          </div>
+        )}
+        <div class="cb-body">
+          <div class="cb-text">
+            <slot />
+          </div>
+        </div>
+      </div>
+    )
+  }
 </div>
 
+<script>
+  document.querySelectorAll<HTMLElement>(".flip-card").forEach((card) => {
+    const inner = card.querySelector<HTMLElement>(".flip-inner");
+    card.querySelectorAll<HTMLButtonElement>(".flip-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        inner?.classList.toggle("is-flipped");
+      });
+    });
+  });
+</script>
+
 <style>
+  /* ─── row layout ─────────────────────────────────────────── */
+
   .cb-row {
     display: flex;
     margin: 0.35rem 0;
@@ -90,6 +193,8 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
     justify-content: center;
   }
 
+  /* ─── standard bubble (no flip) ──────────────────────────── */
+
   .cb {
     display: flex;
     align-items: center;
@@ -99,8 +204,6 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
     padding: 0.55rem 0.85rem;
     border-radius: 18px;
     border: 1px solid var(--fp-border-soft);
-
-    /* ★ ここを CSS 変数経由にして、背景を優先順位で切り替え */
     background: var(
       --cb-bg,
       radial-gradient(
@@ -123,30 +226,156 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
     text-align: center;
   }
 
-  /* ★ 四角いアバター（角丸） */
+  /* ─── flip card ───────────────────────────────────────────── */
+
+  .flip-card {
+    perspective: 1000px;
+    max-width: min(100%, 560px);
+  }
+
+  .flip-inner {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 420ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .flip-inner.is-flipped {
+    transform: rotateY(180deg);
+  }
+
+  /* ─── shared face styles ──────────────────────────────────── */
+
+  .flip-face {
+    backface-visibility: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--fp-border-soft);
+    box-shadow: 0 10px 24px var(--fp-card-background-alt);
+  }
+
+  /* ─── front face ──────────────────────────────────────────── */
+
+  .flip-front {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.55rem;
+    padding: 0.55rem 0.85rem;
+    background: var(
+      --cb-bg,
+      radial-gradient(
+        circle at 0 0,
+        var(--fp-card-background),
+        transparent 55%
+      ),
+      var(--fp-background-shadow)
+    );
+  }
+
+  .flip-face--right {
+    flex-direction: row-reverse;
+  }
+
+  /* ─── back face ───────────────────────────────────────────── */
+
+  .flip-back {
+    position: absolute;
+    inset: 0;
+    transform: rotateY(180deg);
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    padding: 0.55rem 0.85rem;
+    background:
+      radial-gradient(
+        ellipse at 50% 0%,
+        rgba(99, 102, 241, 0.08) 0%,
+        transparent 70%
+      ),
+      var(--fp-background-shadow);
+  }
+
+  /* ─── body (shared between front and back) ────────────────── */
+
+  .cb-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .cb-text {
+    font-size: var(--fp-font-size-base);
+    line-height: 1.7;
+    color: var(--fp-text);
+    word-wrap: break-word;
+  }
+
+  /* ─── peek back content ───────────────────────────────────── */
+
+  .peek-back-text {
+    margin: 0;
+    flex: 1;
+    font-size: 0.78rem;
+    font-family: var(--fp-font-mono, monospace);
+    color: var(--fp-text-muted, rgba(148, 163, 184, 0.85));
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* ─── flip trigger button ─────────────────────────────────── */
+
+  .flip-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-end;
+    margin-top: 0.35rem;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--fp-text-muted, rgba(148, 163, 184, 0.55));
+    transition:
+      opacity 150ms ease,
+      color 150ms ease;
+  }
+
+  .flip-btn:hover {
+    color: var(--fp-accent);
+  }
+
+  .flip-btn--back {
+    transform: scaleX(-1);
+  }
+
+  .flip-btn-svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+
+  /* ─── avatar ──────────────────────────────────────────────── */
+
   .cb-avatar {
     flex: 0 0 auto;
     width: 52px;
     height: 52px;
-    border-radius: 14px; /* 0 にすれば完全な四角 */
+    border-radius: 14px;
     overflow: hidden;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     background: transparent;
     box-shadow: 0 2px 4px var(--fp-border-soft);
-    /* box-shadow: 0 2px 4px rgba(51, 63, 90, 0.9); */
-
-    /* ★ ホバー用のアニメーション準備 */
     transform: translateY(0) scale(1);
     transition:
       transform 170ms cubic-bezier(0.16, 1.1, 0.3, 1),
       box-shadow 170ms ease-out;
   }
 
-  /* アイコンに hover したとき、大きく＆影を強く */
   .cb-avatar:hover {
-    transform: translateY(-1px) scale(2.5); /* 1.05〜1.10 くらいで調整 */
+    transform: translateY(-1px) scale(2.5);
     box-shadow: 0 10px 24px var(--fp-card-background-alt);
   }
 
@@ -156,27 +385,26 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
     object-fit: cover;
   }
 
-  .cb-body {
-    min-width: 0;
-  }
-
-  .cb-text {
-    font-size: var(--fp-font-size-base);
-
-    line-height: 1.7;
-    color: var(--fp-text);
-    word-wrap: break-word;
-  }
+  /* ─── responsive ──────────────────────────────────────────── */
 
   @media (max-width: 720px) {
     .cb-row {
       margin: 0.3rem 0;
     }
 
+    .cb,
+    .flip-face {
+      border-radius: 16px;
+    }
+
     .cb {
       max-width: 100%;
       padding: 0.5rem 0.75rem;
-      border-radius: 16px;
+    }
+
+    .flip-front,
+    .flip-back {
+      padding: 0.5rem 0.75rem;
     }
 
     .cb-text {
