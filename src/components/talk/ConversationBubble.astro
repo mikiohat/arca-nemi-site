@@ -2,9 +2,10 @@
 interface Props {
   speaker: "arca" | "nemi" | "narration";
   emotion?: "normal" | "happy" | "anger" | "sad" | "joy";
+  peek?: string;
 }
 
-const { speaker, emotion = "normal" } = Astro.props;
+const { speaker, emotion = "normal", peek } = Astro.props;
 
 // speaker から自動決定
 const isNarration = speaker === "narration";
@@ -59,6 +60,14 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
       <div class="cb-text">
         <slot />
       </div>
+      {
+        !isNarration && peek && (
+          <details class="peek">
+            <summary class="peek-trigger">peek</summary>
+            <p class="peek-content">{peek}</p>
+          </details>
+        )
+      }
     </div>
   </div>
 </div>
