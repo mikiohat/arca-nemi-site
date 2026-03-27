@@ -20,7 +20,7 @@ const { ledger, lines } = Astro.props as Props;
 
 {
   lines.map((l) => (
-    <ConversationBubble speaker={l.speaker} emotion={l.emotion}>
+    <ConversationBubble speaker={l.speaker} emotion={l.emotion} peek={l.peek}>
       {l.text}
     </ConversationBubble>
   ))

@@ -10,4 +10,5 @@ export type EpisodeLine = {
   speaker: "arca" | "nemi" | "narration";
   emotion?: "normal" | "happy" | "anger" | "sad" | "joy";
   text: string;
+  peek?: string;
 };

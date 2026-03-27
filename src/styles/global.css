@@ -1087,3 +1087,53 @@ img {
 .pz-feedback.is-wrong {
   border-color: rgba(239, 68, 68, 0.35);
 }
+
+/* ─── peek ───────────────────────────────────────────────── */
+
+.peek {
+  margin-top: 0.45rem;
+}
+
+.peek-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--fp-text-muted, rgba(148, 163, 184, 0.75));
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+/* remove browser disclosure triangle */
+.peek-trigger::-webkit-details-marker,
+.peek-trigger::marker {
+  display: none;
+}
+
+.peek-trigger::before {
+  content: "▸";
+  font-size: 0.65rem;
+  transition: transform 150ms ease;
+}
+
+details[open] .peek-trigger::before {
+  transform: rotate(90deg);
+}
+
+.peek-content {
+  margin: 0.35rem 0 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(99, 102, 241, 0.06) 0%, transparent 70%),
+    rgba(2, 6, 23, 0.28);
+  font-size: 0.78rem;
+  font-family: var(--fp-font-mono, monospace);
+  color: var(--fp-text-muted, rgba(148, 163, 184, 0.85));
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

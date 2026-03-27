@@ -60,6 +60,29 @@ export const sqlLedger: LedgerUnit[] = [
 
   {
     order: 2,
+    slug: "peek-test",
+
+    title: "Peek Test",
+    titleJa: "Peekテスト",
+
+    description: "Temporary episode for validating the peek feature.",
+    descriptionJa: "Peek機能の検証用テストエピソード。",
+
+    tags: ["SQL", "TEST"],
+
+    episode: {
+      enabled: "live",
+      subtitle: "— peek feature validation.",
+      subtitleJa: "— peek機能テスト。",
+    },
+
+    playground: {
+      enabled: "off",
+    },
+  },
+
+  {
+    order: 3,
     slug: "02-tbd",
 
     title: "TBD",
