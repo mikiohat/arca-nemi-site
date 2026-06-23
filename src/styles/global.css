@@ -147,7 +147,7 @@ p {
   color: var(--fp-accent);
 }
 
-/* episode title / subtitle */
+/* story title / subtitle */
 .fp-title {
   font-size: calc(var(--fp-font-size-base) * 1.67);
   line-height: 1.2;
@@ -949,7 +949,7 @@ img {
   font-weight: 400; /* Kurale を確定させるため */
 }
 
-/* === Playground (minimal) === */
+/* === Lab (minimal) === */
 .pg {
   max-width: 780px;
   margin: 0 auto;

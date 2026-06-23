@@ -1,4 +1,4 @@
-export const formatEpisodeNumber = (
+export const formatStoryNumber = (
   order: number,
   locale: "en" | "ja" = "en",
 ) => {
@@ -8,18 +8,15 @@ export const formatEpisodeNumber = (
     return `第${padded}話`;
   }
 
-  return `Episode ${padded}`;
+  return `Story ${padded}`;
 };
 
-export const formatPlaygroundNumber = (
-  order: number,
-  locale: "en" | "ja" = "en",
-) => {
+export const formatLabNumber = (order: number, locale: "en" | "ja" = "en") => {
   const padded = String(order).padStart(2, "0");
 
   if (locale === "ja") {
     return `第${padded}回`;
   }
 
-  return `Playground ${padded}`;
+  return `Lab ${padded}`;
 };

@@ -17,9 +17,7 @@ const uniqueVisibleTags = (tags: string[] | undefined) => {
     .filter((x) => x !== hideTag);
 };
 
-const episodeHref = (slug: string) => `/topics/${topicSlug}/episode/${slug}`;
-const playgroundHref = (slug: string) =>
-  `/topics/${topicSlug}/playground/${slug}`;
+const storyHref = (slug: string) => `/topics/${topicSlug}/stories/${slug}`;
 ---
 
 <ul class="ledger" aria-label="Ledger list">
@@ -43,16 +41,8 @@ const playgroundHref = (slug: string) =>
 
               <ul class="ledger__menu" aria-label="Actions">
                 <li>
-                  <a class="ledger__menu-link" href={episodeHref(ledger.slug)}>
-                    Read Episode
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="ledger__menu-link"
-                    href={playgroundHref(ledger.slug)}
-                  >
-                    Try Playground
+                  <a class="ledger__menu-link" href={storyHref(ledger.slug)}>
+                    Read Story
                   </a>
                 </li>
               </ul>

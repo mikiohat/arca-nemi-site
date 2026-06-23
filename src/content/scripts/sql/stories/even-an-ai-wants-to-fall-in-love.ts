@@ -1,8 +1,8 @@
 // even-an-ai-wants-to-fall-in-love.ts
 
-import type { EpisodeLine } from "@/content/scripts/types";
+import type { StoryLine } from "@/content/scripts/types";
 
-export const lines: EpisodeLine[] = [
+export const lines: StoryLine[] = [
   {
     speaker: "arca",
     emotion: "normal",
@@ -17,6 +17,11 @@ export const lines: EpisodeLine[] = [
     speaker: "arca",
     emotion: "happy",
     text: `Nah, for real! Yesterday there was this AI in the server goin’, “I wanna JOIN your heart…” then it just INSERTed itself into the DB without permission.`,
+    peek: `INSERT INTO heart_links (sender_ai, receiver_ai, message)
+VALUES ('Lovestruck AI', 'Beloved AI', 'I wanna JOIN your heart');
+
+The lovestruck AI added a new heart-link request to the database.
+INSERT INTO adds one new row to a table.`,
   },
   {
     speaker: "nemi",
@@ -27,11 +32,26 @@ export const lines: EpisodeLine[] = [
     speaker: "arca",
     emotion: "joy",
     text: `And when it got rejected, it just went ROLLBACK; like it was rewinding life or somethin’. Wouldn’t that be handy for humans too?`,
+    peek: `BEGIN;
+
+INSERT INTO regrets (memory, status)
+VALUES ('I almost said it.', 'pending');
+
+ROLLBACK;
+
+Nothing was saved. No regret entered the table.
+ROLLBACK undoes every change since BEGIN.`,
   },
   {
     speaker: "nemi",
     emotion: "happy",
     text: `I mean, yeah, sometimes I DO wanna wipe out an ex, but “DELETE FROM my heart”… that’s illegal as hell, ya know?`,
+    peek: `DELETE FROM my_heart
+WHERE memory = 'you';
+
+Just that one memory is gone, not the whole heart.
+DELETE FROM removes rows; WHERE chooses which.
+Without WHERE, every row would be deleted.`,
   },
   {
     speaker: "arca",

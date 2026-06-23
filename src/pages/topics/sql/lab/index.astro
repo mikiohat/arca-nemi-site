@@ -1,0 +1,35 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
+import { TOPICS } from "@/consts/topics.ts";
+---
+
+<BaseLayout title={`${TOPICS.SQL.title} Lab`} description={TOPICS.SQL.description}>
+  <main class="fp-main">
+    <section class="fp-section js-fade">
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Topics", href: "/topics" },
+          { label: TOPICS.SQL.shortLabel, href: `/topics/${TOPICS.SQL.slug}` },
+          { label: "Lab" },
+        ]}
+      />
+
+      <h1 class="fp-title">{TOPICS.SQL.shortLabel} Lab</h1>
+      <p class="fp-subtitle">Hands-on SQL experiments.</p>
+
+      <p class="fp-lead" style="margin-top: 1.5rem;">
+        The lab is still under construction. 🛠️ Hands-on experiments are coming
+        soon — for now, enjoy the stories.
+      </p>
+
+      <p style="margin-top: 1.25rem;">
+        <a class="link-underline" href={`/topics/${TOPICS.SQL.slug}/stories`}>
+          <span>Go to {TOPICS.SQL.shortLabel} Stories</span>
+          <span class="fp-chevron" aria-hidden="true"></span>
+        </a>
+      </p>
+    </section>
+  </main>
+</BaseLayout>

@@ -1,20 +1,20 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
-import EpisodeRenderer from "@/components/episode/EpisodeRenderer.astro";
+import StoryRenderer from "@/components/story/StoryRenderer.astro";
 import ContentPager from "@/components/nav/ContentPager.astro";
 import FloatingSwitcher from "@/components/nav/FloatingSwitcher.astro";
 
 import { sqlLedger, type LedgerUnit } from "@/content/ledger/sql";
 import { TOPICS } from "@/consts/topics";
-import { formatEpisodeNumber } from "@/utils/format";
-import { getSqlEpisodeLines } from "@/content/scripts/sql/sqlEpisodeRegistry";
+import { formatStoryNumber } from "@/utils/format";
+import { getSqlStoryLines } from "@/content/scripts/sql/sqlStoryRegistry";
 
 // =======================
 // static generation
 // =======================
 export function getStaticPaths() {
-  const targets = sqlLedger.filter((e) => e.episode?.enabled == "live");
+  const targets = sqlLedger.filter((e) => e.story?.enabled == "live");
 
   return targets.map((ledger) => ({
     params: { slug: ledger.slug },
@@ -35,14 +35,14 @@ const slug = Astro.params.slug!;
 // =======================
 // script load
 // =======================
-const lines = await getSqlEpisodeLines(slug); // await は「呼ばれるまで待つ」じゃなく、「結果が返るまで待つ」。
+const lines = await getSqlStoryLines(slug); // await は「呼ばれるまで待つ」じゃなく、「結果が返るまで待つ」。
 const isMissingScript = !lines;
 
 // =======================
 // prev / next
 // =======================
 const navigable = sqlLedger
-  .filter((e) => e.episode?.enabled == "live")
+  .filter((e) => e.story?.enabled == "live")
   .sort((a, b) => a.order - b.order);
 
 const idx = navigable.findIndex((e) => e.slug === slug);
@@ -50,36 +50,35 @@ const prevLedger = idx > 0 ? navigable[idx - 1] : null;
 const nextLedger =
   idx >= 0 && idx < navigable.length - 1 ? navigable[idx + 1] : null;
 
-const toEpisodeHref = (s: string) => `/topics/${TOPICS.SQL.slug}/episode/${s}`;
+const toStoryHref = (s: string) => `/topics/${TOPICS.SQL.slug}/stories/${s}`;
 
 const prev = prevLedger
-  ? { href: toEpisodeHref(prevLedger.slug), title: prevLedger.title }
+  ? { href: toStoryHref(prevLedger.slug), title: prevLedger.title }
   : null;
 
 const next = nextLedger
-  ? { href: toEpisodeHref(nextLedger.slug), title: nextLedger.title }
+  ? { href: toStoryHref(nextLedger.slug), title: nextLedger.title }
   : null;
 
 const top = {
-  href: `/topics/${TOPICS.SQL.slug}`,
-  label: `${TOPICS.SQL.shortLabel} Home`,
+  href: `/topics/${TOPICS.SQL.slug}/stories`,
+  label: `${TOPICS.SQL.shortLabel} Stories`,
 };
 
 // =======================
-// epi / play
+// story / lab switch
 // =======================
-const episodeHref = (s: string) => `/topics/${TOPICS.SQL.slug}/episode/${s}`;
-const playgroundHref = (s: string) =>
-  `/topics/${TOPICS.SQL.slug}/playground/${s}`;
+const storyHref = (s: string) => `/topics/${TOPICS.SQL.slug}/stories/${s}`;
+const labHref = (s: string) => `/topics/${TOPICS.SQL.slug}/lab/${s}`;
 
 const switchLeft = {
-  label: "Episode",
-  href: episodeHref(slug),
+  label: "Story",
+  href: storyHref(slug),
 };
 
 const switchRight = {
-  label: "Playground",
-  href: playgroundHref(slug),
+  label: "Lab",
+  href: labHref(slug),
 };
 ---
 
@@ -95,31 +94,35 @@ const switchRight = {
           href: `/topics/${TOPICS.SQL.slug}`,
         },
         {
-          label: formatEpisodeNumber(ledger.order),
+          label: "Stories",
+          href: `/topics/${TOPICS.SQL.slug}/stories`,
+        },
+        {
+          label: formatStoryNumber(ledger.order),
         },
       ]}
     />
 
-    {/* ===== Episode content ===== */}
+    {/* ===== Story content ===== */}
     {
       isMissingScript ? (
         <>
           <h1 class="fp-title">{ledger.title}</h1>
-          {ledger.episode?.subtitle && (
-            <p class="fp-subtitle">{ledger.episode.subtitle}</p>
+          {ledger.story?.subtitle && (
+            <p class="fp-subtitle">{ledger.story.subtitle}</p>
           )}
 
           <p class="fp-lead" style="margin-top: 1.5rem;">
-            This episode is still forming in the night sky. 🌙
+            This story is still forming in the night sky. 🌙
           </p>
         </>
       ) : (
-        <EpisodeRenderer ledger={ledger} lines={lines} />
+        <StoryRenderer ledger={ledger} lines={lines} />
       )
     }
     {/* ===== Prev / Next ===== */}
     <ContentPager prev={prev} next={next} top={top} />
   </section>
-  {/* ===== epi / play ===== */}
+  {/* ===== story / lab ===== */}
   <FloatingSwitcher left={switchLeft} right={switchRight} active="left" />
 </BaseLayout>

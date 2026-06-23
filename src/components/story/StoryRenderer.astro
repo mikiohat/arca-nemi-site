@@ -1,11 +1,11 @@
 ---
 import ConversationBubble from "@talk/ConversationBubble.astro";
 import type { LedgerUnit } from "@/content/ledger/sql";
-import type { EpisodeLine } from "@/content/scripts/types";
+import type { StoryLine } from "@/content/scripts/types";
 
 type Props = {
   ledger: LedgerUnit;
-  lines: EpisodeLine[];
+  lines: StoryLine[];
 };
 
 const { ledger, lines } = Astro.props as Props;
@@ -13,8 +13,8 @@ const { ledger, lines } = Astro.props as Props;
 
 <h1 class="fp-title">{ledger.title}</h1>
 {
-  ledger.episode?.subtitle && (
-    <p class="fp-subtitle">{ledger.episode.subtitle}</p>
+  ledger.story?.subtitle && (
+    <p class="fp-subtitle">{ledger.story.subtitle}</p>
   )
 }
 

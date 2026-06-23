@@ -1,9 +1,9 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
-import LedgerIndex from "@/components/ledger/LedgerIndex.astro";
 import { TOPICS } from "@/consts/topics.ts";
-import { sqlLedger } from "@/content/ledger/sql";
+
+const sqlSlug = TOPICS.SQL.slug;
 ---
 
 <BaseLayout title={TOPICS.SQL.title} description={TOPICS.SQL.description}>
@@ -17,9 +17,43 @@ import { sqlLedger } from "@/content/ledger/sql";
         ]}
       />
 
-      <h1 class="fp-heading-soft">{TOPICS.SQL.summary}</h1>
+      <h1 class="fp-title">{TOPICS.SQL.title}</h1>
+      <p class="fp-subtitle">{TOPICS.SQL.summary}</p>
 
-      <LedgerIndex topicSlug={TOPICS.SQL.slug} ledgers={sqlLedger} />
+      <p class="fp-lead" style="margin-top: 1.5rem;">
+        SQL is the language we use to talk to a database — asking it questions,
+        adding new facts, changing what is there, and removing what is not. Here
+        we learn it sideways: through Arca and Nemi’s slightly off-kilter love
+        log, where every emotion happens to map onto a real SQL idea.
+      </p>
+
+      <div class="fp-cards" style="margin-top: 2rem;">
+        <article class="fp-card">
+          <h2 class="fp-heading">Stories</h2>
+          <p>
+            Read the narrative stories. Concepts like INSERT, ROLLBACK, and
+            DELETE arrive through the dialogue, with a peek at the real SQL.
+          </p>
+          <div class="fp-card-actions">
+            <a href={`/topics/${sqlSlug}/stories`} class="link-underline">
+              Read Stories <span class="fp-chevron" aria-hidden="true"></span>
+            </a>
+          </div>
+        </article>
+
+        <article class="fp-card">
+          <h2 class="fp-heading">Lab</h2>
+          <p>
+            Hands-on experiments where you try the SQL yourself. Still under
+            construction — coming soon.
+          </p>
+          <div class="fp-card-actions">
+            <a href={`/topics/${sqlSlug}/lab`} class="link-underline">
+              Open Lab <span class="fp-chevron" aria-hidden="true"></span>
+            </a>
+          </div>
+        </article>
+      </div>
     </section>
   </main>
 </BaseLayout>

@@ -23,7 +23,16 @@ import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
 
           <div class="fp-card-actions">
             <a href={`/topics/${TOPICS.SQL.slug}`} class="link-underline">
-              Continue <span class="fp-chevron" aria-hidden="true"></span>
+              Overview <span class="fp-chevron" aria-hidden="true"></span>
+            </a>
+            <a
+              href={`/topics/${TOPICS.SQL.slug}/stories`}
+              class="link-underline"
+            >
+              Stories <span class="fp-chevron" aria-hidden="true"></span>
+            </a>
+            <a href={`/topics/${TOPICS.SQL.slug}/lab`} class="link-underline">
+              Lab <span class="fp-chevron" aria-hidden="true"></span>
             </a>
           </div>
         </article>
