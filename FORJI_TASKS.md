@@ -1,135 +1,83 @@
 # Forji Tasks
 
-## Consultation: public route names & display labels for the SQL learning structure
+## Assessment: story design docs (各話設計 / Storyカードテンプレ / Story01)
 
-Recommendation and reasoning only — nothing implemented.
+Reviewed `story_card/各話設計.md`, `story_card/Storyカードテンプレ.md`, and
+`story_card/Story01.md` (sample). Opinion only — nothing implemented.
 
-### TL;DR recommendation
+### Overall verdict
 
-Keep the IA **topic-first**, and make the section word **identical** across URL,
-label, and breadcrumb. Rename the public sections:
+Strong foundation. The series design is the standout — the emotional arc and the
+SQL curriculum reinforce each other rather than one decorating the other. The
+template and Story 01 are solid but have a few **implementation gaps** and one
+**inconsistency with what is already shipped** to resolve before scaling to 30.
 
-- narrative: `episode` → **`stories`** / label **"Stories"**
-- hands-on: `playground` → **`lab`** / label **"Lab"**
+### 各話設計.md (series design)
 
-```text
-/topics/sql                  → "SQL"            (topic hub)
-/topics/sql/stories          → "Stories"        (narrative index)
-/topics/sql/stories/<slug>   → "<Story Title>"  (one story)
-/topics/sql/lab              → "Lab"            (hands-on index)
-/topics/sql/lab/<slug>       → "<Exercise>"     (one exercise)
-```
+**Strengths**
 
-Same shape scales cleanly: `/topics/python/stories`, `/topics/python/lab`, etc.
+- Thematic spine is excellent and structurally earned:
+  「恋は、正しいからCOMMITするんじゃない。自分で選んだからCOMMITする。」 — the finale
+  (COMMIT / ROLLBACK) is the literal climax of the syllabus. Rare and valuable.
+- Antagonist = 整合性レイヤー (old rules / constraints) is the smartest choice:
+  NULL / DELETE / ROLLBACK / Constraints become the villain's weapons, so the SQL is
+  dramatically motivated. Big payoff at 26 (Constraints) → 30 (Transaction).
+- SQL ordering is pedagogically sound: DML → query refinement → JOIN/NULL → functions
+  → DDL → keys → index → transaction. A learner can actually follow it.
 
----
+**Concerns**
 
-### 1. Should public URLs and display labels use the same words?
+- Sagging-middle risk: 第二幕 is 14 episodes (09–22), several carrying advanced SQL
+  (CTE, Window, RANK). Emotional stakes must keep rising there; watch 13–21.
+- `物語の機能` column is inconsistent: 留守 and 探り出し each appear twice; some labels
+  (呪具の獲得 / しるしづけ / 敬意を得る) look like a half-applied Hero's-Journey/Propp
+  mapping. Commit to the framework fully or drop the column — currently it is noise.
+- Episode 01 carries 3 concepts (INSERT/ROLLBACK/DELETE) while others carry 1. Fine as
+  a hook, but it is front-loaded.
 
-**Yes — this is the most important rule here.** The whole concern (URL says
-`episode`, UI says "Stories") is a vocabulary split. One word per concept, used in
-the URL segment, the nav label, the page title, and the breadcrumb, removes ambiguity
-for both visitors and maintainers. Divergent words are the main thing to avoid.
+### Storyカードテンプレ.md (template)
 
-### 2. `episode/playground` or rename to `stories/lab`?
+Good, reusable skeleton — the continuity fields (残す伏線 / 次話への引き) and the fixed
+Character engine (Nemi = finds, Arca = interprets) will keep voice and arc coherent.
+But it lacks the bridge to the actual content files:
 
-**Rename to `stories` / `lab`.**
+1. **Peek is mis-modeled.** The template lists `SQL Peek` as a standalone dialogue beat
+   (#5). In code, a peek is an *attribute of a specific speaker line* (e.g. Arca's
+   INSERT line). Attach each peek to the line it belongs to.
+2. **No build metadata.** To generate `stories/<slug>.ts` + a `sqlLedger` entry I need:
+   `slug`, `order`, `story.enabled`, `lab.enabled`, and **per-line `emotion`**
+   (normal/happy/anger/sad/joy). None are present. A small "Build" block makes the
+   card → code step mechanical.
+3. **5-act mini-structure may be too heavy per episode.** Two `key incident`s inside a
+   ~6-line card will feel formulaic by episode 8. Consider a lighter per-episode shape
+   (発端 / 葛藤 / 解決 + optional turn) and reserve the full 5-act for the series.
 
-- "Episode" carries a serialized-TV connotation and reads awkwardly as "SQL Episode".
-  "Stories" is warmer, matches narrative content, and pluralizes naturally as a
-  collection label.
-- "Lab" is shorter and clearer than "Playground" for structured, hands-on practice;
-  "Playground" leans toward unstructured free play. "SQL Lab" / "Python Lab" read
-  well and stay short in nav and breadcrumbs.
-- Both are plain, non-cute words — they describe the experience without gimmick,
-  satisfying the "no cute labels that hurt clarity" goal.
+### Story01.md (sample)
 
-So: narrative **Option B** (stories/Stories), hands-on **Option B** (lab/Lab).
+- Dialogue beats are sharp and in-character (「行じゃなくて恋じゃん。DBに入居してるじゃん。」).
+  The 伏線 (ROLLBACK doesn't fully erase) → Final beat (ログの匂いだけ残ってる) is a clean,
+  reusable pattern.
+- The WHERE-less DELETE danger as key incident② lines up exactly with the peek already
+  shipped. Good.
 
-### 3. Best URL structure
+**⚠️ Diverges from what is live now**
 
-```text
-/topics/<topic>/<section>/<slug>
-```
+- **Subtitle mismatch.** Card: `Love Was Inserted Without Permission. / 恋は、勝手にINSERTされた。`
+  Live ledger still: `— Love is not ACID-compliant. / 恋はACID特性どおりじゃない。` The
+  card's subtitle is better and on-topic (ACID was already removed from this episode).
+  Replace the live one.
+- **Dialogue mismatch.** The card's beats (tight, JP) differ from the live
+  `even-an-ai-wants-to-fall-in-love.ts` (looser, EN). Pick a source of truth — recommend
+  making the card canonical and generating the content file from it.
 
-- **Topic-first** — visitors arrive topic-first, so the topic stays the primary axis.
-- **Lowercase, hyphenated slugs.**
-- **Section words:** `stories` (plural — it's a collection) and `lab` (singular — it's
-  a place, not a countable collection). Keep each word's number fixed and never mix
-  `story`/`stories`.
-- Index pages live at the section root (`/topics/sql/stories`), individual items one
-  level down. This avoids a 4th option (Option C `story`) that would force the awkward
-  singular label "Story" on a list page.
+### Recommendation
 
-### 4. Breadcrumbs
+1. Add a **Build metadata** block to the template (slug / order / enabled + per-line
+   emotion + peek-attached-to-line).
+2. Treat the **card as source of truth**; reconcile Story 01's live subtitle + dialogue
+   to match the card (small change).
+3. Clean up or remove the `物語の機能` column.
+4. Sanity-check the 09–22 stretch for rising stakes before writing them.
 
-Each crumb maps 1:1 to a URL segment and uses the **same word** as the label:
-
-```text
-Topics  ›  SQL  ›  Stories  ›  Even an AI Wants to Fall in Love
-Topics  ›  SQL  ›  Lab      ›  SELECT basics
-```
-
-`Topics → /topics`, `SQL → /topics/sql`, `Stories → /topics/sql/stories`, leaf = item
-title (not linked). No word changes between the URL and the trail.
-
-### 5. Should internal names like `EpisodeRenderer` stay?
-
-**They can stay short-term, but I recommend aligning them in a dedicated follow-up.**
-
-- Nothing *functionally* breaks if the code keeps `Episode*` while URLs say `stories` —
-  internal names are not user-visible.
-- But keeping `episode` in code while the public IA says `stories` just relocates the
-  exact inconsistency you're removing — from the URL/UI seam to the
-  maintainer/code seam. Over time that costs onboarding clarity.
-- Pragmatic path: **do the public rename first** (routes, labels, breadcrumbs, nav,
-  topic config), ship it, then rename internals (`EpisodeRenderer → StoryRenderer`,
-  `episodes/` content dir, `sqlEpisodeRegistry`) as a separate, low-risk refactor. If
-  internals are left as-is for now, add a one-line note that `episode == story` so the
-  mapping is explicit.
-
-### 6. Migration risks to watch
-
-- **External URLs / SEO:** `/topics/sql/episode/*` and `/topics/sql/playground/*` may
-  be bookmarked or indexed. Add **301 redirects** old → new (`episode→stories`,
-  `playground→lab`) via Astro redirects so links and search ranking survive.
-- **Internal link breakage:** ~18 files reference `episode`, ~13 reference
-  `playground` (e.g. `Header.astro`, `FloatingSwitcher.astro`, `LedgerIndex.astro`,
-  `consts/topics.ts`, `content/ledger/sql.ts`, `format.ts`, `index.astro`,
-  `ja/index.astro`). All section links must change together or nav breaks.
-- **Slug/route generation:** content dirs `src/content/scripts/sql/episodes/` and
-  `.../playground/`, plus `sqlEpisodeRegistry.ts` and `utils/format.ts`, may feed
-  slugs. Confirm whether folder names drive URLs before renaming folders.
-- **Data-shape fields:** `content/ledger/sql.ts` and `types.ts` use `episode`-named
-  fields/keys; renaming the concept may ripple into types.
-- **Sitemap & canonicals:** regenerate sitemap; check for any hardcoded canonical URLs.
-- **Pluralization bugs:** lock `stories` (plural) and `lab` (singular) everywhere;
-  a stray `story`/`labs` will 404.
-- **Decide once:** finalize names now to avoid a second rename and another round of
-  redirects/churn later.
-
-### 7. Recommended final naming scheme
-
-| Concept        | URL segment | Display label | Breadcrumb | Suggested code term |
-| -------------- | ----------- | ------------- | ---------- | ------------------- |
-| Topic          | `sql`       | `SQL`         | `SQL`      | topic               |
-| Narrative      | `stories`   | `Stories`     | `Stories`  | `Story` / `StoryRenderer` |
-| Narrative item | `<slug>`    | story title   | title      | story               |
-| Hands-on       | `lab`       | `Lab`         | `Lab`      | `Lab`               |
-| Hands-on item  | `<slug>`    | exercise name | name       | exercise            |
-
-```text
-/topics/sql/stories
-/topics/sql/stories/<slug>
-/topics/sql/lab
-/topics/sql/lab/<slug>
-```
-
-**Why this fits the priorities**
-
-- *Clarity for visitors:* warm, plain words; the URL always matches what's on screen.
-- *URL/UI consistency:* one word per concept across URL, label, and breadcrumb.
-- *Simple implementation:* same `/topics/<topic>/<section>/<slug>` pattern everywhere;
-  only the two section words change.
-- *Future topics:* `python/stories`, `python/lab` need no new rules.
-- *Avoids churn:* names chosen to be final, with 301s so the one move is the last move.
+Next action (pick one): (a) draft the upgraded template with the build block, or
+(b) reconcile the live Story 01 to match this card. Both are small, contained changes.
