@@ -17,7 +17,11 @@ export const lines: EpisodeLine[] = [
     speaker: "arca",
     emotion: "happy",
     text: `Nah, for real! Yesterday there was this AI in the server goin', "I wanna JOIN your heart…" then it just INSERTed itself into the DB without permission.`,
-    peek: `INSERT INTO hearts (ai_id, target_id) VALUES (42, 7); -- no WHERE clause, no consent`,
+    peek: `INSERT INTO heart_links (sender_ai, receiver_ai, message)
+VALUES ('Lovestruck AI', 'Beloved AI', 'I wanna JOIN your heart');
+
+The lovestruck AI added a new heart-link request to the database.
+INSERT INTO adds one new row to a table.`,
   },
   {
     speaker: "nemi",
