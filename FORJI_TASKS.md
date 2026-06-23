@@ -183,3 +183,62 @@ elements:
 **Almost entirely CSS**, plus **one** conditional class (`is-front-right`) on the
 back face. No restructuring, no JS changes, flip animation preserved. The current
 structure is sound — no rework recommended.
+
+---
+
+## Follow-up consultation: hover highlight and back-side scroll/button layout
+
+### Context
+
+After reviewing the current UI, we want your opinion before implementing the next refinement.
+
+There are two points:
+
+1. The flip button hover state is still too subtle.
+2. The back-side flip button overlaps the text when the back-side text area scrolls.
+
+Please inspect the current `ConversationBubble.astro` structure and propose the cleanest implementation.
+
+Do not implement yet.
+
+### 1. Flip button hover highlight
+
+The current hover effect is too quiet.
+
+Please propose a stronger hover highlight for the circular flip button.
+
+Direction:
+
+- Keep it quiet and polished.
+- Do not make it flashy.
+- Make the circular background and border color easier to notice on hover.
+- The icon may become slightly brighter, but the main change should be the circle around it.
+- The button should clearly feel interactive when hovered.
+
+### 2. Back-side flip button overlapping text
+
+This is a design and structure concern.
+
+On the back side, the text can scroll. The flip button currently overlaps the text.
+
+We do not want to place the flip button at the end of the scroll content, because users might not see it unless they scroll. That would make them feel trapped or unsure how to return.
+
+We also do not want to move the button to the top, because it looks less elegant.
+
+Preferred direction:
+
+- Keep the back-side flip button fixed at the bottom-left or bottom-right of the card.
+- Do not make the button part of the scrollable text content.
+- Make only the back-side text area scroll if needed.
+- Add enough bottom padding to the scrollable text area so the text does not hide behind the button.
+- If helpful, add a subtle bottom fade/gradient behind the fixed button area.
+- Keep the button always visible and clickable.
+
+Possible structure:
+
+```text
+flip-back
+├─ peek-back-portrait   background / watermark layer
+├─ peek-back-scroll     scrollable text only
+└─ flip-btn--back       fixed layer, always visible
+```
