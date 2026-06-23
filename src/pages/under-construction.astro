@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
+import UnderConstruction from "@/components/common/UnderConstruction.astro";
 ---
 
 <BaseLayout
@@ -13,20 +14,7 @@ import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
         items={[{ label: "Home", href: "/" }, { label: "Under Construction" }]}
       />
 
-      <h1 class="fp-title">Under Construction 🛠️</h1>
-      <p class="fp-subtitle">This corner of the night sky is still forming.</p>
-
-      <p class="fp-lead" style="margin-top: 1.5rem;">
-        There’s nothing here yet — but it’s on the way. In the meantime, explore
-        the topics.
-      </p>
-
-      <p style="margin-top: 1.25rem;">
-        <a class="link-underline" href="/topics">
-          <span>Explore Topics</span>
-          <span class="fp-chevron" aria-hidden="true"></span>
-        </a>
-      </p>
+      <UnderConstruction fallbackHref="/topics" />
     </section>
   </main>
 </BaseLayout>

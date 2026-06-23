@@ -1,0 +1,58 @@
+---
+// Reusable "Under Construction" state.
+// The Go-back link points to `fallbackHref` (works without JS); when the
+// previous history entry is same-origin, JS upgrades the click to history.back().
+type Props = {
+  title?: string;
+  subtitle?: string;
+  message?: string;
+  fallbackHref?: string;
+};
+
+const {
+  title = "Under Construction 🛠️",
+  subtitle = "This corner of the night sky is still forming.",
+  message = "There’s nothing here yet — but it’s on the way. In the meantime, explore the topics.",
+  fallbackHref = "/topics",
+} = Astro.props as Props;
+---
+
+<div class="uc">
+  <h1 class="fp-title">{title}</h1>
+  <p class="fp-subtitle">{subtitle}</p>
+
+  <p class="fp-lead" style="margin-top: 1.5rem;">{message}</p>
+
+  <p style="margin-top: 1.25rem;">
+    <a class="uc-back link-underline" href={fallbackHref}>
+      <span aria-hidden="true">←</span>
+      <span>Go back</span>
+    </a>
+  </p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>("a.uc-back").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      // allow modified / non-primary clicks to behave normally
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey)
+        return;
+
+      let sameOrigin = false;
+      try {
+        sameOrigin =
+          !!document.referrer &&
+          new URL(document.referrer).origin === location.origin;
+      } catch {
+        sameOrigin = false;
+      }
+
+      // Same-origin previous entry → step back; otherwise let the link
+      // navigate to its fallback href.
+      if (sameOrigin && window.history.length > 1) {
+        e.preventDefault();
+        window.history.back();
+      }
+    });
+  });
+</script>

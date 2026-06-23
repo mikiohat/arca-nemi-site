@@ -49,8 +49,8 @@ export const sqlLedger: LedgerUnit[] = [
 
     story: {
       enabled: "live",
-      subtitle: "— Love is not ACID-compliant.",
-      subtitleJa: "— 恋はACID特性どおりじゃない。",
+      subtitle: "— Love Was Inserted Without Permission.",
+      subtitleJa: "— 恋は勝手にINSERT",
     },
 
     lab: {

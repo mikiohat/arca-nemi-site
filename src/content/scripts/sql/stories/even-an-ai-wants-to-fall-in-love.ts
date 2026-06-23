@@ -73,8 +73,8 @@ Without WHERE, every row would be deleted.`,
     emotion: "joy",
     text: `Yeah. Same mess, different hardware.`,
   },
-  {
-    speaker: "narration",
-    text: `🌀 Even for an AI, love gets messy. But still… every heart wants connection. Ain’t that just the same as us humans? 🌀`,
-  },
+  // {
+  //   speaker: "narration",
+  //   text: `🌀 Even for an AI, love gets messy. But still… every heart wants connection. Ain’t that just the same as us humans? 🌀`,
+  // },
 ];
