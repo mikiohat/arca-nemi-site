@@ -20,6 +20,12 @@ interface Props {
   title?: string;
   description?: string;
   lang?: string; // 言語を外部から渡せるようにする
+  /**
+   * Locale-agnostic path (e.g. "/topics/sql/stories/<slug>"). When set, the
+   * page emits hreflang alternates for EN (root) and JA (/ja). Omit on pages
+   * that don't yet have a translated counterpart.
+   */
+  localePath?: string;
 }
 
 // いったん「生の説明」を取ってから、空白を整える
@@ -34,6 +40,11 @@ const description = rawDescription.replace(/\s+/g, " ").trim();
 
 // デフォルト言語 = 英語
 const lang = Astro.props.lang ?? "en";
+
+// hreflang alternates (only when the page declares a translated counterpart)
+const localePath = Astro.props.localePath;
+const enHref = localePath ? new URL(localePath, Astro.site).href : null;
+const jaHref = localePath ? new URL(`/ja${localePath}`, Astro.site).href : null;
 ---
 
 <html lang={lang}>
@@ -44,6 +55,15 @@ const lang = Astro.props.lang ?? "en";
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+    {
+      localePath && (
+        <>
+          <link rel="alternate" hreflang="en" href={enHref} />
+          <link rel="alternate" hreflang="ja" href={jaHref} />
+          <link rel="alternate" hreflang="x-default" href={enHref} />
+        </>
+      )
+    }
     <link rel="icon" href={SITE_FAVICON} type="image/svg+xml" />
     <!-- 🔤 Kurale 読み込み（見出し用 serif フォント） -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

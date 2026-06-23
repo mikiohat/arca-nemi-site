@@ -10,6 +10,12 @@ export default defineConfig({
   integrations: [mdx(), sitemap()],
   server: { host: true },
 
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'ja'],
+    routing: { prefixDefaultLocale: false },
+  },
+
   vite: { 
       resolve: { 
           alias: { 

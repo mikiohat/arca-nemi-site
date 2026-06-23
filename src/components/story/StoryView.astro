@@ -1,0 +1,113 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Breadcrumbs from "@/components/nav/Breadcrumbs.astro";
+import StoryRenderer from "@/components/story/StoryRenderer.astro";
+import ContentPager from "@/components/nav/ContentPager.astro";
+import FloatingSwitcher from "@/components/nav/FloatingSwitcher.astro";
+
+import { sqlLedger, type LedgerUnit } from "@/content/ledger/sql";
+import { TOPICS } from "@/consts/topics";
+import { formatStoryNumber } from "@/utils/format";
+import { getSqlStoryLines } from "@/content/scripts/sql/sqlStoryRegistry";
+import { localize, t, localizedPath, type Locale } from "@/i18n";
+
+type Props = {
+  ledger: LedgerUnit;
+  lang: Locale;
+};
+
+const { ledger, lang } = Astro.props as Props;
+const slug = ledger.slug;
+
+const lines = await getSqlStoryLines(slug);
+const isMissingScript = !lines;
+
+const sqlSlug = TOPICS.SQL.slug;
+const storyBase = `/topics/${sqlSlug}/stories`;
+const labBase = `/topics/${sqlSlug}/lab`;
+
+const pageTitle = localize(ledger, "title", lang);
+const pageDesc = localize(ledger, "description", lang);
+const subtitle = localize(ledger.story, "subtitle", lang);
+
+// locale-agnostic path → drives hreflang alternates in BaseLayout
+const localePath = `${storyBase}/${slug}`;
+
+// prev / next — story detail exists in both locales, so these are localized
+const navigable = sqlLedger
+  .filter((e) => e.story?.enabled === "live")
+  .sort((a, b) => a.order - b.order);
+
+const idx = navigable.findIndex((e) => e.slug === slug);
+const prevLedger = idx > 0 ? navigable[idx - 1] : null;
+const nextLedger =
+  idx >= 0 && idx < navigable.length - 1 ? navigable[idx + 1] : null;
+
+const prev = prevLedger
+  ? {
+      href: localizedPath(`${storyBase}/${prevLedger.slug}`, lang),
+      title: localize(prevLedger, "title", lang),
+    }
+  : null;
+
+const next = nextLedger
+  ? {
+      href: localizedPath(`${storyBase}/${nextLedger.slug}`, lang),
+      title: localize(nextLedger, "title", lang),
+    }
+  : null;
+
+// NOTE: only the story DETAIL route is localized in this slice. The stories
+// index, breadcrumb parents, and lab route are not yet → keep those EN until
+// they are converted, to avoid linking to missing /ja pages.
+const top = {
+  href: storyBase,
+  label: `${TOPICS.SQL.shortLabel} ${t("stories", lang)}`,
+};
+
+const switchLeft = {
+  label: t("story", lang),
+  href: localizedPath(`${storyBase}/${slug}`, lang),
+};
+const switchRight = {
+  label: t("lab", lang),
+  href: `${labBase}/${slug}`,
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDesc}
+  lang={lang}
+  localePath={localePath}
+>
+  <section class="fp-section js-fade">
+    <Breadcrumbs
+      items={[
+        { label: t("home", lang), href: "/" },
+        { label: t("topics", lang), href: "/topics" },
+        { label: TOPICS.SQL.title, href: `/topics/${sqlSlug}` },
+        { label: t("stories", lang), href: storyBase },
+        { label: formatStoryNumber(ledger.order, lang) },
+      ]}
+    />
+
+    {
+      isMissingScript ? (
+        <>
+          <h1 class="fp-title">{pageTitle}</h1>
+          {subtitle && <p class="fp-subtitle">{subtitle}</p>}
+          <p class="fp-lead" style="margin-top: 1.5rem;">
+            {t("storyForming", lang)}
+          </p>
+        </>
+      ) : (
+        <StoryRenderer ledger={ledger} lines={lines} lang={lang} />
+      )
+    }
+
+    <ContentPager prev={prev} next={next} top={top} />
+  </section>
+
+  <FloatingSwitcher left={switchLeft} right={switchRight} active="left" />
+</BaseLayout>

@@ -2,26 +2,35 @@
 import ConversationBubble from "@talk/ConversationBubble.astro";
 import type { LedgerUnit } from "@/content/ledger/sql";
 import type { StoryLine } from "@/content/scripts/types";
+import { localize, pickLang, type Locale } from "@/i18n";
 
 type Props = {
   ledger: LedgerUnit;
   lines: StoryLine[];
+  lang: Locale;
 };
 
-const { ledger, lines } = Astro.props as Props;
+const { ledger, lines, lang } = Astro.props as Props;
+
+const title = localize(ledger, "title", lang);
+const subtitle = localize(ledger.story, "subtitle", lang);
+
+// Compose the peek string at render time: SQL block + blank line + localized note.
+const composePeek = (line: StoryLine) =>
+  line.peek ? `${line.peek.sql}\n\n${pickLang(line.peek.note, lang)}` : undefined;
 ---
 
-<h1 class="fp-title">{ledger.title}</h1>
-{
-  ledger.story?.subtitle && (
-    <p class="fp-subtitle">{ledger.story.subtitle}</p>
-  )
-}
+<h1 class="fp-title">{title}</h1>
+{subtitle && <p class="fp-subtitle">{subtitle}</p>}
 
 {
   lines.map((l) => (
-    <ConversationBubble speaker={l.speaker} emotion={l.emotion} peek={l.peek}>
-      {l.text}
+    <ConversationBubble
+      speaker={l.speaker}
+      emotion={l.emotion}
+      peek={composePeek(l)}
+    >
+      {pickLang(l.text, lang)}
     </ConversationBubble>
   ))
 }
