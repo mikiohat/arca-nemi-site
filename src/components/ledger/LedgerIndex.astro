@@ -32,21 +32,13 @@ const storyHref = (slug: string) => `/topics/${topicSlug}/stories/${slug}`;
               {String(ledger.order).padStart(2, "0")}: {ledger.title}
             </p>
 
-            <details class="ledger__actions">
-              <summary class="ledger__trigger" aria-label="Open actions">
-                <span class="ledger__trigger-pill" aria-hidden="true">
-                  <span class="fp-chevron" />
-                </span>
-              </summary>
-
-              <ul class="ledger__menu" aria-label="Actions">
-                <li>
-                  <a class="ledger__menu-link" href={storyHref(ledger.slug)}>
-                    Read Story
-                  </a>
-                </li>
-              </ul>
-            </details>
+            <a
+              class="ledger__open"
+              href={storyHref(ledger.slug)}
+              aria-label={`Open story: ${ledger.title}`}
+            >
+              <span class="fp-chevron" aria-hidden="true" />
+            </a>
           </div>
 
           {visibleTags.length > 0 && (
@@ -62,78 +54,6 @@ const storyHref = (slug: string) => `/topics/${topicSlug}/stories/${slug}`;
   }
 </ul>
 
-<script>
-  const CLOSE_MS = 170;
-
-  /**
-   * @param {Element | null} node
-   */
-  const closeWithMotion = (node: Element | null) => {
-    if (!(node instanceof HTMLDetailsElement)) return;
-    const details = node;
-
-    if (!details.hasAttribute("open")) return;
-    if (details.dataset.state === "closing") return;
-
-    // closing開始
-    details.dataset.state = "closing";
-
-    // ✅ ここで即 open を外す → chevron が先に戻る
-    details.removeAttribute("open");
-
-    // ✅ 少し待って closing解除 → メニューがそのタイミングで閉じる
-    window.setTimeout(() => {
-      delete details.dataset.state;
-    }, CLOSE_MS);
-  };
-
-  document.addEventListener(
-    "click",
-    (e) => {
-      const target = e.target;
-      if (!(target instanceof Element)) return;
-
-      const summary = target.closest(".ledger__trigger");
-      if (summary) {
-        const details = summary.closest(".ledger__actions");
-        if (
-          details instanceof HTMLDetailsElement &&
-          details.hasAttribute("open")
-        ) {
-          e.preventDefault();
-          closeWithMotion(details);
-          return;
-        }
-        return;
-      }
-
-      const menuLink = target.closest(".ledger__menu-link");
-      if (menuLink) {
-        const details = menuLink.closest(".ledger__actions");
-        closeWithMotion(details);
-        return;
-      }
-
-      document.querySelectorAll(".ledger__actions[open]").forEach((d) => {
-        if (d instanceof Element && d.contains(target)) return;
-        closeWithMotion(d);
-      });
-    },
-    true,
-  );
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape") return;
-
-    document.querySelectorAll(".ledger__actions[open]").forEach((d) => {
-      closeWithMotion(d);
-    });
-
-    const active = document.activeElement;
-    if (active instanceof HTMLElement) active.blur();
-  });
-</script>
-
 <style>
   /* =========================
    LedgerIndex (scoped)
@@ -144,13 +64,6 @@ const storyHref = (slug: string) => `/topics/${topicSlug}/stories/${slug}`;
     margin: 0;
     padding: 0;
     --ledger-indent: 1.2rem;
-  }
-
-  .ledger__menu,
-  .ledger__tags {
-    list-style: none;
-    margin: 0;
-    padding: 0;
   }
 
   .ledger__item {
@@ -188,13 +101,14 @@ const storyHref = (slug: string) => `/topics/${topicSlug}/stories/${slug}`;
   }
 
   .ledger__tags {
+    list-style: none;
     width: 100%;
-    margin-top: 0.2rem;
+    margin: 0.2rem 0 0;
+    padding-left: calc(var(--ledger-indent) - 0.2rem);
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
 
-    padding-left: calc(var(--ledger-indent) - 0.2rem);
     font-size: calc(var(--fp-font-size-base) * 0.542);
     color: var(--fp-muted);
   }
@@ -205,26 +119,9 @@ const storyHref = (slug: string) => `/topics/${topicSlug}/stories/${slug}`;
     border: 1px solid var(--fp-border-faint);
   }
 
-  .ledger__actions {
-    position: relative;
-    z-index: 1;
-  }
-
-  .ledger__actions[open] {
-    z-index: 50;
-  }
-
-  .ledger__trigger {
-    list-style: none;
-    cursor: pointer;
-  }
-
-  .ledger__trigger::-webkit-details-marker {
-    display: none;
-  }
-
-  /* pillは消さない */
-  .ledger__trigger-pill {
+  /* ===== open-story: subtle circular icon button ===== */
+  .ledger__open {
+    flex: 0 0 auto;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -232,118 +129,27 @@ const storyHref = (slug: string) => `/topics/${topicSlug}/stories/${slug}`;
     height: 1.55rem;
     border-radius: 999px;
     border: 1px solid var(--fp-border-soft);
-    font-size: calc(var(--fp-font-size-base) * 0.792);
     color: var(--fp-accent);
+    text-decoration: none;
 
     transition:
       background 140ms ease,
       border-color 140ms ease;
   }
 
-  .ledger__trigger:hover .ledger__trigger-pill,
-  .ledger__trigger:focus-visible .ledger__trigger-pill {
+  .ledger__open:hover,
+  .ledger__open:focus-visible {
     background: var(--fp-border-faint);
     border-color: var(--fp-border);
   }
 
-  /* ===== menu: 箱はふわっと、文字はcloseで即消す ===== */
-  .ledger__menu {
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + 0.35rem); /* ピルの上に出す */
-
-    width: fit-content;
-
-    padding: 0.35rem;
-    border-radius: 14px;
-    background: var(--fp-card-background-alt);
-    box-shadow: inset 0 0 0 1px var(--fp-border-faint);
-
-    opacity: 0;
-    pointer-events: none;
-
-    transform-origin: right bottom;
-    transform: translateY(6px); /* scaleは使わない（文字が縮む不自然さ回避） */
-
-    transition:
-      opacity 120ms ease,
-      transform 160ms ease;
-  }
-
-  /* open中も closing中も、メニューは表示したまま（重複整理版） */
-  .ledger__actions:is([open], [data-state="closing"]) .ledger__menu {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-
-    transition:
-      opacity 140ms ease,
-      transform 220ms cubic-bezier(0.16, 1.2, 0.36, 1);
-  }
-
-  /* リンクは open時だけ見せる。close開始で即消す */
-  .ledger__menu-link {
-    display: block;
-    padding: 0.6rem 0.65rem;
-    border-radius: 12px;
-    font-size: calc(var(--fp-font-size-base) * 0.708);
-    text-decoration: none;
-    white-space: nowrap;
-
-    opacity: 0; /* デフォは非表示 */
-    transition: opacity 120ms ease;
-  }
-
-  .ledger__actions[open] .ledger__menu-link {
-    opacity: 1;
-    transition-delay: 40ms; /* 箱の出現に少し追従して気持ちよく */
-  }
-
-  .ledger__actions[data-state="closing"] .ledger__menu-link {
-    opacity: 0;
-    transition: none; /* close時、文字は即消す */
-  }
-
-  .ledger__menu-link:hover,
-  .ledger__menu-link:focus-visible {
-    background: var(--fp-menu-hover);
-  }
-
-  .ledger__trigger:active,
-  .ledger__menu-link:active {
-    background: transparent;
-  }
-
-  .ledger__trigger:focus {
-    outline: none;
-  }
-
-  .ledger__trigger:focus-visible .ledger__trigger-pill {
+  .ledger__open:focus-visible {
     outline: 2px solid var(--fp-accent);
     outline-offset: 2px;
   }
 
-  .ledger__menu-link:focus-visible {
-    outline: 2px solid var(--fp-accent);
-    outline-offset: 2px;
-    border-radius: 12px;
-  }
-
-  /* chevron（今の角度でOK） */
-  .ledger__trigger-pill .fp-chevron {
-    display: inline-block;
+  /* right-facing chevron, centered in the pill */
+  .ledger__open .fp-chevron {
     margin-left: 0;
-    vertical-align: initial;
-    transform: rotate(45deg);
-    transition: transform 180ms cubic-bezier(0.16, 1.2, 0.36, 1);
-  }
-
-  .ledger__actions[open] .ledger__trigger-pill .fp-chevron {
-    transform: rotate(-135deg);
-  }
-
-  .ledger__actions[open] .ledger__trigger-pill {
-    border-color: var(--fp-border);
-    background: var(--fp-border-faint);
   }
 </style>
