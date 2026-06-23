@@ -1,108 +1,96 @@
 # Forji Tasks
 
-## Task: Improve the Episode peek flip-card UI
+## Task: Propose refinements for the Episode peek flip-card UI
 
-### Current context
+### Context
+
+The previous task improved the peek flip-card back panel in:
+
+`src/components/talk/ConversationBubble.astro`
 
 The peek flip card is used on:
 
 `/topics/sql/episode/peek-test`
 
-The main related files are:
+The current direction is good, but we want your implementation proposal before applying the next changes.
 
-| File                                            | Role                                            |
-| ----------------------------------------------- | ----------------------------------------------- |
-| `src/content/scripts/sql/episodes/peek-test.ts` | Peek text content                               |
-| `src/components/talk/ConversationBubble.astro`  | Flip-card UI, button, layout, styles, animation |
-| `src/components/episode/EpisodeRenderer.astro`  | Connects episode lines to bubbles               |
+### Desired refinements
 
-The current peek content already uses real line breaks and looks like this:
+#### 1. Back-side flip button position
 
-```sql
-INSERT INTO heart_links (sender_ai, receiver_ai, message)
-VALUES ('Lovestruck AI', 'Beloved AI', 'I wanna JOIN your heart');
+The back side should feel like the reverse side of the same card.
 
-The lovestruck AI added a new heart-link request to the database.
-INSERT INTO adds one new row to a table.
-```
+The back-side flip button should appear on the opposite side from the character image on the front side.
 
-### Goal
+Rules:
 
-Improve the visual design and usability of the back side of the peek flip card.
+- If the front character image is on the right, the back-side flip button should be fixed at the bottom-left.
+- If the front character image is on the left, the back-side flip button should be fixed at the bottom-right.
 
-This is a design and UI refinement task, not a content rewrite task.
+Example:
 
-### Requirements
+- Arca's front image is on the right, so Arca's back-side flip button should be on the left.
+- Nemi's front image is on the left, so Nemi's back-side flip button should be on the right.
 
-1. Make the circular flip button easier to notice, but do not make it visually loud.
-2. Keep the flip button fixed at the bottom-right of the panel.
-3. Prevent the flip button from disappearing, moving, or being pushed away when the text becomes long.
-4. On the back side, show the character image as a subtle back-side visual:
+#### 2. Back-side character image position
 
-   * horizontally flipped
-   * grayscale
-   * low opacity
-   * slightly embossed if possible
-5. Make the back-side text easier to read:
+The subtle back-side character image should also appear on the opposite side from the front character image.
 
-   * slightly larger font size
-   * better line height
-   * better spacing
-   * enough bottom padding so the text does not overlap the flip button
+Rules:
 
-### Design direction
+- If the front character image is on the right, place the back-side character image on the left.
+- If the front character image is on the left, place the back-side character image on the right.
 
-The flip button should feel like a small glass-like control.
+Keep the existing back-side visual treatment:
 
-Good direction:
+- horizontally flipped
+- grayscale
+- low opacity
+- subtle embossed feel if possible
 
-* subtle circular background
-* soft border
-* muted glow
-* clear hover and focus states
-* polished but quiet
+#### 3. Mobile bug: duplicate flip buttons
 
-Avoid:
+On mobile, the back side currently shows flip buttons on both the left and right edges.
 
-* bright neon
-* oversized button
-* distracting animation
-* layout changes that make the card feel unstable
+Please propose a fix so only one flip button is visible on the back side.
 
-### Implementation notes
+For Arca, since the front image is on the right, only the left-side back button should appear.
 
-In `src/components/talk/ConversationBubble.astro`:
+The hidden or inactive button should not be visible or clickable.
 
-* Set the card face or bubble container to `position: relative`.
-* Position the flip button with `position: absolute`.
-* Place it near the bottom-right corner.
-* Give it a higher `z-index` than the text and avatar.
-* Add enough `padding-bottom` to the card face so long text does not overlap the button.
-* Keep the button in the same visual position on both the front and back sides.
+#### 4. Mobile bug: clipped back-side text
 
-For the back-side character image:
+On mobile, the back-side text does not fully fit inside the panel.
 
-* Reuse the existing character image if possible.
-* Apply a back-side style only when the card is flipped/back side is shown.
-* Use CSS similar to:
+Please propose a fix so all back-side text can be read.
 
-  * `transform: scaleX(-1);`
-  * `filter: grayscale(1) contrast(...) brightness(...);`
-  * `opacity: 0.18` to `0.28`
-* Keep it subtle. The SQL text should remain the main focus.
+Possible directions:
 
-For the back-side text:
+- responsive spacing and padding
+- reducing layout pressure from the avatar
+- allowing the back-side text area to scroll if needed
+- keeping `white-space: pre-wrap`
+- preventing the flip button from overlapping the text
 
-* Increase font size slightly.
-* Improve line height.
-* Keep `white-space: pre-wrap` so the line breaks from `peek-test.ts` continue to render correctly.
-* Do not convert the peek text to Markdown unless absolutely necessary.
+### Design notes
 
-### Acceptance checklist
+- The back side should feel like a reversed version of the front side.
+- Keep the design quiet, polished, and consistent with the current dark episode UI.
+- Do not make the flip button visually loud.
+- Preserve the current flip animation if possible.
+- Avoid making the card feel unstable.
 
-* The flip button is always visible.
-* The flip button stays at the bottom-right of the panel.
-* Long peek text does not hide or push away the button.
-* The back-side text is easier to read than before.
-* The back-side character image feels visually distinct from the front side.
-* The overall design still matches the dark polished episode UI.
+### Request
+
+Please do not implement yet.
+
+First, inspect the current `ConversationBubble.astro` implementation and propose your approach.
+
+Please answer with:
+
+1. What you think is causing the duplicate mobile flip buttons.
+2. What you think is causing the mobile text clipping.
+3. How you would determine the front character side and place the back-side button/avatar on the opposite side.
+4. The CSS or structure changes you recommend.
+5. Any risks or tradeoffs.
+6. Whether you think this should be solved with CSS only, or whether the component structure should be adjusted.
