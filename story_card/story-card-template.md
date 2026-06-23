@@ -2,7 +2,8 @@
 
 > Purpose:
 > This card is the source of truth for one SQL Story.
-> It should be readable as a story-planning document and also structured enough to convert into content data.
+> It should be readable as a story-planning document and structured enough to convert into content data.
+> Each story card keeps English and Japanese text together so the story, metadata, emotions, and peeks stay aligned.
 
 ---
 
@@ -12,18 +13,27 @@
 
 - slug:
 - order:
-- story.enabled: true
-- lab.enabled: false
+- story.enabled: live
+- lab.enabled: soon
 - route:
 - data file:
 - topic: sql
 - series: A Slightly Off-Kilter Love Log, Told Through SQL
 
+Allowed publish states:
+
+- `live`
+- `soon`
+- `off`
+
 ## Metadata
 
 - Title:
+- JP Title:
 - Subtitle:
 - JP Subtitle:
+- Description:
+- JP Description:
 - SQL Topic:
 - Tags:
 
@@ -49,50 +59,67 @@
 
 ## Lines
 
-### Line 1
+> Lines are variable-length.
+> Add as many lines as the scene needs.
+> A peek can be attached to any line.
+> Keep English and Japanese text inside the same line item so speaker, emotion, and peek stay aligned.
+
+Allowed speakers:
+
+- `arca`
+- `nemi`
+- `narration`
+
+Allowed emotions:
+
+- `normal`
+- `happy`
+- `anger`
+- `sad`
+- `joy`
+
+Peek format:
+
+- `sql` contains the SQL code.
+- `note.en` contains one or more short English explanation lines.
+- `note.ja` contains one or more short Japanese explanation lines.
+- When converted to code, peek should be joined as:
+  - SQL block
+  - blank line
+  - note lines
+
+### Line example without peek
 
 - speaker:
 - emotion: normal
 - line:
+  - en:
+  - ja:
+
 - peek: none
 
-### Line 2
+### Line example with peek
 
 - speaker:
 - emotion: normal
 - line:
-- peek: none
+  - en:
+  - ja:
 
-### Line 3
-
-- speaker:
-- emotion: normal
-- line:
 - peek:
   - sql:
   - note:
+    - ## en:
+    - ## ja:
 
-### Line 4
-
-- speaker:
-- emotion: normal
-- line:
-- peek: none
-
-### Line 5
+### Final line example
 
 - speaker:
 - emotion: normal
 - line:
-- peek:
-  - sql:
-  - note:
+  - en:
+  - ja:
 
-### Final line
-
-- speaker:
-- emotion: normal
-- line:
 - peek: none
 
 ## Lab idea

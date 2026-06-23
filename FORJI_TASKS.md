@@ -1,68 +1,58 @@
 # Forji Tasks
 
-## Review: updated story card template (`story_card/story-card-template.md`)
+## Review: story card template v3 (`story_card/story-card-template.md`)
 
 Opinion only — nothing implemented.
 
-### 1. Overall assessment
+### Overall assessment
 
-Big step up; the revisions address most prior feedback.
+Strong — this revision resolves the blockers from the last review. It now speaks the
+code's vocabulary and reads as a true source of truth.
 
-- **Build metadata** block now exists with `route` / `data file` / `topic` / `series` —
-  exactly the bridge that was missing.
-- **Episode shape (Setup / Turn / Resolution)** is the right call — better than the old
-  発端/incident①/葛藤/incident②/解決. A short conversational card shouldn't carry two
-  key-incidents; three beats fit the format and won't feel formulaic across 30.
-- **Peek is now correctly nested under a specific `Line`** (Line 3, Line 5) with
-  `sql` + `note` — matches how the code works (peek is an attribute of a line, not a
-  standalone beat). Fixed.
-- **Per-line `emotion`** with `normal` default is usable as-is.
-- **Design notes** (why this exists / keep simple / what not to explain yet) is a smart
-  add for arc continuity.
-- File rename to `story-card-template.md` is clearer.
+**Fixed since last review**
 
-Close to ready, but a few concrete mismatches with the live code remain.
+- `enabled` is now `live` / `soon` (with an explicit "Allowed publish states:
+  live / soon / off" list) — matches `PublishState`. The boolean blocker is gone. ✅
+- `Lines` is now explicitly **variable-length** ("add as many lines as the scene
+  needs; a peek can be attached to any line"), with without-peek / with-peek / final
+  examples instead of a fixed 1–5 schema. ✅
+- `JP Title` added; `Description` / `JP Description` added — the ledger entry
+  (`title` / `titleJa` / `description` / `descriptionJa`) can now be filled with no
+  guessing. ✅
+- Allowed **speakers** (`arca | nemi | narration`) and **emotions**
+  (`normal | happy | anger | sad | joy`) are listed inline — invalid values can't slip
+  into `StoryLine`. ✅
+- **Peek format** is now specified (sql + note, joined as SQL block → blank line →
+  note lines). Deterministic conversion. ✅
 
-### 2. Implementation concerns
+### Remaining concerns
 
-1. **`enabled` type is wrong (blocker).** Template uses `story.enabled: true` /
-   `lab.enabled: false` (boolean). The code's `PublishState` is
-   `"live" | "soon" | "off"` — not boolean. As written it won't typecheck. Should be
-   `story.enabled: live`, `lab.enabled: soon`.
-2. **`Lines` looks capped at 6.** Numbered Line 1–5 + Final line, but shipped Story 01 is
-   ~11 lines. Authors may read this as a fixed schema. It needs to read explicitly as
-   variable-length (add as many lines as the scene needs; peek on any line with SQL).
-3. **Missing JP title.** Ledger has `titleJa` (e.g. "AIだって恋したい"), but Metadata only
-   has Title + JP Subtitle. Add `JP Title:` or it has to be invented.
-4. **Peek join convention unstated.** `sql:` + `note:` are separate here, but in the
-   content file `peek` is a single string rendered as: SQL block → blank line → note
-   lines. State the join rule so every card converts deterministically (and confirm
-   `note` may be multiple short lines).
-5. **`emotion` / `speaker` allowed values not listed.** To avoid invalid values reaching
-   `StoryLine`, list them inline: speaker = `arca | nemi | narration`;
-   emotion = `normal | happy | anger | sad | joy`.
+1. **Bilingual fields exceed what the renderer consumes today (decision needed).**
+   Lines now carry `line.en` / `line.ja`, and peek notes carry `note.en` / `note.ja`.
+   Good future-proofing — but the current code is single-language: `StoryLine` has one
+   `text` and one `peek` string, the `[slug]` route renders one locale, and there is no
+   JA story route. So today an author's `ja` text has nowhere to render.
+   - If EN-only for now: fine — converter just uses `.en`; keep `.ja` as a parked draft.
+   - If JA stories are wanted soon: that's a code change first (StoryLine carries both
+     languages + a locale switch + a JA route), not just a content task. Worth deciding
+     before authoring 30 cards in two languages.
 
-### 3. Suggested improvements
+2. **`- ## Field:` markdown still present (cosmetic).** In Arc role, Character engine,
+   Episode shape, and the peek `note` (`- ## en:` / `- ## ja:`), a bullet wraps an `##`
+   that isn't a real heading — it renders as literal "## en:" text and is awkward to
+   parse. Plain `- Field:` / `- en:` would be cleaner. Not a blocker.
 
-- Fix `enabled` to `live | soon | off`.
-- Mark `Lines` as variable count; keep Line 1/3/Final as examples, not a fixed schema.
-- Add `JP Title:` (and optionally `description` / `descriptionJa` — used for the page
-  `<meta>`; can default from Subtitle if you'd rather not write them).
-- The `- ## Field:` pattern inside Arc role / Character engine / Episode shape mixes a
-  bullet with an H2 — renders oddly and is awkward to parse. Make them plain
-  `- Field:`. Cosmetic, but it hurts the "structure clear" goal.
-- One line stating the peek-string format (SQL, blank line, note).
+### Minor / optional
 
-### 4. Ready as source of truth?
+- `route` and `data file` are derivable from `slug`
+  (`/topics/sql/stories/<slug>` and `src/content/scripts/sql/stories/<slug>.ts`) — keep
+  them explicit or note they're derived.
+- Ledger also has optional `summary` / `summaryJa`; not currently used by the index, so
+  not needed in the card.
 
-**Almost — ready after two small fixes:** (a) `enabled` → `live/soon/off`, and (b) make
-`Lines` explicitly variable-length. With those plus the `JP Title` field, a card converts
-to `stories/<slug>.ts` + a `sqlLedger` entry mechanically, with no guessing. The
-remaining items (markdown `## ` cleanup, peek-format note, value lists) are polish, not
-blockers.
+### Ready as source of truth?
 
-Net: structure and intent are right; it just needs to speak the code's exact vocabulary
-(`PublishState`, variable lines, `titleJa`) to be a true source of truth.
-
-Next action (pick one): apply these fixes to the template, or leave it to you. Nothing
-touched yet.
+**Yes — ready to use.** The blockers are resolved and a card now converts to
+`stories/<slug>.ts` + a `sqlLedger` entry mechanically. The only thing to settle before
+scaling to 30 is concern #1: confirm **EN-only for now** (use `.en`, park `.ja`), or
+schedule the bilingual rendering work in code first. The `## ` cleanup is polish.
