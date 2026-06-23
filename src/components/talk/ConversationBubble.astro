@@ -98,7 +98,7 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
           </div>
 
           {/* Back face */}
-          <div class="flip-face flip-back">
+          <div class={`flip-face flip-back${isRight ? " is-front-right" : ""}`}>
             {avatarSrc && (
               <img
                 src={avatarSrc}
@@ -261,6 +261,28 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
     box-shadow: 0 10px 24px var(--fp-card-background-alt);
   }
 
+  /*
+   * Belt-and-suspenders for mobile WebKit, where preserve-3d +
+   * backface-visibility can flatten and leak the hidden face (and its
+   * flip button). Swap visibility instantly at the rotate midpoint so
+   * exactly one face is shown/clickable. The 210ms delay must stay in
+   * sync with the 420ms .flip-inner transition above.
+   */
+  .flip-front,
+  .flip-back {
+    transition: opacity 0s linear 210ms;
+  }
+
+  .flip-inner:not(.is-flipped) .flip-back {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .flip-inner.is-flipped .flip-front {
+    opacity: 0;
+    pointer-events: none;
+  }
+
   /* ─── front face ──────────────────────────────────────────── */
 
   .flip-front {
@@ -291,7 +313,9 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
     position: absolute;
     inset: 0;
     transform: rotateY(180deg);
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     display: flex;
     align-items: flex-start;
     padding: 0.55rem 0.85rem 2.4rem;
@@ -402,6 +426,21 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
     transform: scaleX(-1);
   }
 
+  /*
+   * Back side mirrors the front: when the front character image sits on
+   * the right (Arca), move the back button and portrait to the left so
+   * the back feels like the reverse of the same card.
+   */
+  .flip-back.is-front-right .flip-btn--back {
+    right: auto;
+    left: 0.6rem;
+  }
+
+  .flip-back.is-front-right .peek-back-portrait {
+    right: auto;
+    left: 0;
+  }
+
   .flip-btn-svg {
     width: 16px;
     height: 16px;
@@ -460,8 +499,17 @@ const avatarSrc = !isNarration ? AVATAR_MAP[speaker]?.[emotion] : null;
       padding: 0.5rem 0.75rem 2.3rem;
     }
 
+    .flip-back {
+      padding-bottom: 2.6rem;
+    }
+
     .cb-text {
       font-size: calc(var(--fp-font-size-base) * 0.88);
+    }
+
+    .peek-back-text {
+      font-size: 0.82rem;
+      line-height: 1.65;
     }
   }
 </style>
