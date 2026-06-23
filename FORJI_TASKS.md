@@ -242,3 +242,110 @@ flip-back
 ├─ peek-back-scroll     scrollable text only
 └─ flip-btn--back       fixed layer, always visible
 ```
+
+### Forji's proposal (response)
+
+#### Current structure (back face)
+
+```text
+.flip-back              ← overflow-x:hidden; overflow-y:auto  (THIS is the scroller)
+├─ .peek-back-portrait  ← absolute watermark, z-index:0
+└─ .cb-body
+   ├─ .peek-back-text   ← the text
+   └─ .flip-btn--back   ← position:absolute, bottom-corner, z-index:3
+```
+
+**Why the button overlaps / drifts on scroll:** the scroll lives on `.flip-back`,
+and the button is `position: absolute` *inside that same scroll container*.
+Absolutely-positioned children scroll **with** their scroll container's content — so
+as the text scrolls up, the button rides up with it and lands on top of the text. It
+only looks fixed when there is nothing to scroll. The proposed structure is the right
+fix.
+
+#### 1. Flip button hover highlight
+
+Make the **circle** the main signal: raise the fill, switch the border to the accent
+color, tighten the glow into a clear ring. Icon brightens via the existing accent
+color. No scale/animation, no neon.
+
+```css
+.flip-btn:hover {
+  color: var(--fp-accent);
+  background: rgba(99, 102, 241, 0.28);   /* was 0.16 — clearly filled */
+  border-color: var(--fp-accent);          /* was soft border — now reads as active */
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.18),    /* quiet accent ring */
+    0 4px 14px rgba(99, 102, 241, 0.30);
+}
+```
+
+#### 2. Back-side button overlapping scrollable text
+
+Needs a small structural change (CSS-only cannot fix it cleanly — the button must be
+a sibling *outside* the scroller). Adopt the proposed layout:
+
+```text
+.flip-back              ← position:relative; overflow:hidden  (NO scroll, clips corners)
+├─ .peek-back-portrait  ← absolute watermark, z-index:0
+├─ .peek-back-scroll    ← the ONLY scroller: overflow-y:auto; flex:1; min-height:0; z-index:1
+│  └─ .peek-back-text
+└─ .flip-btn--back      ← absolute sibling, bottom-corner, z-index:3  → truly fixed
+```
+
+Markup change (back face only — replace the back's `.cb-body` with a dedicated
+scroller, move the button out as a sibling):
+
+```astro
+<div class={`flip-face flip-back${isRight ? " is-front-right" : ""}`}>
+  {avatarSrc && (<img ... class="peek-back-portrait" .../>)}
+  <div class="peek-back-scroll">
+    <p class="peek-back-text">{peek}</p>
+  </div>
+  <button class="flip-btn flip-btn--back" aria-label="Back to dialogue"> ... </button>
+</div>
+```
+
+Supporting CSS:
+
+```css
+.flip-back { overflow: hidden; }            /* stop the face itself from scrolling */
+
+.peek-back-scroll {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;                            /* required so it can actually scroll */
+  width: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2.4rem;                   /* clear the fixed button (2.6rem on mobile) */
+  position: relative;
+  z-index: 1;
+}
+
+/* subtle bottom fade behind the fixed button so text dissolves, not clips */
+.flip-back::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2.6rem;
+  background: linear-gradient(to top, var(--fp-background-shadow), transparent);
+  pointer-events: none;
+  z-index: 2;                               /* above text, below the button (z-index:3) */
+}
+```
+
+#### Risks / tradeoffs
+
+- Small structural change to the back face (not CSS-only), but localized; front face
+  and the flip animation are untouched.
+- The `::after` fade uses `var(--fp-background-shadow)`; since the back background is
+  a layered gradient, the fade is an approximation — worth a visual check.
+- `.flip-back` reverts to `overflow: hidden`; scrolling moves to the inner element, so
+  rounded-corner clipping is preserved and the watermark won't spill.
+- `min-height: 0` on the scroller is required for it to scroll inside the flex column.
+
+#### CSS-only or restructure?
+
+Point 1 (hover) is pure CSS. Point 2 needs the minimal structural split above (one
+wrapper + moving the button to a sibling). Everything stays inside
+`ConversationBubble.astro`, no JS changes, animation preserved.
