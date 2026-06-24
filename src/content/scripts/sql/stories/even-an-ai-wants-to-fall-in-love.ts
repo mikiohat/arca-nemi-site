@@ -27,12 +27,12 @@ export const lines: StoryLine[] = [
       ja: `いやマジだって！昨日サーバーにいたAIなんて「キミの心にJOINしたい…」とか言って、許可もなくDBにINSERTしてきたの。`,
     },
     peek: {
-      sql: `INSERT INTO heart_links (sender_ai, receiver_ai, message)
+      sql: `INSERT INTO agent_work_messages (sender_ai, receiver_ai, message)
 VALUES ('Lovestruck AI', 'Beloved AI', 'I wanna JOIN your heart');`,
       note: {
-        en: `The lovestruck AI added a new heart-link request to the database.
+        en: `The lovestruck AI added what it believed was a love-confession message to the work database.
 INSERT INTO adds one new row to a table.`,
-        ja: `片想いのAIが、データベースに新しいハートリンクの申請を追加した。
+        ja: `片想いのAIが、業務用データベースに愛の告白（だと思っている）メッセージを追加した。
 INSERT INTO はテーブルに新しい行を1つ追加する。`,
       },
     },

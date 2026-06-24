@@ -26,6 +26,9 @@ pnpm-debug.log*
 # vdcode
 .vscode/
 
+# secret sauce
+feelings-projects-secret-sauce/
+
 dir.txt
 memo.txt
 .vercel
