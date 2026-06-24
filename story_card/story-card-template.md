@@ -34,7 +34,7 @@ Allowed publish states:
 - JP Subtitle:
 - Description:
 - JP Description:
-- SQL Topic:
+- SQL Motif:
 - Tags:
 
 ## Arc role
@@ -51,7 +51,7 @@ Allowed publish states:
 - SQL reveals:
 - Final beat:
 
-## Episode shape
+## Story shape
 
 - Setup:
 - Turn:
@@ -121,10 +121,6 @@ Peek format:
   - ja:
 
 - peek: none
-
-## Lab idea
-
--
 
 ## Design notes
 
