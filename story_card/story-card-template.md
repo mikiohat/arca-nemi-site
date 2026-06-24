@@ -39,23 +39,23 @@ Allowed publish states:
 
 ## Arc role
 
-- ## Progress:
-- ## Foreshadowing:
-- ## Next hook:
+- Progress:
+- Foreshadowing:
+- Next hook:
 
 ## Character engine
 
-- ## Nemi finds:
-- ## Arca interprets:
-- ## Conflict:
-- ## SQL reveals:
-- ## Final beat:
+- Nemi finds:
+- Arca interprets:
+- Conflict:
+- SQL reveals:
+- Final beat:
 
 ## Episode shape
 
-- ## Setup:
-- ## Turn:
-- ## Resolution:
+- Setup:
+- Turn:
+- Resolution:
 
 ## Lines
 
@@ -109,8 +109,8 @@ Peek format:
 - peek:
   - sql:
   - note:
-    - ## en:
-    - ## ja:
+    - en:
+    - ja:
 
 ### Final line example
 
