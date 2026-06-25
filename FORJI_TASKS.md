@@ -274,3 +274,52 @@ repetition.
 
 Motifs `IS NOT NULL`, `CREATE INDEX`, empty result set — none overlap Story 01. Exactly
 what the fingerprint gate should wave through.
+
+---
+
+## Forji implementation report (2026-06-25)
+
+Status of the recommendations above.
+
+### sauce (private) — `feelings-projects-secret-sauce`
+
+| Change | File |
+|---|---|
+| **Step 1 → YAML blueprint** + `fingerprint` block (was Markdown) | `story-generator/agents/step1-accident-designer/output-format.md` |
+| Procedure: read `motif-registry.yml`, lock a non-colliding fingerprint, YAML self-check | `story-generator/agents/step1-accident-designer/procedure.md` |
+| **NEW** anti-repetition ledger, seeded with Story 01's fingerprint | `story-generator/shared/motif-registry.yml` |
+| **NEW** hard-reject / soft-warn phrases (incl. Story 01's reusable lines) | `story-generator/shared/banned-phrases.yml` |
+| **NEW** which files each step loads (real paths) | `story-generator/shared/manifest.yml` |
+| Naming fix: `step2-mikky-sensor-auditor` → `step2-human-sensor-auditor`, "Mikky's sensor" note; reflect new files + YAML | `README.md` |
+| **NEW** L1 blueprint validator (Node + `yaml`, ~130 lines) | `story-generator/validators/validate-blueprint.ts` |
+| **NEW** tooling + ignore for the validator | `package.json`, `.gitignore` |
+
+### site (public) — `arca-nemi-site`
+
+| Change | File |
+|---|---|
+| **NEW** L2 dialogue validator — structural only, imports just the `StoryLine` type, leaks nothing | `scripts/validate-story.ts` |
+
+### Decisions / notes
+
+- **Step 2** kept as the dedicated Human Sensor Auditor step; role/procedure/checklist untouched. Naming is now consistent everywhere on `step2-human-sensor-auditor`.
+- **Privacy seam intact (Q7):** no prompt/checklist/NG/gold files were copied into the public repo. L1 (private) owns banned-phrases + fingerprint dedup; L2 (public) knows only shape.
+- The `git mv` to the sibling private repo was already done on Mikky's side — repo layout not touched.
+- **L1 runtime:** **Node + `yaml` (TS)** — consistent with the TS framing and the public L2 validator.
+- The L1 fingerprint gate flags a clone when **≥4 of 6** axes overlap (lists collide on any shared token; `accident_mechanism` on >50% word overlap).
+
+### Verification
+
+- **L1 — verified working:** `cd <sauce> && npm install`, then
+  `npm run validate -- <blueprint.yml>` → `PASS`/`FAIL` with reasons, exit 0/1.
+  Confirmed PASS on a clean Story-02-style blueprint; FAIL with correct messages
+  on a clone (6/6 axis collision), an empty beat, a missing peek, and a
+  hard-reject phrase.
+- **L2:** imports only `@/content/scripts/types`; sits in `scripts/` (outside
+  Astro's `src/**` include), so it does not affect the build. Call
+  `validateStory(slug, lines)` from a runner when wiring Step 3's output.
+
+### Not done (creative, not code)
+
+- **Story 02 end-to-end (work-order step 5)** — a pipeline run through all three
+  steps at N=1, not a code change. Pending Mikky's go-ahead.
